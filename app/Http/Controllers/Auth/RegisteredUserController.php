@@ -61,6 +61,6 @@ class RegisteredUserController extends Controller
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         // Shuffle and pick random characters
-        return substr(str_shuffle(str_repeat($characters, 6)), 0, 6);
+        return substr(str_shuffle(str_repeat($characters, 8)), 0, 8);
     }
 }

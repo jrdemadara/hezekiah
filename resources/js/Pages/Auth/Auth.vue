@@ -111,22 +111,24 @@ defineProps(['status']);
 <template>
     <Head title="Register" />
     <div
-        class="flex h-screen flex-col items-center justify-center space-y-7 sm:px-32"
+        class="flex flex-col items-center justify-center space-y-4 px-0 sm:h-screen sm:space-y-7 sm:px-32"
     >
-        <h2 class="font-areplos text-4xl font-semibold text-[#458500]">
+        <h2
+            class="mt-10 font-areplos text-4xl font-semibold text-[#458500] sm:mt-0"
+        >
             Hezekiah
         </h2>
         <div
-            class="flex flex-col rounded-lg p-8 ring-1 ring-stone-300"
+            class="flex flex-col rounded-lg p-4 ring-stone-300 sm:p-8 sm:ring-1"
             :class="{
-                'w-2/3': pageStatus !== 'login',
-                'w-1/3': pageStatus === 'login',
+                'sm:w-2/3': pageStatus !== 'login',
+                'sm:w-1/3': pageStatus === 'login',
             }"
         >
             <Link
                 v-show="pageStatus === 'check-email'"
                 :href="route('home')"
-                class="group w-fit cursor-pointer rounded-md px-3 py-2 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20]"
+                class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
             >
                 Cancel
             </Link>
@@ -134,7 +136,7 @@ defineProps(['status']);
             <h4
                 v-show="pageStatus !== 'check-email'"
                 @click="pageStatus = 'check-email'"
-                class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-[#FF2D20]"
+                class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
                 :class="{
                     'py-2': pageStatus !== 'login',
                     'py-0': pageStatus === 'login',
@@ -150,7 +152,6 @@ defineProps(['status']);
                 <CircleAlert class="flex-shrink-0 text-red-600" />
                 <span>Invalid credentials</span>
             </div>
-
             <div
                 v-show="pageStatus !== 'login' && registerFailed"
                 class="my-4 flex w-full items-center justify-start space-x-1 rounded-lg bg-red-200/90 p-2"
@@ -159,14 +160,17 @@ defineProps(['status']);
                 <span>Something went wrong! Please try again later.</span>
             </div>
 
-            <div
+            <!-- <div
                 v-if="status"
                 class="my-4 flex w-full items-center justify-start space-x-1 rounded-lg bg-red-200/90 p-2"
             >
                 <CircleX class="flex-shrink-0 text-red-600" />
                 <span> {{ status }}</span>
-            </div>
-            <h4 v-show="pageStatus" class="text-center text-2xl font-semibold">
+            </div> -->
+            <h4
+                v-show="pageStatus"
+                class="mt-5 text-center text-2xl font-semibold sm:mt-0"
+            >
                 {{ formHeader }}
             </h4>
             <p
@@ -176,15 +180,22 @@ defineProps(['status']);
                 Enter your email or mobile number to get started. If you already
                 have an account, we’ll find it for you.
             </p>
+
             <div
-                class="flex justify-evenly space-x-5"
+                class="flex flex-col justify-evenly space-x-5 sm:flex-row"
                 :class="{
                     'mt-7': pageStatus !== 'login',
                     'mt-0': pageStatus === 'login',
                 }"
             >
                 <!-- Left Column -->
-                <div class="flex flex-1 flex-col items-center space-y-6 p-2">
+                <div
+                    class="flex flex-1 flex-col items-center"
+                    :class="{
+                        'space-y-6 sm:space-y-6': pageStatus !== 'register',
+                        'space-y-0 sm:space-y-6': pageStatus === 'register',
+                    }"
+                >
                     <form
                         v-show="pageStatus === 'check-email'"
                         @submit.prevent="checkEmail"
@@ -206,7 +217,7 @@ defineProps(['status']);
                             />
                         </div>
                         <button
-                            class="mt-4 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
+                            class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
                             :class="{ 'opacity-25': checkEmailForm.processing }"
                             :disabled="checkEmailForm.processing"
                         >
@@ -356,7 +367,7 @@ defineProps(['status']);
                             .
                         </small>
                         <button
-                            class="mt-4 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
+                            class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00] sm:mt-4"
                             :class="{ 'opacity-25': registerForm.processing }"
                             :disabled="registerForm.processing"
                         >
@@ -449,7 +460,7 @@ defineProps(['status']);
                         </div>
 
                         <button
-                            class="mt-4 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
+                            class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00] sm:mt-4"
                             :class="{ 'opacity-25': loginForm.processing }"
                             :disabled="loginForm.processing"
                         >
@@ -510,7 +521,10 @@ defineProps(['status']);
                         </button>
                     </div>
 
-                    <p v-show="pageStatus === 'check-email'" class="text-xs">
+                    <p
+                        v-show="pageStatus === 'check-email'"
+                        class="mt-4 text-xs sm:mt-0"
+                    >
                         By continuing, you’ve read and agree to our
                         <span
                             class="cursor-pointer text-blue-600 hover:underline"
@@ -534,7 +548,7 @@ defineProps(['status']);
                 <!-- Right Column -->
                 <div
                     v-show="pageStatus !== 'login'"
-                    class="flex flex-1 flex-col items-start space-y-4 p-2"
+                    class="mt-7 flex flex-1 flex-col items-start space-y-4 sm:mt-0 sm:p-2"
                 >
                     <h4 class="w-full text-center font-bold">Why Hezekiah?</h4>
                     <div class="flex space-x-2">

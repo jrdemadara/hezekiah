@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -21,9 +22,11 @@ class GoogleLoginController extends Controller
             $user = User::where('email', $googleUser->user['email'])->first();
 
             if (!$user) {
+
                 // Create a new user if not exists
                 $user = User::create([
                     'code' => Str::lower($this->generateRandomString()),
+                    'avatar' => $googleUser->user['picture'],
                     'lastname' => Str::lower($googleUser->user['family_name']),
                     'firstname' => Str::lower($googleUser->user['given_name']),
                     'email' => $googleUser->user['email'],
@@ -54,6 +57,6 @@ class GoogleLoginController extends Controller
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         // Shuffle and pick random characters
-        return substr(str_shuffle(str_repeat($characters, 6)), 0, 6);
+        return substr(str_shuffle(str_repeat($characters, 8)), 0, 8);
     }
 }
