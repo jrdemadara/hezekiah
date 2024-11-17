@@ -32,7 +32,6 @@ return new class extends Migration
             $table->foreignId('referred_by')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('auth_provider')->default('default');
             $table->index(['code']);
-
             $table->timestamps();
         });
 

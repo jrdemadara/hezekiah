@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('payment_method', ['e-wallet', 'card'])->default('e-wallet');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
-            $table->timestamps('payment_date');
+            $table->timestamp('date_paid')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

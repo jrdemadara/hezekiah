@@ -126,7 +126,7 @@ defineProps(['status']);
             <Link
                 v-show="pageStatus === 'check-email'"
                 :href="route('home')"
-                class="group cursor-pointer rounded-md px-3 py-2 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20]"
+                class="group w-fit cursor-pointer rounded-md px-3 py-2 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20]"
             >
                 Cancel
             </Link>
@@ -134,7 +134,7 @@ defineProps(['status']);
             <h4
                 v-show="pageStatus !== 'check-email'"
                 @click="pageStatus = 'check-email'"
-                class="group cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20]"
+                class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-[#FF2D20]"
                 :class="{
                     'py-2': pageStatus !== 'login',
                     'py-0': pageStatus === 'login',
@@ -239,7 +239,7 @@ defineProps(['status']);
                                 }}</span>
                                 <span
                                     @click="pageStatus = 'check-email'"
-                                    class="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
+                                    class="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
                                     >change</span
                                 >
                             </div>
@@ -344,11 +344,15 @@ defineProps(['status']);
                         </div>
                         <small class="mt-4 line-clamp-2"
                             >By continuing, you’ve read and agree to our
-                            <span class="text-blue-500"
+                            <span
+                                class="cursor-pointer text-blue-500 hover:underline"
                                 >Terms and Conditions</span
                             >
                             and
-                            <span class="text-blue-500">Privacy Policy</span>
+                            <span
+                                class="cursor-pointer text-blue-500 hover:underline"
+                                >Privacy Policy</span
+                            >
                             .
                         </small>
                         <button
@@ -508,9 +512,16 @@ defineProps(['status']);
 
                     <p v-show="pageStatus === 'check-email'" class="text-xs">
                         By continuing, you’ve read and agree to our
-                        <span class="text-blue-600">Terms and Conditions</span>
+                        <span
+                            class="cursor-pointer text-blue-600 hover:underline"
+                            >Terms and Conditions</span
+                        >
                         and
-                        <span class="text-blue-600"> Privacy Policy.</span>
+                        <span
+                            class="cursor-pointer text-blue-600 hover:underline"
+                        >
+                            Privacy Policy.</span
+                        >
                     </p>
                 </div>
 
