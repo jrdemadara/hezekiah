@@ -17,6 +17,8 @@ import {
     Warehouse,
 } from 'lucide-vue-next';
 
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+
 const pageStatus = ref('check-email');
 const loginFailed = ref(false);
 const registerFailed = ref(false);
@@ -113,11 +115,7 @@ defineProps(['status']);
     <div
         class="flex flex-col items-center justify-center space-y-4 px-0 sm:h-screen sm:space-y-7 sm:px-32"
     >
-        <h2
-            class="mt-10 font-areplos text-4xl font-semibold text-[#458500] sm:mt-0"
-        >
-            Hezekiah
-        </h2>
+        <ApplicationLogo class="w-48" />
         <div
             class="flex flex-col rounded-lg p-4 ring-stone-300 sm:p-8 sm:ring-1"
             :class="{

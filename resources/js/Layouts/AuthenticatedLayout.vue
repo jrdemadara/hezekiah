@@ -6,8 +6,17 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-
+import { AlignRight, Bell, Menu, ShoppingBag, X } from 'lucide-vue-next';
 const showingNavigationDropdown = ref(false);
+
+defineProps({
+    canResetPassword: {
+        type: Boolean,
+    },
+    status: {
+        type: String,
+    },
+});
 </script>
 
 <template>
@@ -16,13 +25,13 @@ const showingNavigationDropdown = ref(false);
             <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
+                    <div class="flex h-16 items-center justify-between">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
                                 <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
+                                        class="block h-12 w-auto fill-current text-gray-800"
                                     />
                                 </Link>
                             </div>
@@ -42,6 +51,18 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
                             <!-- Settings Dropdown -->
+                            <div
+                                class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
+                            >
+                                <ShoppingBag />
+                                <!-- Badge for showing the item count -->
+                                <span
+                                    class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
+                                >
+                                    3
+                                    <!-- Replace '3' with your dynamic item count variable -->
+                                </span>
+                            </div>
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
@@ -50,7 +71,10 @@ const showingNavigationDropdown = ref(false);
                                                 type="button"
                                                 class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                                             >
-                                                {{ $page.props.auth.user.name }}
+                                                {{
+                                                    $page.props.auth.user
+                                                        .firstname
+                                                }}
 
                                                 <svg
                                                     class="-me-0.5 ms-2 h-4 w-4"
@@ -86,50 +110,54 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                        <div class="flex">
+                            <div
+                                class="relative mr-2 rounded-full p-2 sm:hidden"
                             >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
+                                <Bell class="text-gray-800" />
+                                <!-- Badge for showing the item count -->
+                                <span
+                                    class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                                 >
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
+                                    1
+                                    <!-- Replace '3' with your dynamic item count variable -->
+                                </span>
+                            </div>
+                            <div
+                                class="relative mr-2 rounded-full p-2 sm:hidden"
+                            >
+                                <ShoppingBag class="text-gray-800" />
+                                <!-- Badge for showing the item count -->
+                                <span
+                                    class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
+                                >
+                                    3
+                                    <!-- Replace '3' with your dynamic item count variable -->
+                                </span>
+                            </div>
+                            <!-- Hamburger -->
+                            <div class="-me-2 flex items-center sm:hidden">
+                                <button
+                                    @click="
+                                        showingNavigationDropdown =
+                                            !showingNavigationDropdown
+                                    "
+                                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                                >
+                                    <span v-show="!showingNavigationDropdown">
+                                        <AlignRight class="text-gray-800"
+                                    /></span>
+                                    <span v-show="showingNavigationDropdown">
+                                        <X class="text-gray-800"
+                                    /></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Responsive Navigation Menu -->
+
                 <div
                     :class="{
                         block: showingNavigationDropdown,
@@ -150,7 +178,7 @@ const showingNavigationDropdown = ref(false);
                     <div class="border-t border-gray-200 pb-1 pt-4">
                         <div class="px-4">
                             <div class="text-base font-medium text-gray-800">
-                                {{ $page.props.auth.user.name }}
+                                {{ $page.props.auth.user.firstname }}
                             </div>
                             <div class="text-sm font-medium text-gray-500">
                                 {{ $page.props.auth.user.email }}

@@ -36,9 +36,7 @@ const toggleMenu = () => {
         <header>
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center justify-center">
-                    <ApplicationLogo
-                        class="anima h-12 w-12 fill-current text-gray-500"
-                    />
+                    <ApplicationLogo class="w-28" />
                 </div>
 
                 <nav
