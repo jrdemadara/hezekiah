@@ -21,7 +21,7 @@ defineProps({
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100">
+        <div class="bg-gray-100 sm:min-h-screen">
             <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -212,6 +212,9 @@ defineProps({
             <main>
                 <slot />
             </main>
+            <footer class="flex items-center justify-center bg-white p-6">
+                <p class="text-sm">© 2024 Hezekiah</p>
+            </footer>
         </div>
     </div>
 </template>

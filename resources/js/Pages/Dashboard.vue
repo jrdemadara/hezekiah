@@ -1,46 +1,36 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, usePage, Link } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
 import {} from '@inertiajs/vue3';
-import { Network, QrCode, UsersRound } from 'lucide-vue-next';
+import {
+    Check,
+    Copy,
+    Network,
+    QrCode,
+    UserPlus2,
+    UsersRound,
+} from 'lucide-vue-next';
 import * as d3 from 'd3';
 const { props } = usePage();
-
+const code = props.auth.user.code;
 const source = ref('');
-source.value = props.auth.user.code;
+source.value = code;
 
 const { text, copy, copied, isSupported } = useClipboard({ source });
 
 const aapl = [
     // Example data structure (replace this with your actual data)
-    { date: new Date(2007, 3, 23), close: 93.24 },
-    { date: new Date(2007, 3, 24), close: 98.35 },
-    { date: new Date(2007, 3, 25), close: 93.84 },
-    { date: new Date(2007, 3, 26), close: 102.92 },
-    { date: new Date(2007, 3, 29), close: 98.8 },
-    { date: new Date(2007, 4, 1), close: 99.47 },
-    { date: new Date(2007, 4, 2), close: 97.39 },
-    { date: new Date(2007, 4, 3), close: 108.4 },
-    { date: new Date(2007, 4, 4), close: 99.81 },
-    { date: new Date(2007, 4, 7), close: 97.92 },
-    { date: new Date(2007, 4, 8), close: 95.06 },
-    { date: new Date(2007, 4, 9), close: 94.88 },
-    { date: new Date(2007, 4, 9), close: 92.34 },
-    { date: new Date(2007, 4, 10), close: 95.74 },
-    { date: new Date(2007, 4, 13), close: 100.36 },
-    { date: new Date(2007, 4, 14), close: 107.52 },
-    { date: new Date(2007, 4, 15), close: 107.34 },
-    { date: new Date(2007, 4, 16), close: 109.44 },
-    { date: new Date(2007, 4, 17), close: 110.02 },
-    { date: new Date(2007, 4, 20), close: 111.98 },
-
-    // Add more data points...
+    { date: new Date(2024, 1), close: 0 },
+    { date: new Date(2024, 2), close: 14.34 },
+    { date: new Date(2024, 3), close: 17.76 },
+    { date: new Date(2024, 4), close: 8.56 },
+    { date: new Date(2024, 5), close: 11.34 },
+    { date: new Date(2024, 6), close: 7.45 },
+    { date: new Date(2024, 7), close: 14.67 },
 ];
-
 const chart = ref(null);
-
 onMounted(() => {
     // Declare chart dimensions and margins.
     const width = 928;
@@ -65,8 +55,19 @@ onMounted(() => {
     // Declare the line generator.
     const line = d3
         .line()
+        .curve(d3.curveMonotoneX) // Makes the line smooth
         .x((d) => x(d.date))
         .y((d) => y(d.close));
+
+    // Define the area generator (matching the curve)
+    const area = d3
+        .area()
+        .curve(d3.curveMonotoneX) // Ensure the area matches the line curve
+        .x((d) => x(d.date))
+        .y1((d) => y(d.close))
+        .y0(height - marginBottom); // Baseline of the area
+
+    // Appe
 
     // Create the SVG container.
     const svg = d3
@@ -105,15 +106,45 @@ onMounted(() => {
                 .attr('y', 10)
                 .attr('fill', 'currentColor')
                 .attr('text-anchor', 'start')
-                .text('↑ Daily close ($)'),
+                .text('↑ Network Trends'),
         );
+
+    // Add vertical grid lines
+    svg.append('g')
+        .attr('class', 'grid')
+        .attr('transform', `translate(0,${height - marginBottom})`) // Align grid with x-axis position
+        .call(
+            d3
+                .axisBottom(x) // Use the x scale
+                .ticks(width / 80) // Adjust tick count for grid spacing
+                .tickSize(-(height - marginTop - marginBottom)) // Extend grid lines top-to-bottom
+                .tickFormat(''), // Remove labels from grid lines
+        )
+        .call((g) => g.selectAll('.domain').remove()) // Remove the axis line
+        .call((g) => g.selectAll('.tick line').attr('stroke-opacity', 0.1)); // Style grid lines
+
+    // Append the area (background color under the line)
+    svg.append('path')
+        .attr('fill', '#AFEC70') // Choose your background color
+        .attr('fill-opacity', 0.2)
+        .attr('d', area(aapl)); // Use the area generator with your data
 
     // Append a path for the line.
     svg.append('path')
         .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 1.5)
+        .attr('stroke', '#5DA414')
+        .attr('stroke-width', 4)
         .attr('d', line(aapl));
+
+    svg.selectAll('circle')
+        .data(aapl) // Bind data
+        .join('circle') // Enter pattern for circles
+        .attr('cx', (d) => x(d.date)) // Position circles horizontally
+        .attr('cy', (d) => y(d.close)) // Position circles vertically
+        .attr('r', (d, i) => (i === 0 ? 0 : 14)) // Set radius to 0 for the first point
+        .attr('fill', '#5DA414') // Circle color
+        .attr('stroke', 'white') // Optional: Add a border
+        .attr('stroke-width', 0.5); // Optional: Thickness of the border
 
     // Attach the SVG element to the DOM inside the `#chart` div
     chart.value.appendChild(svg.node());
@@ -137,28 +168,37 @@ onMounted(() => {
                             {{ props.auth.user.firstname }}
                             {{ props.auth.user.lastname }}
                         </h4>
-                        <p
+
+                        <div
                             @click="copy(source)"
-                            class="text-sm font-bold uppercase text-[#215439] active:underline"
+                            class="flex cursor-pointer items-center space-x-1 text-sm font-bold uppercase text-[#458500] active:underline"
                         >
-                            {{ props.auth.user.code }}
+                            <span> {{ code }}</span>
+
                             <span v-if="!copied">
-                                <Copy class="mr-0.5 text-slate-800" :size="16"
+                                <Copy class="mr-0.5" :size="16"
                             /></span>
                             <span v-else>
-                                <Check class="mr-0.5 text-green-600" :size="16"
+                                <Check class="mr-0.5" :size="16"
                             /></span>
-                        </p>
+                        </div>
                     </div>
                 </div>
-                <QrCode :size="28" class="text-" />
+                <Link
+                    :href="route('qrcode')"
+                    class="rounded-xl bg-[#AFEC70]/10 p-3 ring-1 ring-[#5DA414]/20"
+                >
+                    <QrCode :size="26" class="text-[#215439]" />
+                </Link>
             </div>
         </template>
 
         <div class="flex flex-col bg-white px-4">
-            <div class="mt-2 flex flex-col">
+            <div class="flex flex-col">
                 <h6 class="text-gray-400">Total Points</h6>
-                <h2 class="text-5xl font-semibold tracking-wider">₱9,700.50</h2>
+                <h2 class="text-5xl font-semibold tracking-wider">
+                    ₱{{ props.auth.user.points }}
+                </h2>
             </div>
             <div class="mb-4 mt-5 grid w-full grid-cols-2 gap-2 sm:grid-cols-2">
                 <div
@@ -177,7 +217,7 @@ onMounted(() => {
                     <div class="flex flex-col">
                         <p class="text-xs text-lime-700">Invite Success</p>
                         <h2 class="text-2xl font-semibold text-lime-900">
-                            107
+                            107<span class="text-xs font-normal">/Invites</span>
                         </h2>
                     </div>
                 </div>
@@ -197,12 +237,36 @@ onMounted(() => {
                     <div class="flex flex-col">
                         <p class="text-xs text-gray-500">Build Networks</p>
                         <h2 class="text-2xl font-semibold text-[#AFEC70]">
-                            1,358
+                            1,358<span class="text-xs font-normal"
+                                >/Networks</span
+                            >
                         </h2>
                     </div>
                 </div>
             </div>
-            <div class="mt-4 h-full w-full" id="chart" ref="chart"></div>
+            <div class="mt-2 flex flex-col bg-transparent">
+                <h6 class="text-gray-400">Network Trends</h6>
+                <div
+                    class="mt-1 h-full w-full rounded-lg p-3 shadow-sm ring-1 ring-gray-200"
+                    id="chart"
+                    ref="chart"
+                ></div>
+            </div>
+
+            <div
+                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#2B542C] to-[#2B542C] p-4"
+            >
+                <div class="flex flex-col space-y-2">
+                    <h2 class="text-lg font-semibold text-[#AFEC70]">
+                        Invites Friends
+                    </h2>
+                    <p class="text-xs leading-5 text-gray-200">
+                        Invite your friends to join, and both of you can enjoy
+                        amazing rewards and benefits!
+                    </p>
+                </div>
+                <UserPlus2 :size="92" class="text-[#AFEC70]" />
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
