@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bag;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -21,11 +22,14 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'referral_code' => 'required|string|max:6',
+            'referral_code' => 'required|string|max:8',
             'lastname' => 'required|string|max:255',
             'firstname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => 'required|string|max:32',
+            'bag_items' => 'nullable|array',
+            'bag_items.*.product_id' => 'required_with:bag_items|integer|exists:products,id',
+            'bag_items.*.quantity' => 'required_with:bag_items|integer|min:1',
         ]);
 
         $referrer = User::where('code', $request->referral_code)->pluck('id')->first();
@@ -47,6 +51,17 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'referred_by' => $referrer,
         ]);
+
+        // Save the bag items to the database
+        if (!empty($request->bag_items)) {
+            foreach ($request->bag_items as $item) {
+                Bag::create([
+                    'user_id' => $user->id,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                ]);
+            }
+        }
 
         event(new Registered($user));
 

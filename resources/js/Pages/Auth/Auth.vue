@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useBagStore } from '@/Stores/bag';
 import {
     CalendarCheck,
     CircleAlert,
@@ -23,8 +24,15 @@ const pageStatus = ref('check-email');
 const loginFailed = ref(false);
 const registerFailed = ref(false);
 
+const bagStore = useBagStore(); // Access Pinia store
+
 const checkEmailForm = useForm({
     email: '',
+});
+
+onMounted(() => {
+    // You can also call loadBag if you're manually loading from localStorage
+    console.log(registerForm.bag_items);
 });
 
 const registerForm = useForm({
@@ -33,6 +41,7 @@ const registerForm = useForm({
     firstname: '',
     email: computed(() => checkEmailForm.email),
     password: '',
+    bag_items: computed(() => bagStore.items),
 });
 
 // Method to check the email

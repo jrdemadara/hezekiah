@@ -3,18 +3,36 @@ import { ref } from 'vue';
 import { useClipboard } from '@vueuse/core';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { Check, Copy, ScanQrCode } from 'lucide-vue-next';
+import { Check, Copy, ScanQrCode, Share2 } from 'lucide-vue-next';
 import QrcodeVue from 'qrcode.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 const { props } = usePage();
-const qrcode = props.auth.user.code;
+const code = props.auth.user.code;
 const source = ref('');
 const value = ref('');
 
-value.value = `https://hezekiahhealth.com/invite?code=${qrcode}`;
-source.value = qrcode;
+value.value = `https://hezekiahhealth.com/invite?code=${code}`;
+source.value = code;
 
-const { text, copy, copied, isSupported } = useClipboard({ source });
+const { copy, copied } = useClipboard({ source });
+
+const shareInvite = () => {
+    const shareData = {
+        title: 'Invite Friends',
+        text: 'Join me on this amazing platform and enjoy great rewards! Sign up now.',
+        url: `https://hezekiahhealth.com/invite?code=${code}`,
+    };
+
+    if (navigator.share) {
+        navigator
+            .share(shareData)
+            .then(() => console.log('Shared successfully'))
+            .catch((error) => console.error('Error sharing:', error));
+    } else {
+        alert('Sharing is not supported on your browser.');
+    }
+};
 </script>
 
 <template>
@@ -39,19 +57,28 @@ const { text, copy, copied, isSupported } = useClipboard({ source });
                 render-as="svg"
             />
 
-            <div class="mt-5 flex w-3/4 flex-col items-center justify-center">
-                <div class="flex w-full items-center justify-center space-x-2">
+            <div class="flex w-3/4 flex-col items-center justify-center">
+                <SecondaryButton
+                    @click="shareInvite"
+                    class="mt-5 flex h-12 w-full items-center justify-center rounded-lg border bg-[#458500] px-2 text-black"
+                >
+                    <Share2 class="mr-2" />
+                    Share
+                </SecondaryButton>
+                <div
+                    class="mb-6 mt-6 flex w-full items-center justify-center space-x-2"
+                >
                     <div class="h-0.5 flex-grow rounded bg-slate-100"></div>
                     <p class="text-xs font-light text-slate-700">
                         or copy the code manually
                     </p>
                     <div class="h-0.5 flex-grow rounded bg-slate-100"></div>
                 </div>
-                <div class="mt-5 flex w-full space-x-2">
+                <div class="flex w-full space-x-2">
                     <div
                         class="flex h-10 w-full items-center justify-start rounded px-2 font-bold uppercase text-black ring-1 ring-slate-200"
                     >
-                        {{ qrcode }}
+                        {{ code }}
                     </div>
                     <div
                         @click="copy(source)"
@@ -65,11 +92,12 @@ const { text, copy, copied, isSupported } = useClipboard({ source });
                         /></span>
                     </div>
                 </div>
+
                 <Link
                     :href="route('dashboard')"
-                    class="mt-5 flex h-12 w-full items-center justify-center rounded-lg border bg-[#458500] px-2 text-white"
+                    class="mt-5 flex h-12 w-full items-center justify-center rounded-md border bg-[#458500] px-2 text-white"
                 >
-                    I'm done
+                    Done
                 </Link>
             </div>
         </div>

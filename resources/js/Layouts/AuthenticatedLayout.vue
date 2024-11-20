@@ -1,12 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
-import { AlignRight, Bell, Menu, ShoppingBag, X } from 'lucide-vue-next';
+import { usePage, Link } from '@inertiajs/vue3';
+import { Bell, ShoppingBag } from 'lucide-vue-next';
+import { useBagStore } from '@/Stores/bag';
+
+const { props } = usePage();
+const bagStore = useBagStore();
+
 const showingNavigationDropdown = ref(false);
 
 defineProps({
@@ -17,6 +22,16 @@ defineProps({
         type: String,
     },
 });
+
+const bagCount = computed(() => {
+    if (props.auth.user) {
+        // If authenticated, use the bag count from the server-side props
+        return props.auth.bags || 0;
+    } else {
+        // If not authenticated, use the bag count from the local store
+        return bagStore.bagCount;
+    }
+});
 </script>
 
 <template>
@@ -26,70 +41,74 @@ defineProps({
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 items-center justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-12 w-auto fill-current text-gray-800"
-                                    />
-                                </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
+                        <!-- Left Section: Logo -->
+                        <div class="flex shrink-0 items-center">
+                            <Link :href="route('dashboard')">
+                                <ApplicationLogo
+                                    class="block h-12 w-auto fill-current text-gray-800"
+                                />
+                            </Link>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
+                        <!-- Desktop Navigation Links -->
+                        <div class="hidden space-x-8 sm:flex">
+                            <NavLink
+                                :href="route('dashboard')"
+                                :active="route().current('dashboard')"
+                            >
+                                Dashboard
+                            </NavLink>
+                            <NavLink
+                                :href="route('auth')"
+                                :active="route().current('auth')"
+                            >
+                                Products
+                            </NavLink>
+                        </div>
+
+                        <!-- Right Section: Desktop Cart and User Menu -->
+                        <div
+                            class="hidden sm:flex sm:items-center sm:space-x-2"
+                        >
+                            <!-- Shopping Bag -->
                             <div
                                 class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
                             >
                                 <ShoppingBag />
-                                <!-- Badge for showing the item count -->
                                 <span
+                                    v-if="bagCount > 0"
                                     class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                                 >
-                                    3
-                                    <!-- Replace '3' with your dynamic item count variable -->
+                                    {{ bagCount }}
                                 </span>
                             </div>
-                            <div class="relative ms-3">
+
+                            <!-- User Dropdown -->
+                            <div class="relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                                        <button
+                                            v-if="$page.props.auth.user"
+                                            type="button"
+                                            class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium capitalize text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        >
+                                            {{
+                                                $page.props.auth.user.firstname
+                                            }}
+                                            {{ $page.props.auth.user.lastname }}
+                                            <svg
+                                                class="-me-0.5 ms-2 h-4 w-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
                                             >
-                                                {{
-                                                    $page.props.auth.user
-                                                        .firstname
-                                                }}
-
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                        </button>
                                     </template>
 
                                     <template #content>
@@ -110,54 +129,74 @@ defineProps({
                             </div>
                         </div>
 
-                        <div class="flex">
-                            <div
-                                class="relative mr-2 rounded-full p-2 sm:hidden"
-                            >
+                        <!-- Mobile Section: Bell, Bag, and Menu -->
+                        <div class="flex items-center space-x-4 sm:hidden">
+                            <!-- Bell Icon -->
+                            <div class="relative rounded-full p-2">
                                 <Bell class="text-gray-800" />
-                                <!-- Badge for showing the item count -->
                                 <span
                                     class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                                 >
                                     1
-                                    <!-- Replace '3' with your dynamic item count variable -->
                                 </span>
                             </div>
-                            <div
-                                class="relative mr-2 rounded-full p-2 sm:hidden"
+
+                            <!-- Shopping Bag -->
+                            <Link
+                                :href="route('bag')"
+                                class="relative rounded-full p-2"
                             >
                                 <ShoppingBag class="text-gray-800" />
-                                <!-- Badge for showing the item count -->
                                 <span
+                                    v-if="bagCount > 0"
                                     class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                                 >
-                                    3
-                                    <!-- Replace '3' with your dynamic item count variable -->
+                                    {{ bagCount }}
                                 </span>
-                            </div>
-                            <!-- Hamburger -->
-                            <div class="-me-2 flex items-center sm:hidden">
-                                <button
-                                    @click="
-                                        showingNavigationDropdown =
-                                            !showingNavigationDropdown
-                                    "
-                                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                            </Link>
+
+                            <!-- Hamburger Menu -->
+                            <button
+                                @click="
+                                    showingNavigationDropdown =
+                                        !showingNavigationDropdown
+                                "
+                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
+                            >
+                                <svg
+                                    v-if="!showingNavigationDropdown"
+                                    class="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
                                 >
-                                    <span v-show="!showingNavigationDropdown">
-                                        <AlignRight class="text-gray-800"
-                                    /></span>
-                                    <span v-show="showingNavigationDropdown">
-                                        <X class="text-gray-800"
-                                    /></span>
-                                </button>
-                            </div>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 6h16M4 12h16m-7 6h7"
+                                    />
+                                </svg>
+                                <svg
+                                    v-else
+                                    class="h-6 w-6"
+                                    stroke="currentColor"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-
                 <div
                     :class="{
                         block: showingNavigationDropdown,
@@ -172,31 +211,12 @@ defineProps({
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <div class="border-t border-gray-200 pb-1 pt-4">
-                        <div class="px-4">
-                            <div class="text-base font-medium text-gray-800">
-                                {{ $page.props.auth.user.firstname }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                        <ResponsiveNavLink
+                            :href="route('auth')"
+                            :active="route().current('auth')"
+                        >
+                            Products
+                        </ResponsiveNavLink>
                     </div>
                 </div>
             </nav>
@@ -209,7 +229,7 @@ defineProps({
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="bg-white">
                 <slot />
             </main>
             <footer class="flex items-center justify-center bg-white p-6">

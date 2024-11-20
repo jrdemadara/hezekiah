@@ -9,6 +9,11 @@ import {
     Copy,
     Network,
     QrCode,
+    Settings,
+    Settings2,
+    User2,
+    UserCircle2,
+    UserCog2,
     UserPlus2,
     UsersRound,
 } from 'lucide-vue-next';
@@ -18,7 +23,7 @@ const code = props.auth.user.code;
 const source = ref('');
 source.value = code;
 
-const { text, copy, copied, isSupported } = useClipboard({ source });
+const { copy, copied } = useClipboard({ source });
 
 const aapl = [
     // Example data structure (replace this with your actual data)
@@ -149,6 +154,23 @@ onMounted(() => {
     // Attach the SVG element to the DOM inside the `#chart` div
     chart.value.appendChild(svg.node());
 });
+
+const shareInvite = () => {
+    const shareData = {
+        title: 'Invite Friends',
+        text: 'Join me on this amazing platform and enjoy great rewards! Sign up now.',
+        url: `https://hezekiahhealth.com/invite?code=${code}`,
+    };
+
+    if (navigator.share) {
+        navigator
+            .share(shareData)
+            .then(() => console.log('Shared successfully'))
+            .catch((error) => console.error('Error sharing:', error));
+    } else {
+        alert('Sharing is not supported on your browser.');
+    }
+};
 </script>
 
 <template>
@@ -184,12 +206,20 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <Link
-                    :href="route('qrcode')"
-                    class="rounded-xl bg-[#AFEC70]/10 p-3 ring-1 ring-[#5DA414]/20"
-                >
-                    <QrCode :size="26" class="text-[#215439]" />
-                </Link>
+                <div class="flex space-x-3">
+                    <Link
+                        :href="route('qrcode')"
+                        class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
+                    >
+                        <QrCode :size="24" class="text-[#215439]" />
+                    </Link>
+                    <Link
+                        :href="route('profile.index')"
+                        class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
+                    >
+                        <UserCog2 :size="24" class="text-[#215439]" />
+                    </Link>
+                </div>
             </div>
         </template>
 
@@ -217,7 +247,8 @@ onMounted(() => {
                     <div class="flex flex-col">
                         <p class="text-xs text-lime-700">Invite Success</p>
                         <h2 class="text-2xl font-semibold text-lime-900">
-                            107<span class="text-xs font-normal">/Invites</span>
+                            {{ props.auth.referrals
+                            }}<span class="text-xs font-normal">/Invites</span>
                         </h2>
                     </div>
                 </div>
@@ -237,9 +268,8 @@ onMounted(() => {
                     <div class="flex flex-col">
                         <p class="text-xs text-gray-500">Build Networks</p>
                         <h2 class="text-2xl font-semibold text-[#AFEC70]">
-                            1,358<span class="text-xs font-normal"
-                                >/Networks</span
-                            >
+                            {{ props.auth.downlines
+                            }}<span class="text-xs font-normal">/Networks</span>
                         </h2>
                     </div>
                 </div>
@@ -254,11 +284,12 @@ onMounted(() => {
             </div>
 
             <div
-                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#2B542C] to-[#2B542C] p-4"
+                @click="shareInvite"
+                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#2B542C] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
             >
                 <div class="flex flex-col space-y-2">
                     <h2 class="text-lg font-semibold text-[#AFEC70]">
-                        Invites Friends
+                        Invite Friends
                     </h2>
                     <p class="text-xs leading-5 text-gray-200">
                         Invite your friends to join, and both of you can enjoy

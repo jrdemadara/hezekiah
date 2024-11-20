@@ -1,25 +1,12 @@
 <script setup>
-import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { ref, computed } from 'vue';
+import { usePage, Link } from '@inertiajs/vue3';
 import { ShoppingBag, User2, ChevronDown } from 'lucide-vue-next';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { useBagStore } from '@/Stores/bag';
 
-defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-});
+const { props } = usePage();
+const bagStore = useBagStore();
 
 const isMenuOpen = ref(false); // State for tracking the menu's visibility
 
@@ -27,12 +14,21 @@ const isMenuOpen = ref(false); // State for tracking the menu's visibility
 const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value;
 };
+
+const bagCount = computed(() => {
+    if (props.auth.user) {
+        // If authenticated, use the bag count from the server-side props
+        return props.auth.bags || 0;
+    } else {
+        console.log('not');
+        // If not authenticated, use the bag count from the local store
+        return bagStore.bagCount;
+    }
+});
 </script>
 
 <template>
-    <div
-        class="h-screen bg-gradient-to-tr from-[#C6DCAE] to-[#DBE5CB] sm:px-16"
-    >
+    <div class="bg-gradient-to-tr from-[#C6DCAE] to-[#DBE5CB] px-3 sm:px-16">
         <header>
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center justify-center">
@@ -74,13 +70,26 @@ const toggleMenu = () => {
 
                 <div class="flex items-center justify-center space-x-5">
                     <div class="flex items-center justify-center space-x-2">
+                        <Link
+                            :href="route('bag')"
+                            class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
+                        >
+                            <ShoppingBag />
+                            <!-- Badge for showing the item count -->
+                            <span
+                                v-if="bagCount > 0"
+                                class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
+                            >
+                                {{ bagCount }}
+                            </span>
+                        </Link>
                         <div class="group relative">
                             <!-- Sign In Button -->
                             <div
                                 class="flex cursor-pointer items-center rounded-full p-2 text-[#0C1F15] hover:bg-[#328458] hover:text-white"
                             >
                                 <User2 />
-                                <p class="ml-2">Sign in</p>
+                                <p class="ml-2 hidden sm:block">Sign in</p>
                                 <ChevronDown :size="20" :stroke-width="1.5" />
                             </div>
 
@@ -104,18 +113,6 @@ const toggleMenu = () => {
                                     >Profile</a
                                 >
                             </div>
-                        </div>
-                        <div
-                            class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
-                        >
-                            <ShoppingBag />
-                            <!-- Badge for showing the item count -->
-                            <span
-                                class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
-                            >
-                                3
-                                <!-- Replace '3' with your dynamic item count variable -->
-                            </span>
                         </div>
                     </div>
                     <!-- Hamburger Menu for Mobile -->
@@ -201,5 +198,8 @@ const toggleMenu = () => {
         <main>
             <slot />
         </main>
+        <footer class="flex items-center justify-center p-6">
+            <p class="font-semibold">© 2024 Hezekiah Health</p>
+        </footer>
     </div>
 </template>
