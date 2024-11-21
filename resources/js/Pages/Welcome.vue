@@ -1,26 +1,13 @@
 <script setup>
 import { ref } from 'vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { usePage, Head, Link, useForm } from '@inertiajs/vue3';
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { ArrowDown, BadgePlus, Plus, PlusCircle } from 'lucide-vue-next';
+import { ArrowDown, Plus } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
 
-const props = defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
+const { props } = usePage();
 
+defineProps({
     products: {
         type: Array, // Accept the products prop directly here
         required: true,
@@ -29,8 +16,26 @@ const props = defineProps({
 
 const bagStore = useBagStore();
 
+const bagForm = useForm({
+    product_id: '',
+});
+
 const addToBag = (product) => {
-    bagStore.addToBag(product);
+    bagForm.product_id = product.id;
+    if (props.auth.user) {
+        // If the user is authenticated, send the data to the backend
+        bagForm.post('bag-add', {
+            onSuccess: (data) => {
+                bagStore.addToBag(product);
+                console.log(product); // Log the state to check if it's updated
+            },
+            onError: (errors) => {
+                console.error('Error adding to bag:', errors);
+            },
+        });
+    } else {
+        bagStore.addToBag(product);
+    }
 };
 </script>
 
@@ -43,19 +48,19 @@ const addToBag = (product) => {
                 class="mt-10 flex flex-col items-center justify-center sm:mt-20 sm:items-start"
             >
                 <h2
-                    class="animate-slideIn font-areplos text-5xl font-black text-[#0C1F15] sm:text-8xl"
+                    class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-8xl"
                 >
-                    Organic Oil
+                    Food Supplements
                 </h2>
                 <h6
                     style="animation-delay: 0.1s"
-                    class="mt-2 animate-slideIn text-center font-areplos text-2xl font-medium tracking-wider text-[#EF6B21] sm:mt-6 sm:text-start sm:text-4xl"
+                    class="mt-2 animate-slideUp text-center font-areplos font-medium tracking-wider text-[#EF6B21] sm:mt-6 sm:animate-slideIn sm:text-start sm:text-4xl"
                 >
-                    Pure natural organic oil
+                    Pure natural organic supplements
                 </h6>
                 <p
                     style="animation-delay: 0.2s"
-                    class="mt-6 animate-slideIn text-center text-lg text-stone-600 sm:w-1/2"
+                    class="mt-4 animate-slideUp text-center text-lg text-stone-600 sm:w-1/2 sm:animate-slideIn sm:text-start"
                 >
                     Discover the essence of purity with our organic
                     oil—harvested from nature's finest ingredients to nourish,
@@ -67,19 +72,23 @@ const addToBag = (product) => {
                     class="mt-6 flex w-full flex-col items-center space-y-2 sm:w-fit"
                 >
                     <ArrowDown class="animate-bounce" :size="32" />
-                    <button
+                    <Link
+                        :href="route('auth')"
                         style="animation-delay: 0.3s"
-                        class="h-14 w-full animate-slideUp rounded-full bg-[#EF6B21] text-lg font-medium text-white sm:w-40"
+                        class="flex h-14 w-full animate-slideUp items-center justify-center rounded-full bg-[#EF6B21] text-lg font-medium text-white sm:w-40"
                     >
-                        Buy now
-                    </button>
+                        Join us!
+                    </Link>
                 </div>
             </div>
 
             <!-- Second Section: Reviews/Testimonials -->
             <div class="mt-16 flex h-fit">
                 <!-- Image Carousel (People) -->
-                <div class="relative flex w-40 flex-col items-start">
+                <div
+                    style="animation-delay: 0.4s"
+                    class="relative flex w-40 animate-slideUp flex-col items-start"
+                >
                     <div class="absolute rounded-full ring-4 ring-gray-200">
                         <img
                             src="../../assets/images/person-1.jpg"
@@ -108,7 +117,10 @@ const addToBag = (product) => {
                 </div>
 
                 <!-- Customer Review -->
-                <div class="ml-8 flex flex-col">
+                <div
+                    style="animation-delay: 0.5s"
+                    class="ml-8 flex animate-slideUp flex-col"
+                >
                     <h4 class="font-semibold sm:text-xl">
                         Our Satisfied Customers
                     </h4>
@@ -143,7 +155,8 @@ const addToBag = (product) => {
                     Our Products
                 </h2>
                 <div
-                    class="mt-12 grid grid-cols-1 justify-center gap-8 sm:grid-cols-2 lg:grid-cols-3"
+                    style="animation-delay: 0.6s"
+                    class="mt-12 grid animate-slideUp grid-cols-1 justify-center gap-8 sm:grid-cols-2 lg:grid-cols-3"
                 >
                     <div
                         class="flex w-80 flex-col rounded-3xl bg-slate-50/60 p-6 shadow-md ring-1 ring-slate-50 hover:shadow-lg"

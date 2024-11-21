@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
-import { ShoppingBag, User2, ChevronDown } from 'lucide-vue-next';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { ShoppingBag, User2 } from 'lucide-vue-next';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { useBagStore } from '@/Stores/bag';
 
@@ -16,20 +18,28 @@ const toggleMenu = () => {
 };
 
 const bagCount = computed(() => {
-    if (props.auth.user) {
-        // If authenticated, use the bag count from the server-side props
-        return props.auth.bags || 0;
-    } else {
-        console.log('not');
-        // If not authenticated, use the bag count from the local store
-        return bagStore.bagCount;
+    // If the user is authenticated, update the bag store with the server data
+    if (props.auth.user && props.auth.bags) {
+        // Clear existing items from the store
+        bagStore.clearBag();
+
+        // Add bags from server-side props to the store
+        props.auth.bags.forEach((bag) => {
+            bagStore.addToBag({
+                id: bag.id,
+                name: bag.name,
+                price: bag.price,
+                quantity: bag.quantity,
+            });
+        });
     }
+    return bagStore.bagCount;
 });
 </script>
 
 <template>
     <div class="bg-gradient-to-tr from-[#C6DCAE] to-[#DBE5CB] px-3 sm:px-16">
-        <header>
+        <header class="animate-slideUp">
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center justify-center">
                     <ApplicationLogo class="w-28" />
@@ -38,34 +48,36 @@ const bagCount = computed(() => {
                 <nav
                     class="-mx-3 hidden flex-1 justify-center space-x-16 md:flex"
                 >
-                    <Link
-                        :href="route('login')"
+                    <NavLink
+                        v-if="props.auth.user"
+                        :href="route('dashboard')"
                         class="group rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-[#328458] focus:outline-none focus-visible:ring-[#FF2D20]"
+                    >
+                        Dashboard
+                        <div
+                            class="h-0.5 w-full rounded-full bg-[#328458] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+                        ></div>
+                    </NavLink>
+                    <NavLink
+                        :href="route('home')"
+                        :active="route().current('home')"
+                        class="group px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-[#328458] focus:outline-none focus-visible:ring-[#FF2D20]"
                     >
                         Home
-                        <div
-                            class="h-0.5 w-full rounded-full bg-[#328458] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                        ></div>
-                    </Link>
+                    </NavLink>
 
-                    <Link
+                    <NavLink
                         :href="route('login')"
-                        class="group rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-[#328458] focus:outline-none focus-visible:ring-[#FF2D20]"
+                        class="group px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-[#328458] focus:outline-none focus-visible:ring-[#FF2D20]"
                     >
                         Contact us
-                        <div
-                            class="h-0.5 w-full rounded-full bg-[#328458] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                        ></div>
-                    </Link>
-                    <Link
+                    </NavLink>
+                    <NavLink
                         :href="route('login')"
                         class="group rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-[#328458] focus:outline-none focus-visible:ring-[#FF2D20]"
                     >
                         About us
-                        <div
-                            class="h-0.5 w-full rounded-full bg-[#328458] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                        ></div>
-                    </Link>
+                    </NavLink>
                 </nav>
 
                 <div class="flex items-center justify-center space-x-5">
@@ -74,7 +86,7 @@ const bagCount = computed(() => {
                             :href="route('bag')"
                             class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
                         >
-                            <ShoppingBag />
+                            <ShoppingBag class="text-black" />
                             <!-- Badge for showing the item count -->
                             <span
                                 v-if="bagCount > 0"
@@ -83,37 +95,12 @@ const bagCount = computed(() => {
                                 {{ bagCount }}
                             </span>
                         </Link>
-                        <div class="group relative">
-                            <!-- Sign In Button -->
-                            <div
-                                class="flex cursor-pointer items-center rounded-full p-2 text-[#0C1F15] hover:bg-[#328458] hover:text-white"
-                            >
-                                <User2 />
-                                <p class="ml-2 hidden sm:block">Sign in</p>
-                                <ChevronDown :size="20" :stroke-width="1.5" />
-                            </div>
-
-                            <!-- Dropdown Menu -->
-                            <div
-                                class="absolute left-0 top-full mt-1 hidden w-40 flex-col divide-y divide-gray-200 rounded-lg bg-white shadow-lg group-hover:flex"
-                            >
-                                <a
-                                    href="auth"
-                                    class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >Login</a
-                                >
-                                <a
-                                    href="auth"
-                                    class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >Register</a
-                                >
-                                <a
-                                    href="profile"
-                                    class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >Profile</a
-                                >
-                            </div>
-                        </div>
+                        <NavLink
+                            :href="route('dashboard')"
+                            class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
+                        >
+                            <User2 class="text-black" />
+                        </NavLink>
                     </div>
                     <!-- Hamburger Menu for Mobile -->
                     <div class="md:hidden">
@@ -156,49 +143,41 @@ const bagCount = computed(() => {
             </div>
             <!-- Mobile Navigation Menu -->
 
-            <nav
-                v-if="isMenuOpen && canLogin"
-                class="flex flex-col space-y-2 p-4 md:hidden"
-            >
-                <Link
+            <nav v-if="isMenuOpen" class="flex flex-col sm:hidden">
+                <ResponsiveNavLink
+                    v-if="props.auth.user"
                     :href="route('dashboard')"
-                    class="flex items-center font-semibold"
-                >
-                    Subscribe To Newsletters
-                    <Mail class="ml-2" :size="18" />
-                </Link>
-
-                <Link
-                    v-if="$page.props.auth.user"
-                    :href="route('dashboard')"
+                    :active="route().current('dashboard')"
                     class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
                 >
                     Dashboard
-                </Link>
-
-                <template v-else>
-                    <Link
-                        :href="route('login')"
-                        class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        Log in
-                    </Link>
-
-                    <Link
-                        v-if="canRegister"
-                        :href="route('register')"
-                        class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                    >
-                        Register
-                    </Link>
-                </template>
+                </ResponsiveNavLink>
+                <ResponsiveNavLink
+                    :href="route('home')"
+                    :active="route().current('home')"
+                    class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                >
+                    Home
+                </ResponsiveNavLink>
+                <ResponsiveNavLink
+                    :href="route('home')"
+                    class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                >
+                    Contact us
+                </ResponsiveNavLink>
+                <ResponsiveNavLink
+                    :href="route('home')"
+                    class="rounded-md px-3 py-2 text-[#0C1F15] ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                >
+                    About us
+                </ResponsiveNavLink>
             </nav>
         </header>
 
         <main>
             <slot />
         </main>
-        <footer class="flex items-center justify-center p-6">
+        <footer class="flex animate-slideDown items-center justify-center p-6">
             <p class="font-semibold">© 2024 Hezekiah Health</p>
         </footer>
     </div>

@@ -18,8 +18,14 @@ class Product extends Model
         'image_url',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function bags()
     {
-        return $this->hasMany(Bag::class);
+        return $this->hasMany(Bag::class, 'product_id');
     }
 }

@@ -53,7 +53,7 @@ const checkoutLink = computed(() => {
                 />
                 <div class="flex w-full flex-col justify-between">
                     <div class="flex items-center justify-between py-1">
-                        <h4 class="font-mono tracking-tight">
+                        <h4 class="font-mono capitalize tracking-tight">
                             {{ item.name }}
                         </h4>
                         <div

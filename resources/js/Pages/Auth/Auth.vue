@@ -30,10 +30,10 @@ const checkEmailForm = useForm({
     email: '',
 });
 
-onMounted(() => {
-    // You can also call loadBag if you're manually loading from localStorage
-    console.log(registerForm.bag_items);
-});
+// onMounted(() => {
+//     // You can also call loadBag if you're manually loading from localStorage
+//     console.log(registerForm.bag_items);
+// });
 
 const registerForm = useForm({
     referral_code: '',
@@ -124,7 +124,7 @@ defineProps(['status']);
     <div
         class="flex flex-col items-center justify-center space-y-4 px-0 sm:h-screen sm:space-y-7 sm:px-32"
     >
-        <ApplicationLogo class="w-48" />
+        <ApplicationLogo class="mt-6 w-44 flex-none sm:mt-0 sm:w-48" />
         <div
             class="flex flex-col rounded-lg p-4 ring-stone-300 sm:p-8 sm:ring-1"
             :class="{
@@ -502,7 +502,7 @@ defineProps(['status']);
                     >
                         <button
                             @click="googleLogin"
-                            class="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                            class="flex h-12 w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
                         >
                             <img
                                 src="../../../assets/images/google.png"
@@ -515,7 +515,7 @@ defineProps(['status']);
                         </button>
 
                         <button
-                            class="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
+                            class="flex h-12 w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
                         >
                             <img
                                 src="../../../assets/images/facebook.png"

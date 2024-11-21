@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
+    Route::post('/bag-add', [BagController::class, 'addToBag'])->name('bag.add');
 
 });
 

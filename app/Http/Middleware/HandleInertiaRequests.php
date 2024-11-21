@@ -50,8 +50,24 @@ class HandleInertiaRequests extends Middleware
             WHERE id != ?;
         ', [$user->id, $user->id]);
 
+            // $bags = Bag::find($use);
             $downlines = $allDownline[0]->downline_count ?? 0;
         }
+
+        // If the user is authenticated, retrieve bags with products, otherwise return an empty array
+        $bags = $user ? $user->bags()->with('product')->get() : collect();
+
+        // Transform the bags to include product details
+        $mergedBags = $bags->map(function ($bag) {
+            return [
+                'id' => $bag->id,
+                'user_id' => $bag->user_id,
+                'product_id' => $bag->product_id,
+                'quantity' => $bag->quantity,
+                'name' => $bag->product->name ?? null,
+                'price' => $bag->product->price ?? 0,
+            ];
+        });
 
         return [
              ...parent::share($request),
@@ -59,7 +75,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
                 'referrals' => $user ? $user->referrals()->count() : 0,
                 'downlines' => $downlines,
-                'bags' => $user ? $user->bags()->count() : 0,
+                "bags" => $mergedBags,
             ],
         ];
 

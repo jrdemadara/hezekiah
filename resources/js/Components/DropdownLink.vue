@@ -1,5 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { useBagStore } from '@/Stores/bag';
+
+const bagStore = useBagStore();
 
 defineProps({
     href: {

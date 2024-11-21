@@ -28,8 +28,6 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => 'required|string|max:32',
             'bag_items' => 'nullable|array',
-            'bag_items.*.product_id' => 'required_with:bag_items|integer|exists:products,id',
-            'bag_items.*.quantity' => 'required_with:bag_items|integer|min:1',
         ]);
 
         $referrer = User::where('code', $request->referral_code)->pluck('id')->first();
@@ -57,7 +55,7 @@ class RegisteredUserController extends Controller
             foreach ($request->bag_items as $item) {
                 Bag::create([
                     'user_id' => $user->id,
-                    'product_id' => $item['product_id'],
+                    'product_id' => $item['id'],
                     'quantity' => $item['quantity'],
                 ]);
             }

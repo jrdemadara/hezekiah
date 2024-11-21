@@ -68,6 +68,10 @@ export const useBagStore = defineStore('bag', {
                 this.items = savedItems;
             }
         },
+
+        clearBag() {
+            this.items = [];
+        },
     },
 
     // Enable persistence

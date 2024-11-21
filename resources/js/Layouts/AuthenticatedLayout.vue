@@ -24,13 +24,22 @@ defineProps({
 });
 
 const bagCount = computed(() => {
-    if (props.auth.user) {
-        // If authenticated, use the bag count from the server-side props
-        return props.auth.bags || 0;
-    } else {
-        // If not authenticated, use the bag count from the local store
-        return bagStore.bagCount;
+    // If the user is authenticated, update the bag store with the server data
+    if (props.auth.user && props.auth.bags) {
+        // Clear existing items from the store
+        bagStore.clearBag();
+
+        // Add bags from server-side props to the store
+        props.auth.bags.forEach((bag) => {
+            bagStore.addToBag({
+                id: bag.id,
+                name: bag.name,
+                price: bag.price,
+                quantity: bag.quantity,
+            });
+        });
     }
+    return bagStore.bagCount;
 });
 </script>
 
@@ -59,8 +68,8 @@ const bagCount = computed(() => {
                                 Dashboard
                             </NavLink>
                             <NavLink
-                                :href="route('auth')"
-                                :active="route().current('auth')"
+                                :href="route('home')"
+                                :active="route().current('home')"
                             >
                                 Products
                             </NavLink>
@@ -212,8 +221,8 @@ const bagCount = computed(() => {
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            :href="route('auth')"
-                            :active="route().current('auth')"
+                            :href="route('home')"
+                            :active="route().current('home')"
                         >
                             Products
                         </ResponsiveNavLink>
