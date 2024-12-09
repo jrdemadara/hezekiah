@@ -5,6 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- SEO Meta Tags -->
+    <meta name="author" content="Johnny Roger Demadara">
+    <meta name="description"
+        content="Discover our premium range of healthy food supplements designed to nourish your body and improve overall well-being. Pure, natural, and organic ingredients for a healthier lifestyle.">
+    <meta name="keywords" content="immuno, prebio, hezekiah, food suppliment, health, healthy coffee, coffee, immun">
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
