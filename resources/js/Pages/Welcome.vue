@@ -4,6 +4,9 @@ import { usePage, Head, Link, useForm } from '@inertiajs/vue3';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { ArrowDown, Plus } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import heroImage from '../../assets/images/welcome-background.png';
 
 const { props } = usePage();
 
@@ -23,18 +26,20 @@ const bagForm = useForm({
 const addToBag = (product) => {
     bagForm.product_id = product.id;
     if (props.auth.user) {
-        // If the user is authenticated, send the data to the backend
         bagForm.post('bag-add', {
-            onSuccess: (data) => {
+            onSuccess: () => {
                 bagStore.addToBag(product);
-                console.log(product); // Log the state to check if it's updated
+                //location.reload();
+                toast.success('Item is added to bag!');
             },
             onError: (errors) => {
                 console.error('Error adding to bag:', errors);
+                toast.error('Something went wrong! Please try again later.');
             },
         });
     } else {
         bagStore.addToBag(product);
+        toast.success('Item is added to bag!');
     }
 };
 </script>
@@ -46,6 +51,9 @@ const addToBag = (product) => {
             <!-- First Section: Title and Description -->
             <div
                 class="mt-10 flex flex-col items-center justify-center sm:mt-20 sm:items-start"
+                style="
+                    background-image: url('@/assets/images/welcome-background.png');
+                "
             >
                 <h2
                     class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-8xl"
@@ -164,9 +172,9 @@ const addToBag = (product) => {
                         :key="product.id"
                     >
                         <img
-                            src="../../assets/images/prebio.png"
+                            :src="`/images/${product.image_url}`"
                             alt="Product Image"
-                            class="h-full rounded-lg object-cover"
+                            class="h-full w-full object-contain"
                         />
                         <p class="mt-4 text-xl font-semibold capitalize">
                             {{ product.name }}

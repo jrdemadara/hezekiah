@@ -60,7 +60,7 @@ const shareInvite = () => {
             <div class="flex w-3/4 flex-col items-center justify-center">
                 <SecondaryButton
                     @click="shareInvite"
-                    class="mt-5 flex h-12 w-full items-center justify-center rounded-lg border bg-[#458500] px-2 text-black"
+                    class="mt-5 flex h-12 w-full items-center justify-center rounded-lg border px-2 text-black"
                 >
                     <Share2 class="mr-2" />
                     Share

@@ -22,14 +22,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->integer('points')->default(0);
-            $table->string('province')->nullable();
-            $table->string('city')->nullable();
-            $table->string('barangay')->nullable();
-            $table->string('street')->nullable();
-            $table->string('house_number')->nullable();
-            $table->string('zipcode')->nullable();
-            $table->string('landmark')->nullable();
-            $table->string('coordinates')->nullable();
             $table->foreignId('referred_by')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('auth_provider')->default('default');
             $table->index(['code']);
