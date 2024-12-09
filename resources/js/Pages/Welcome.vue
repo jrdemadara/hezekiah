@@ -6,7 +6,7 @@ import { ArrowDown, Plus } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import heroImage from '../../assets/images/welcome-background.png';
+// import heroImage from '../../assets/images/welcome-background.png';
 
 const { props } = usePage();
 
