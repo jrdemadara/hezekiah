@@ -81,7 +81,7 @@ const checkoutLink = computed(() => {
 
         <!-- Fixed button at the bottom -->
         <div
-            class="fixed bottom-0 left-0 right-0 flex items-center justify-between p-4"
+            class="fixed bottom-0 left-0 right-0 flex items-center justify-between p-4 px-4 sm:px-6 lg:px-8"
         >
             <h4 class="font-mono text-3xl font-medium tracking-tighter">
                 {{ bagStore.subtotal }}
