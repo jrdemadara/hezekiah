@@ -47,7 +47,7 @@ const checkoutLink = computed(() => {
         <div class="flex h-[calc(100vh-64px)] flex-col overflow-y-auto pb-16">
             <div v-for="item in bagStore.items" :key="item.id" class="flex p-4">
                 <img
-                    :src="`/images/${product.image_url}`"
+                    :src="`/images/${product.id}.png`"
                     alt="Product Image"
                     class="mr-3 h-24 rounded-lg"
                 />

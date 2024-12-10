@@ -172,7 +172,7 @@ const addToBag = (product) => {
                         :key="product.id"
                     >
                         <img
-                            :src="`/images/${product.image_url}`"
+                            :src="`/images/${product.id}.png`"
                             alt="Product Image"
                             class="h-full w-full object-contain"
                         />
