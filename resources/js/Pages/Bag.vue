@@ -46,11 +46,11 @@ const checkoutLink = computed(() => {
 
         <div class="flex h-[calc(100vh-64px)] flex-col overflow-y-auto pb-16">
             <div v-for="item in bagStore.items" :key="item.id" class="flex p-4">
-                <img
+                <!-- <img
                     :src="`/images/${item.id}.png`"
                     alt="Product Image"
                     class="mr-3 h-24 rounded-lg"
-                />
+                /> -->
                 <div class="flex w-full flex-col justify-between">
                     <div class="flex items-center justify-between py-1">
                         <h4 class="font-mono capitalize tracking-tight">
