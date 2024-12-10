@@ -67,11 +67,10 @@ const addToBag = (product) => {
                     style="animation-delay: 0.2s"
                     class="mt-4 animate-slideUp text-center text-lg text-stone-600 sm:w-1/2 sm:animate-slideIn sm:text-start"
                 >
-                    Discover the essence of purity with our organic
-                    oil—harvested from nature's finest ingredients to nourish,
-                    protect, and revitalize. Every drop is crafted with care,
-                    offering you the healthiest choice for a radiant, natural
-                    glow inside and out.
+                    Fuel your body and mind with our carefully crafted food
+                    supplements and health-focused coffee blends. Whether you're
+                    boosting your energy, supporting immunity, or finding
+                    balance in your busy day, we've got you covered.
                 </p>
                 <div
                     class="mt-6 flex w-full flex-col items-center space-y-2 sm:w-fit"
