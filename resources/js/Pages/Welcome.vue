@@ -51,9 +51,6 @@ const addToBag = (product) => {
             <!-- First Section: Title and Description -->
             <div
                 class="mt-10 flex flex-col items-center justify-center sm:mt-20 sm:items-start"
-                style="
-                    background-image: url('@/assets/images/welcome-background.png');
-                "
             >
                 <h2
                     class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-8xl"
