@@ -80,7 +80,8 @@ const bagCount = computed(() => {
                             class="hidden sm:flex sm:items-center sm:space-x-2"
                         >
                             <!-- Shopping Bag -->
-                            <div
+                            <Link
+                                :href="route('bag')"
                                 class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
                             >
                                 <ShoppingBag />
@@ -90,7 +91,7 @@ const bagCount = computed(() => {
                                 >
                                     {{ bagCount }}
                                 </span>
-                            </div>
+                            </Link>
 
                             <!-- User Dropdown -->
                             <div class="relative">
