@@ -12,7 +12,7 @@ const code = props.auth.user.code;
 const source = ref('');
 const value = ref('');
 
-value.value = `https://hezekiahhealth.com/invite?code=${code}`;
+value.value = `https://hezekiah.ph/invite?code=${code}`;
 source.value = code;
 
 const { copy, copied } = useClipboard({ source });
@@ -21,7 +21,7 @@ const shareInvite = () => {
     const shareData = {
         title: 'Invite Friends',
         text: 'Join me on this amazing platform and enjoy great rewards! Sign up now.',
-        url: `https://hezekiahhealth.com/invite?code=${code}`,
+        url: `https://hezekiah.ph/invite?code=${code}`,
     };
 
     if (navigator.share) {
