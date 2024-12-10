@@ -44,12 +44,14 @@ export const useBagStore = defineStore('bag', {
         },
 
         incrementQuantity(productId) {
+            console.log(productId);
             const item = this.items.find((item) => item.id === productId);
             if (item) {
                 item.quantity += 1;
             }
         },
         decrementQuantity(productId) {
+            console.log(productId);
             const item = this.items.find((item) => item.id === productId);
             if (item) {
                 item.quantity = Math.max(1, item.quantity - 1); // Prevent quantity from going below 1
@@ -58,6 +60,7 @@ export const useBagStore = defineStore('bag', {
 
         // Remove an item from the bag
         removeFromBag(productId) {
+            console.log(productId);
             this.items = this.items.filter((item) => item.id !== productId);
         },
 
