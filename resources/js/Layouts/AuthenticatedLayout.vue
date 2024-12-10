@@ -36,6 +36,7 @@ const bagCount = computed(() => {
                 name: bag.name,
                 price: bag.price,
                 quantity: bag.quantity,
+                image_url: bag.image_url,
             });
         });
     }

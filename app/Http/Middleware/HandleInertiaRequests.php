@@ -66,6 +66,7 @@ class HandleInertiaRequests extends Middleware
                 'quantity' => $bag->quantity,
                 'name' => $bag->product->name ?? null,
                 'price' => $bag->product->price ?? 0,
+                'image_url' => $bag->image_url,
             ];
         });
 
