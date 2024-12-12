@@ -3,6 +3,7 @@
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRCodeController;
+use App\Http\Controllers\ReferralCodeController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $products = Product::select('id', 'name', 'price', 'image_url')->get();
+    $products = Product::select('id', 'name', 'description', 'price', 'image_url')->get();
 
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -35,6 +36,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
     Route::post('/bag-add', [BagController::class, 'addToBag'])->name('bag.add');
+
+    Route::get('/referral-code', [ReferralCodeController::class, 'index'])->name('referral-code.index');
+    Route::post('/referral-code', [ReferralCodeController::class, 'checkReferralCode'])->name('referral-code.check');
+
+    // Only referred user can access this routes
+    Route::middleware(['check.referral'])->group(function () {
+    });
 
 });
 

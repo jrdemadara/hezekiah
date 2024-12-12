@@ -28,8 +28,8 @@ const addToBag = (product) => {
     if (props.auth.user) {
         bagForm.post('bag-add', {
             onSuccess: () => {
-                bagStore.addToBag(product);
                 //location.reload();
+                bagStore.addToBag(product);
                 toast.success('Item is added to bag!');
             },
             onError: (errors) => {
@@ -53,9 +53,9 @@ const addToBag = (product) => {
                 class="mt-10 flex flex-col items-center justify-center sm:mt-20 sm:items-start"
             >
                 <h2
-                    class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-8xl"
+                    class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-7xl"
                 >
-                    Food Supplements
+                    Functional Supplements
                 </h2>
                 <h6
                     style="animation-delay: 0.1s"
@@ -158,6 +158,39 @@ const addToBag = (product) => {
                 <h2 class="text-center font-areplos text-5xl text-[#0C1F15]">
                     Our Products
                 </h2>
+                <!-- <div
+                    class="mt-12 flex items-center justify-center space-x-4 rounded-3xl bg-slate-50/60 p-6 shadow-md ring-1 ring-slate-50 hover:shadow-lg"
+                >
+                    <div
+                        class="flex space-x-6"
+                        v-for="product in products"
+                        :key="product.id"
+                    >
+                        <img
+                            :src="`/images/${product.id}.png`"
+                            alt="Product Image"
+                            class="h-full w-40 object-contain"
+                        />
+                        <div class="flex flex-col items-start justify-center">
+                            <p class="mt-4 text-xl font-semibold capitalize">
+                                {{ product.name }}
+                            </p>
+                            <p class="text- mt-2 capitalize text-stone-600">
+                                {{ product.description }}
+                            </p>
+                            <p class="mt-2 font-semibold">
+                                ₱{{ product.price }}
+                            </p>
+                            <button
+                                class="mt-4 flex items-center justify-center rounded-full bg-orange-500 px-4 py-2 text-white transition hover:bg-orange-400"
+                                @click="addToBag(product)"
+                            >
+                                <Plus />
+                                <span>Add to bag</span>
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
                 <div
                     style="animation-delay: 0.6s"
                     class="mt-12 grid animate-slideUp grid-cols-1 justify-center gap-8 sm:grid-cols-2 lg:grid-cols-3"
@@ -175,15 +208,52 @@ const addToBag = (product) => {
                         <p class="mt-4 text-xl font-semibold capitalize">
                             {{ product.name }}
                         </p>
-                        <p class="text-gray-600">₱{{ product.price }}</p>
+                        <p class="mt-2 text-sm capitalize">
+                            {{ product.description }}
+                        </p>
+                        <p class="mt-2 font-semibold">
+                            ₱{{ product.price.toLocaleString() }}
+                        </p>
                         <button
-                            class="mt-4 flex justify-center rounded-md bg-orange-500 px-4 py-2 text-white transition hover:bg-orange-400"
+                            class="mt-4 flex justify-center rounded-full bg-orange-500 px-4 py-2 text-white transition hover:bg-orange-400"
                             @click="addToBag(product)"
                         >
                             <Plus />
                             Add to bag
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <div class="mt-24 flex flex-col items-center sm:flex-row">
+                <img src="../../assets/images/coffee2.png" alt="coffee" />
+                <div class="flex flex-col space-y-6">
+                    <h2
+                        class="text-center font-areplos text-3xl leading-tight tracking-wider text-[#0C1F15] sm:text-start sm:text-5xl"
+                    >
+                        Experience wellness with every sip of our healthy
+                        coffee!
+                    </h2>
+                    <p
+                        style="animation-delay: 0.2s"
+                        class="animate-slideUp text-center text-lg text-stone-600 sm:animate-slideIn sm:text-start"
+                    >
+                        Our 13-in-1 healthy coffee is a perfect blend of organic
+                        premium ingredients, carefully crafted to support your
+                        well-being. Packed with essential nutrients,
+                        antioxidants, and natural goodness, it offers a
+                        delicious, energizing experience. Enjoy a boost in both
+                        flavor and health with every sip, making it an ideal
+                        choice for those seeking a healthier, more balanced
+                        lifestyle.
+                    </p>
+                    <Link
+                        :href="route('auth')"
+                        style="animation-delay: 0.3s"
+                        class="flex h-14 w-full animate-slideUp items-center justify-center rounded-full bg-[#328458] text-lg font-medium text-white sm:w-40"
+                    >
+                        About us
+                    </Link>
                 </div>
             </div>
         </div>

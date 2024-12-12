@@ -7,11 +7,13 @@ import {} from '@inertiajs/vue3';
 import {
     Check,
     Copy,
+    Info,
     Network,
     QrCode,
     UserCog2,
     UserPlus2,
     UsersRound,
+    X,
 } from 'lucide-vue-next';
 import * as d3 from 'd3';
 const { props } = usePage();
@@ -174,6 +176,24 @@ const shareInvite = () => {
 
     <AuthenticatedLayout>
         <template #header>
+            <div
+                v-if="!props.auth.user.referred_by"
+                class="mb-4 flex w-full items-center justify-start space-x-2 rounded-xl bg-orange-400 p-2 text-white"
+            >
+                <div class="flex-shrink-0">
+                    <Info :size="32" class="text-white" />
+                </div>
+                <p>
+                    Please enter the referral code of the person who invited
+                    you.
+                    <Link
+                        :href="route('referral-code.index')"
+                        class="font-semibold text-[#AFEC70] underline"
+                    >
+                        Click here to proceed
+                    </Link>
+                </p>
+            </div>
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <img

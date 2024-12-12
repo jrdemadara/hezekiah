@@ -113,7 +113,7 @@ const togglePasswordVisibility = () => {
 
 // Google login
 const googleLogin = () => {
-    window.location.href = 'https://hezekiah.ph/auth/google';
+    window.location.href = '/auth/google';
 };
 
 defineProps(['status']);
