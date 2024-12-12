@@ -55,7 +55,7 @@ const addToBag = (product) => {
                 <h2
                     class="animate-slideUp text-center font-areplos text-5xl font-black text-[#0C1F15] sm:animate-slideIn sm:text-7xl"
                 >
-                    Functional Supplements
+                    Webhook Test
                 </h2>
                 <h6
                     style="animation-delay: 0.1s"
