@@ -39,7 +39,7 @@ const bagCount = computed(() => {
 
 <template>
     <div
-        class="flex h-screen flex-col bg-gradient-to-tr from-[#b9d898] to-[#DBE5CB] px-3 sm:px-16"
+        class="flex min-h-screen flex-col bg-gradient-to-tr from-[#b9d898] to-[#DBE5CB] px-3 sm:px-16"
     >
         <header class="animate-slideUp">
             <div class="flex items-center justify-between py-4">
