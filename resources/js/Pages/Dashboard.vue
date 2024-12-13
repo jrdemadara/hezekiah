@@ -4,6 +4,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
 import {} from '@inertiajs/vue3';
+import avatar from '../../assets/images/avatar.jpg';
+
 import {
     Check,
     Copy,
@@ -13,7 +15,6 @@ import {
     UserCog2,
     UserPlus2,
     UsersRound,
-    X,
 } from 'lucide-vue-next';
 import * as d3 from 'd3';
 const { props } = usePage();
@@ -197,7 +198,7 @@ const shareInvite = () => {
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <img
-                        :src="props.auth.user.avatar"
+                        :src="props.auth.user.avatar || avatar"
                         alt="avatar"
                         class="w-14 rounded-full"
                     />

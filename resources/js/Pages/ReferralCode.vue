@@ -1,14 +1,11 @@
 <script setup>
-import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, useForm } from '@inertiajs/vue3';
-import { Info, OctagonX, Workflow } from 'lucide-vue-next';
+import { Head, useForm } from '@inertiajs/vue3';
+import { Workflow } from 'lucide-vue-next';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-
 const form = useForm({
     code: '',
 });
@@ -16,15 +13,24 @@ const form = useForm({
 const checkCode = () => {
     form.post(route('referral-code.check'), {
         onSuccess: () => {
-            window.location.href = route('dashboard');
+            toast.success('You’ve successfully linked to your referrer.');
+            setTimeout(() => {
+                window.location.href = route('dashboard');
+            }, 5000);
         },
-        onError: (e) => {
-            if (e.status == 404) {
-                toast.error('No matching referral code found.');
-            } else if (e.status == 403) {
-                toast.error('You are already linked to a referrer.');
-            } else if (e.status == 500) {
-                toast.error('Something went wrong. Please try again!');
+        onError: (error) => {
+            switch (error.status) {
+                case 404:
+                    toast.error('No matching referral code found.');
+                    break;
+                case 403:
+                    toast.error('You are already linked to a referrer.');
+                    break;
+                case 500:
+                    toast.error(
+                        'An unexpected error occurred. Please try again.',
+                    );
+                    break;
             }
         },
     });
