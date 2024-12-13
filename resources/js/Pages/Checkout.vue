@@ -22,12 +22,12 @@ const backLink = computed(() => {
 });
 
 const checkoutLink = computed(() => {
-    return props.auth.user ? route('checkout.index') : route('auth');
+    return props.auth.user ? route('dashboard') : route('auth');
 });
 </script>
 
 <template>
-    <Head title="Bag" />
+    <Head title="Checkout" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -39,7 +39,7 @@ const checkoutLink = computed(() => {
                 <h2
                     class="w-full text-center font-mono text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
                 >
-                    Bag
+                    Checkout
                 </h2>
             </div>
         </template>

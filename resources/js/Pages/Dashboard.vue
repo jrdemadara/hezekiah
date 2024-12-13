@@ -179,22 +179,22 @@ const shareInvite = () => {
         <template #header>
             <div
                 v-if="!props.auth.user.referred_by"
-                class="mb-4 flex w-full items-center justify-start space-x-2 rounded-xl bg-orange-400 p-2 text-white"
+                class="mb-4 flex w-full items-center justify-start space-x-2 rounded-xl bg-[#8770ec] p-2 text-white"
             >
                 <div class="flex-shrink-0">
-                    <Info :size="32" class="text-white" />
+                    <Info :size="32" />
                 </div>
                 <p>
-                    Please enter the referral code of the person who invited
-                    you.
+                    Can you tell us who invited you?
                     <Link
                         :href="route('referral-code.index')"
-                        class="font-semibold text-[#AFEC70] underline"
-                    >
-                        Click here to proceed
+                        class="font-semibold underline"
+                        ><br />
+                        Click to proceed
                     </Link>
                 </p>
             </div>
+
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <img

@@ -38,7 +38,9 @@ const bagCount = computed(() => {
 </script>
 
 <template>
-    <div class="bg-gradient-to-tr from-[#b9d898] to-[#DBE5CB] px-3 sm:px-16">
+    <div
+        class="flex h-screen flex-col bg-gradient-to-tr from-[#b9d898] to-[#DBE5CB] px-3 sm:px-16"
+    >
         <header class="animate-slideUp">
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center justify-center">
@@ -174,7 +176,7 @@ const bagCount = computed(() => {
             </nav>
         </header>
 
-        <main>
+        <main class="flex-grow">
             <slot />
         </main>
         <footer class="flex animate-slideDown items-center justify-center p-6">

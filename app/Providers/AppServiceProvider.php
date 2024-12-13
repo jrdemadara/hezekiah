@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
         Vite::prefetch(concurrency: 3);
 
         $router = $this->app['router'];
-        $router->aliasMiddleware('check.referral', CheckReferral::class);
-
+        $router->aliasMiddleware('mustReferred', CheckReferral::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BagController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReferralCodeController;
@@ -41,8 +42,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/referral-code', [ReferralCodeController::class, 'checkReferralCode'])->name('referral-code.check');
 
     // Only referred user can access this routes
-    Route::middleware(['check.referral'])->group(function () {
+    Route::middleware(['mustReferred'])->group(function () {
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
     });
+
+    // Error pages
+    Route::get('/error-403', function () {
+        return Inertia::render('Errors/403');
+    })->name('error.403');
 
 });
 

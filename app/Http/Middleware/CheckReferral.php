@@ -20,12 +20,7 @@ class CheckReferral
 
         // Check if the user is authenticated and has a 'referred_by' attribute
         if (!$user || is_null($user->referred_by)) {
-            return response()->json([
-                'errors' => [
-                    'referred_by' => ['You must be referred to access this page.'],
-                ],
-                'status' => 'not-allowed',
-            ], 403); // HTTP 403 Forbidden
+            return redirect()->route('error.403');
         }
 
         return $next($request);
