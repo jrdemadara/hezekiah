@@ -33,12 +33,10 @@ class RegisteredUserController extends Controller
         $referrer = User::where('code', $request->referral_code)->pluck('id')->first();
 
         if (!$referrer) {
-            if (!$referrer) {
-                return back()->with([
-                    'status' => 'not found',
-                ]);
+            return back()->with([
+                'status' => 'not found',
+            ]);
 
-            }
         }
 
         $user = User::create([
