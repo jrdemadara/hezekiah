@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
@@ -29,11 +29,6 @@ const bagStore = useBagStore(); // Access Pinia store
 const checkEmailForm = useForm({
     email: '',
 });
-
-// onMounted(() => {
-//     // You can also call loadBag if you're manually loading from localStorage
-//     console.log(registerForm.bag_items);
-// });
 
 const registerForm = useForm({
     referral_code: '',

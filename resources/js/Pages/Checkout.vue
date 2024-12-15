@@ -29,7 +29,7 @@ const checkoutLink = computed(() => {
                 </Link>
 
                 <h2
-                    class="w-full text-center font-mono text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
                 >
                     Checkout
                 </h2>
@@ -122,7 +122,7 @@ const checkoutLink = computed(() => {
 
         <!-- Fixed button at the bottom -->
         <div
-            class="fixed bottom-0 left-0 right-0 flex items-center justify-between bg-white p-4 px-4 sm:px-6 lg:px-8"
+            class="fixed bottom-0 left-0 right-0 flex items-center justify-between space-x-8 bg-white p-4 px-4 sm:px-6 lg:px-8"
         >
             <div class="flex flex-col">
                 <small class="text-blue-600">Checkout Total</small>
@@ -134,7 +134,7 @@ const checkoutLink = computed(() => {
 
             <Link
                 :href="checkoutLink"
-                class="w-fit max-w-md justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
+                class="flex h-14 w-full max-w-md items-center justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
             >
                 <span class="font-mono">Place Order</span>
             </Link>

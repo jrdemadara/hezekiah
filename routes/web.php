@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
 
     Route::get('/address', [AddressController::class, 'index'])->name('address.index');
+    Route::post('/address', [AddressController::class, 'store'])->name('address.save');
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
     Route::post('/bag-add', [BagController::class, 'add'])->name('bag.add');

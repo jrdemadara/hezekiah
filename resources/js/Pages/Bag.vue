@@ -83,7 +83,7 @@ const checkoutLink = computed(() => {
                 </Link>
 
                 <h2
-                    class="w-full text-center font-mono text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
                 >
                     Bag
                 </h2>

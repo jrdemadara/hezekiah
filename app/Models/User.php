@@ -81,4 +81,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->referrals()->count();
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id');
+    }
 }

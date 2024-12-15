@@ -70,6 +70,8 @@ class HandleInertiaRequests extends Middleware
             ];
         });
 
+        $address = $user ? $user->addresses()->get() : null;
+
         return [
              ...parent::share($request),
             'auth' => [
@@ -77,6 +79,7 @@ class HandleInertiaRequests extends Middleware
                 'referrals' => $user ? $user->referrals()->count() : 0,
                 'downlines' => $downlines,
                 "bags" => $mergedBags,
+                "address" => $address,
             ],
         ];
 
