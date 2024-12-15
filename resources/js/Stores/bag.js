@@ -34,7 +34,7 @@ export const useBagStore = defineStore('bag', {
                 (item) => item.id === product.id,
             );
             if (existingItem) {
-                existingItem.quantity += product.quantity || 1; // Increment quantity
+                existingItem.quantity += 1;
             } else {
                 this.items.push({
                     ...product,

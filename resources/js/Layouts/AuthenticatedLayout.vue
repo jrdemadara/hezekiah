@@ -28,13 +28,14 @@ const bagCount = computed(() => {
     if (props.auth.user && props.auth.bags) {
         // Clear existing items from the store
         bagStore.clearBag();
-
         // Add bags from server-side props to the store
         props.auth.bags.forEach((bag) => {
             bagStore.addToBag({
                 id: bag.id,
                 name: bag.name,
+                description: bag.description,
                 price: bag.price,
+                image_url: bag.image_url,
                 quantity: bag.quantity,
             });
         });

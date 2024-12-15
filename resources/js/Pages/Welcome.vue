@@ -28,7 +28,6 @@ const addToBag = (product) => {
     if (props.auth.user) {
         bagForm.post('bag-add', {
             onSuccess: () => {
-                //location.reload();
                 bagStore.addToBag(product);
                 toast.success('Item is added to bag!');
             },
@@ -197,7 +196,7 @@ const addToBag = (product) => {
                 >
                     <div
                         class="flex w-80 flex-col rounded-3xl bg-slate-50/60 p-6 shadow-md ring-1 ring-slate-50 hover:shadow-lg"
-                        v-for="product in products"
+                        v-for="product in props.products"
                         :key="product.id"
                     >
                         <img

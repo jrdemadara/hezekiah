@@ -60,13 +60,13 @@ class HandleInertiaRequests extends Middleware
         // Transform the bags to include product details
         $mergedBags = $bags->map(function ($bag) {
             return [
-                'id' => $bag->id,
-                'user_id' => $bag->user_id,
-                'product_id' => $bag->product_id,
-                'quantity' => $bag->quantity,
+                'id' => $bag->product_id,
                 'name' => $bag->product->name ?? null,
                 'description' => $bag->product->description ?? null,
                 'price' => $bag->product->price ?? 0,
+                'image_url' => $bag->product->image_url ?? null,
+                'quantity' => $bag->quantity,
+                'user_id' => $bag->user_id,
             ];
         });
 

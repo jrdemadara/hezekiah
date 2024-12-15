@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
@@ -17,23 +17,21 @@ const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value;
 };
 
-const bagCount = computed(() => {
-    // If the user is authenticated, update the bag store with the server data
+onMounted(() => {
     if (props.auth.user && props.auth.bags) {
-        // Clear existing items from the store
+        console.log('mounted');
         bagStore.clearBag();
-
-        // Add bags from server-side props to the store
         props.auth.bags.forEach((bag) => {
             bagStore.addToBag({
                 id: bag.id,
                 name: bag.name,
+                description: bag.description,
                 price: bag.price,
+                image_url: bag.image_url,
                 quantity: bag.quantity,
             });
         });
     }
-    return bagStore.bagCount;
 });
 </script>
 
@@ -91,10 +89,10 @@ const bagCount = computed(() => {
                             <ShoppingBag class="text-black" />
                             <!-- Badge for showing the item count -->
                             <span
-                                v-if="bagCount > 0"
+                                v-if="bagStore.bagCount > 0"
                                 class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                             >
-                                {{ bagCount }}
+                                {{ bagStore.bagCount }}
                             </span>
                         </Link>
                         <NavLink

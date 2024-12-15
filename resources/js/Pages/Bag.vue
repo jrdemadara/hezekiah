@@ -24,6 +24,9 @@ const backLink = computed(() => {
 const checkoutLink = computed(() => {
     return props.auth.user ? route('checkout.index') : route('auth');
 });
+
+//{"items":[{"id":1,"name":"prebio complete","description":"20gms x10 sachets","price":"520.00","image_url":"1.png","quantity":1},{"id":2,"name":"immuno complete","description":"850mg","price":"1500.00","image_url":"2.png","quantity":1},{"id":3,"name":"package","description":"all products","price":"2999.00","image_url":"3.png","quantity":1}]}
+
 </script>
 
 <template>
