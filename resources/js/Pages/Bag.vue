@@ -129,7 +129,7 @@ const checkoutLink = computed(() => {
                         </div>
                     </div>
                     <div class="flex items-end justify-between py-1">
-                        <h4 class="font-mono text-lg font-medium">
+                        <h4 class="font-mono text-lg font-semibold">
                             <span>₱</span>{{ item.price }}
                         </h4>
                         <div
@@ -149,14 +149,14 @@ const checkoutLink = computed(() => {
         <!-- Fixed button at the bottom -->
         <div
             v-if="bagStore.bagCount > 0"
-            class="fixed bottom-0 left-0 right-0 flex items-center justify-between p-4 px-4 sm:px-6 lg:px-8"
+            class="fixed bottom-0 left-0 right-0 flex items-center justify-between bg-white p-4 px-4 sm:px-6 lg:px-8"
         >
-            <h4 class="font-mono text-4xl font-medium tracking-tighter">
+            <h4 class="font-mono text-4xl font-semibold tracking-tighter">
                 <span>₱</span>{{ bagStore.subtotal }}
             </h4>
             <Link
                 :href="checkoutLink"
-                class="w-fit max-w-md justify-center rounded-lg bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
+                class="max-w-md justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
             >
                 <span class="font-mono">Go to Checkout</span>
             </Link>

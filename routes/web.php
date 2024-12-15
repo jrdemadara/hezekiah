@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode');
 
     Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
+
+    Route::get('/address', [AddressController::class, 'index'])->name('address.index');
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
     Route::post('/bag-add', [BagController::class, 'add'])->name('bag.add');
