@@ -90,7 +90,26 @@ const checkoutLink = computed(() => {
             </div>
         </template>
 
-        <div class="flex h-[calc(100vh-64px)] flex-col overflow-y-auto pb-16">
+        <div
+            v-if="bagStore.bagCount < 1"
+            class="flex flex-col items-center justify-center"
+        >
+            <div
+                class="mt-8 flex h-52 w-52 items-center justify-center rounded-full bg-stone-100 p-8"
+            >
+                <img
+                    src="../../assets/images/empty-bag.svg"
+                    alt="Bag Image"
+                    class="w-24"
+                />
+            </div>
+
+            <h2 class="mt-4 text-xl font-semibold">Your bag is empty.</h2>
+        </div>
+        <div
+            v-if="bagStore.bagCount > 0"
+            class="flex h-[calc(100vh-64px)] flex-col overflow-y-auto pb-16"
+        >
             <div v-for="item in bagStore.items" :key="item.id" class="flex p-4">
                 <img
                     :src="`/images/${item.id}.png`"
@@ -111,7 +130,7 @@ const checkoutLink = computed(() => {
                     </div>
                     <div class="flex items-end justify-between py-1">
                         <h4 class="font-mono text-lg font-medium">
-                            ₱{{ item.price }}
+                            <span>₱</span>{{ item.price }}
                         </h4>
                         <div
                             class="flex h-10 w-28 items-center justify-between rounded-full bg-gray-100 px-3 py-2"
@@ -129,10 +148,11 @@ const checkoutLink = computed(() => {
 
         <!-- Fixed button at the bottom -->
         <div
+            v-if="bagStore.bagCount > 0"
             class="fixed bottom-0 left-0 right-0 flex items-center justify-between p-4 px-4 sm:px-6 lg:px-8"
         >
             <h4 class="font-mono text-4xl font-medium tracking-tighter">
-                ₱{{ bagStore.subtotal }}
+                <span>₱</span>{{ bagStore.subtotal }}
             </h4>
             <Link
                 :href="checkoutLink"

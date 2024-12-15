@@ -176,8 +176,8 @@ onMounted(() => {
         <main class="flex-grow">
             <slot />
         </main>
-        <footer class="flex animate-slideDown items-center justify-center p-6">
+        <!-- <footer class="flex animate-slideDown items-center justify-center p-6">
             <p class="font-semibold">© 2024 Hezekiah Health</p>
-        </footer>
+        </footer> -->
     </div>
 </template>
