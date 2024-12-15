@@ -35,23 +35,20 @@ class BagController extends Controller
         return response()->json(['message' => 'Bag items synced successfully!']);
     }
 
-    public function addToBag(Request $request)
+    public function add(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
 
         $user = $request->user();
-
         $productId = $request->input('product_id');
-
-        // Check if the item exists in the bag and increment the quantity if it does
         $bagItem = $user->bags()->firstOrNew(['product_id' => $productId]);
 
         if ($bagItem->exists) {
-            $bagItem->increment('quantity'); // Increment the quantity
+            $bagItem->increment('quantity');
         } else {
-            $bagItem->quantity = 1; // Set quantity to 1 for new items
+            $bagItem->quantity = 1;
             $bagItem->save();
         }
 
@@ -61,4 +58,59 @@ class BagController extends Controller
 
     }
 
+    public function remove(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $user = $request->user();
+        $productId = $request->input('product_id');
+        $bagItem = $user->bags()->where('product_id', $productId)->first();
+
+        if ($bagItem->exists) {
+            $bagItem->delete();
+        }
+
+        return back()->with([
+            'status' => 'success',
+        ]);
+
+    }
+
+    public function increment(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $user = $request->user();
+        $productId = $request->input('product_id');
+
+        $bagItem = $user->bags()->where('product_id', $productId)->first();
+
+        if ($bagItem->exists) {
+            $bagItem->increment('quantity');
+        }
+
+        return back()->with('status', 'success');
+    }
+
+    public function decrement(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        $user = $request->user();
+        $productId = $request->input('product_id');
+
+        $bagItem = $user->bags()->where('product_id', $productId)->first();
+
+        if ($bagItem->exists) {
+            $bagItem->decrement('quantity');
+        }
+
+        return back()->with('status', 'success');
+    }
 }

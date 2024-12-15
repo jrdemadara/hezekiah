@@ -19,7 +19,6 @@ const toggleMenu = () => {
 
 onMounted(() => {
     if (props.auth.user && props.auth.bags) {
-        console.log('mounted');
         bagStore.clearBag();
         props.auth.bags.forEach((bag) => {
             bagStore.addToBag({

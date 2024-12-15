@@ -36,7 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
-    Route::post('/bag-add', [BagController::class, 'addToBag'])->name('bag.add');
+    Route::post('/bag-add', [BagController::class, 'add'])->name('bag.add');
+    Route::delete('/bag-remove', [BagController::class, 'remove'])->name('bag.remove');
+    Route::patch('/bag-increment', [BagController::class, 'increment'])->name('bag.increment');
+    Route::patch('/bag-decrement', [BagController::class, 'decrement'])->name('bag.decrement');
 
     Route::get('/referral-code', [ReferralCodeController::class, 'index'])->name('referral-code.index');
     Route::post('/referral-code', [ReferralCodeController::class, 'checkReferralCode'])->name('referral-code.check');

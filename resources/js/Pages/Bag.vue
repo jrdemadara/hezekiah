@@ -1,20 +1,66 @@
 <script setup>
 import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, Link } from '@inertiajs/vue3';
+import { usePage, Head, Link, useForm } from '@inertiajs/vue3';
 import {} from '@inertiajs/vue3';
 import { Minus, MoveLeft, Plus, X } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const { props } = usePage();
 const bagStore = useBagStore();
 
+const bagForm = useForm({
+    product_id: '',
+});
+
 const increment = (productId) => {
-    bagStore.incrementQuantity(productId);
+    bagForm.product_id = productId;
+    if (props.auth.user) {
+        bagForm.patch('bag-increment', {
+            onSuccess: () => {
+                bagStore.incrementQuantity(productId);
+            },
+            onError: (errors) => {
+                toast.error('Something went wrong! Please try again.');
+            },
+        });
+    } else {
+        bagStore.incrementQuantity(productId);
+    }
 };
 
 const decrement = (productId) => {
-    bagStore.decrementQuantity(productId);
+    bagForm.product_id = productId;
+    if (props.auth.user) {
+        bagForm.patch('bag-decrement', {
+            onSuccess: () => {
+                bagStore.decrementQuantity(productId);
+            },
+            onError: (errors) => {
+                toast.error('Something went wrong! Please try again.');
+            },
+        });
+    } else {
+        bagStore.decrementQuantity(productId);
+    }
+};
+
+const remove = (productId) => {
+    bagForm.product_id = productId;
+    if (props.auth.user) {
+        bagForm.delete('bag-remove', {
+            onSuccess: () => {
+                bagStore.removeFromBag(productId);
+            },
+            onError: (errors) => {
+                toast.error('Something went wrong! Please try again.');
+            },
+        });
+    } else {
+        bagStore.removeFromBag(productId);
+    }
 };
 
 const backLink = computed(() => {
@@ -24,9 +70,6 @@ const backLink = computed(() => {
 const checkoutLink = computed(() => {
     return props.auth.user ? route('checkout.index') : route('auth');
 });
-
-//{"items":[{"id":1,"name":"prebio complete","description":"20gms x10 sachets","price":"520.00","image_url":"1.png","quantity":1},{"id":2,"name":"immuno complete","description":"850mg","price":"1500.00","image_url":"2.png","quantity":1},{"id":3,"name":"package","description":"all products","price":"2999.00","image_url":"3.png","quantity":1}]}
-
 </script>
 
 <template>
@@ -60,7 +103,7 @@ const checkoutLink = computed(() => {
                             {{ item.name }}
                         </h4>
                         <div
-                            @click="bagStore.removeFromBag(item.id)"
+                            @click="remove(item.id)"
                             class="rounded-full p-1 ring-1 ring-gray-300"
                         >
                             <X :size="20" />
@@ -74,7 +117,9 @@ const checkoutLink = computed(() => {
                             class="flex h-10 w-28 items-center justify-between rounded-full bg-gray-100 px-3 py-2"
                         >
                             <Minus @click="decrement(item.id)" :size="16" />
-                            <p class="font-mono">{{ item.quantity }}</p>
+                            <p class="font-mono">
+                                {{ bagStore.getQuantityById(item.id) }}
+                            </p>
                             <Plus @click="increment(item.id)" :size="16" />
                         </div>
                     </div>
@@ -86,8 +131,8 @@ const checkoutLink = computed(() => {
         <div
             class="fixed bottom-0 left-0 right-0 flex items-center justify-between p-4 px-4 sm:px-6 lg:px-8"
         >
-            <h4 class="font-mono text-3xl font-medium tracking-tighter">
-                {{ bagStore.subtotal }}
+            <h4 class="font-mono text-4xl font-medium tracking-tighter">
+                ₱{{ bagStore.subtotal }}
             </h4>
             <Link
                 :href="checkoutLink"

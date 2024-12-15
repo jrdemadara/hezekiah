@@ -15,15 +15,17 @@ export const useBagStore = defineStore('bag', {
             );
         },
 
+        getQuantityById: (state) => (id) => {
+            const item = state.items.find((item) => item.id === id);
+            return item ? item.quantity : 0; // Return 0 if the item is not in the bag
+        },
+
         subtotal: (state) => {
             const total = state.items.reduce(
                 (total, item) => total + item.quantity * item.price,
                 0,
             );
-            return new Intl.NumberFormat('en-PH', {
-                style: 'currency',
-                currency: 'PHP',
-            }).format(total);
+            return new Intl.NumberFormat().format(total);
         },
     },
 
@@ -44,14 +46,13 @@ export const useBagStore = defineStore('bag', {
         },
 
         incrementQuantity(productId) {
-            console.log(productId);
             const item = this.items.find((item) => item.id === productId);
             if (item) {
                 item.quantity += 1;
             }
         },
+
         decrementQuantity(productId) {
-            console.log(productId);
             const item = this.items.find((item) => item.id === productId);
             if (item) {
                 item.quantity = Math.max(1, item.quantity - 1); // Prevent quantity from going below 1
