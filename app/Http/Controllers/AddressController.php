@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,8 +47,35 @@ class AddressController extends Controller
             'is_default' => $request->boolean('default'), // Convert to boolean
         ]);
 
+        // return back()->withErrors([
+//     'status' => 'not found',
+// ]);
+
         return back()->with([
             'status' => 'success',
         ]);
+    }
+
+    public function changeDefault(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'default' => 'required|boolean',
+        ]);
+
+        $user = Auth::id();
+
+        Address::where('user_id', $user)
+            ->where('is_default', true)
+            ->update(['is_default' => false]);
+
+        Address::where('user_id', $user)
+            ->where('id', $request->id)
+            ->update(['is_default' => true]);
+
+        return back()->with([
+            'status' => 'success',
+        ]);
+
     }
 }

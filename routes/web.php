@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/address', [AddressController::class, 'index'])->name('address.index');
     Route::post('/address', [AddressController::class, 'store'])->name('address.save');
+    Route::patch('/address', [AddressController::class, 'changeDefault'])->name('address.change');
 
     Route::post('/bag-sync', [BagController::class, 'sync'])->name('bag.sync');
     Route::post('/bag-add', [BagController::class, 'add'])->name('bag.add');

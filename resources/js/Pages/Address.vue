@@ -1,27 +1,33 @@
 <script setup>
 import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, Link, useForm } from '@inertiajs/vue3';
-import { Loader2, MoveLeft, Plus } from 'lucide-vue-next';
+import { Head, usePage, Link, useForm, router } from '@inertiajs/vue3';
+import { Check, Loader2, MoveLeft, Plus } from 'lucide-vue-next';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const { props } = usePage();
 const pageState = ref('list');
-const selectedDefault = ref();
 
 const addForm = useForm({
-    name: '',
-    phone: '',
-    province: '',
-    city: '',
-    barangay: '',
-    street: '',
-    house_number: '',
-    zipcode: '',
-    landmark: '',
-    coordinates: '',
+    name: null,
+    phone: null,
+    province: null,
+    city: null,
+    barangay: null,
+    street: null,
+    house_number: null,
+    zipcode: null,
+    landmark: null,
+    coordinates: null,
+    default: false,
+});
+
+const changeDefaultForm = useForm({
+    id: null,
     default: false,
 });
 
@@ -29,9 +35,30 @@ const save = async () => {
     addForm.post(route('address.save'), {
         onSuccess: ({ props }) => {
             console.log(props);
+            toast.success('Success!');
         },
         onError: (errors) => {
             console.log(errors);
+            toast.error('Failed to add address!');
+        },
+    });
+};
+console.log(props);
+const changeDefault = async (id) => {
+    changeDefaultForm.id = id;
+    changeDefaultForm.default = true;
+    changeDefaultForm.patch(route('address.change'), {
+        onSuccess: () => {
+            toast.success('Default address changed!');
+            location.reload(); // change this to more efficient way
+            // router.reload({ only: ['auth.address'] });
+            // router.reload({
+            //     only: ['auth.address'],
+            //     preserveScroll: true, // Keep the scroll position
+            // });
+        },
+        onError: () => {
+            toast.error('Something went wrong, Please try again!');
         },
     });
 };
@@ -91,15 +118,23 @@ const save = async () => {
                         </p>
                     </div>
                     <div class="flex">
+                        <div
+                            v-if="address.is_default"
+                            class="flex items-center justify-center space-x-1 rounded-full bg-[#AFEC70] px-5 py-3 text-sm"
+                        >
+                            <Check :size="18" />
+                            <span>Default</span>
+                        </div>
+
                         <label
+                            v-if="!address.is_default"
                             class="flex cursor-pointer items-center justify-center space-x-2 rounded-full bg-stone-100 p-4 text-sm"
                         >
                             <input
+                                @click="changeDefault(address.id)"
                                 type="radio"
                                 name="default"
                                 :value="address.id"
-                                v-model="address.is_default"
-                                class="form-radio"
                             />
                             <span v-if="address.is_default">Default</span>
                             <span v-if="!address.is_default"
