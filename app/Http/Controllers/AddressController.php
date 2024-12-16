@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,10 +48,6 @@ class AddressController extends Controller
             'is_default' => $request->boolean('default'), // Convert to boolean
         ]);
 
-        // return back()->withErrors([
-//     'status' => 'not found',
-// ]);
-
         return back()->with([
             'status' => 'success',
         ]);
@@ -65,17 +62,30 @@ class AddressController extends Controller
 
         $user = Auth::id();
 
-        Address::where('user_id', $user)
-            ->where('is_default', true)
-            ->update(['is_default' => false]);
+        try {
+            // Begin transaction
+            DB::transaction(function () use ($user, $request) {
+                // Set the current default address to false
+                Address::where('user_id', $user)
+                    ->where('is_default', true)
+                    ->update(['is_default' => false]);
 
-        Address::where('user_id', $user)
-            ->where('id', $request->id)
-            ->update(['is_default' => true]);
+                // Set the selected address as default
+                Address::where('user_id', $user)
+                    ->where('id', $request->id)
+                    ->update(['is_default' => true]);
+            });
 
-        return back()->with([
-            'status' => 'success',
-        ]);
+            return back()->with([
+                'status' => 'success',
+            ]);
+
+        } catch (\Exception $e) {
+            // Handle exception (e.g., log it)
+            return back()->withErrors([
+                'error' => 'Something went wrong, please try again.',
+            ]);
+        }
 
     }
 }

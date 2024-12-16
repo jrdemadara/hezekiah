@@ -31,19 +31,21 @@ const increment = (productId) => {
     }
 };
 
-const decrement = (productId) => {
+const decrement = (productId, quantity) => {
     bagForm.product_id = productId;
-    if (props.auth.user) {
-        bagForm.patch('bag-decrement', {
-            onSuccess: () => {
-                bagStore.decrementQuantity(productId);
-            },
-            onError: (errors) => {
-                toast.error('Something went wrong! Please try again.');
-            },
-        });
-    } else {
-        bagStore.decrementQuantity(productId);
+    if (quantity > 1) {
+        if (props.auth.user) {
+            bagForm.patch('bag-decrement', {
+                onSuccess: () => {
+                    bagStore.decrementQuantity(productId);
+                },
+                onError: () => {
+                    toast.error('Something went wrong! Please try again.');
+                },
+            });
+        } else {
+            bagStore.decrementQuantity(productId);
+        }
     }
 };
 
@@ -123,6 +125,8 @@ const checkoutLink = computed(() => {
                         </h4>
                         <div
                             @click="remove(item.id)"
+                            :disabled="bagForm.processing"
+                            :class="{ 'opacity-25': bagForm.processing }"
                             class="rounded-full p-1 ring-1 ring-gray-300"
                         >
                             <X :size="20" />
@@ -135,11 +139,21 @@ const checkoutLink = computed(() => {
                         <div
                             class="flex h-10 w-28 items-center justify-between rounded-full bg-gray-100 px-3 py-2"
                         >
-                            <Minus @click="decrement(item.id)" :size="16" />
+                            <Minus
+                                @click="decrement(item.id, item.quantity)"
+                                :disabled="bagForm.processing"
+                                :class="{ 'opacity-25': bagForm.processing }"
+                                :size="16"
+                            />
                             <p class="font-mono">
                                 {{ bagStore.getQuantityById(item.id) }}
                             </p>
-                            <Plus @click="increment(item.id)" :size="16" />
+                            <Plus
+                                @click="increment(item.id)"
+                                :disabled="bagForm.processing"
+                                :class="{ 'opacity-25': bagForm.processing }"
+                                :size="16"
+                            />
                         </div>
                     </div>
                 </div>
@@ -156,7 +170,7 @@ const checkoutLink = computed(() => {
             </h4>
             <Link
                 :href="checkoutLink"
-                class="max-w-md justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
+                class="flex h-14 max-w-md items-center justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
             >
                 <span class="font-mono">Go to Checkout</span>
             </Link>

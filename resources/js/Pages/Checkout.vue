@@ -1,21 +1,39 @@
 <script setup>
 import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, Link } from '@inertiajs/vue3';
+import { Head, usePage, Link, useForm } from '@inertiajs/vue3';
 import {} from '@inertiajs/vue3';
-import { ChevronRight, Minus, MoveLeft, Plus, X } from 'lucide-vue-next';
+import { ChevronRight, MoveLeft } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const { props } = usePage();
 const bagStore = useBagStore();
+const defaultAddress = props.auth.address.find(
+    (address) => address.is_default === 1,
+);
+
+const form = useForm({
+    id: null,
+    default: false,
+});
 
 const backLink = computed(() => {
     return props.auth.user ? route('bag') : route('home');
 });
 
-const checkoutLink = computed(() => {
-    return props.auth.user ? route('dashboard') : route('auth');
-});
+const placeOrder = async () => {
+    toast.success('Order placed!');
+    // form.post(route('address.save'), {
+    //     onSuccess: () => {
+    //         toast.success('Success!');
+    //     },
+    //     onError: () => {
+    //         toast.error('Failed to add address!');
+    //     },
+    // });
+};
 </script>
 
 <template>
@@ -38,22 +56,34 @@ const checkoutLink = computed(() => {
 
         <div class="flex h-[calc(100vh-64px)] flex-col overflow-y-auto pb-16">
             <div
-                class="flex w-full items-center justify-between px-5 py-5 shadow"
+                class="flex w-full items-center justify-between px-5 py-5 shadow-sm"
             >
                 <div class="flex flex-col">
                     <h2 class="font-semibold text-black">Shipping Address</h2>
-                    <p class="mt-2 text-xs font-semibold text-black">
-                        Johnny Roger Sunico Demadara
-                    </p>
-                    <p class="text-xs text-stone-600">
-                        Mabini Street, Quirino Ave.
-                    </p>
-                    <p class="text-xs text-stone-600">Poblacion</p>
-                    <p class="text-xs text-stone-600">
-                        Tacurong City, Sultan Kudarat 9800
-                    </p>
-                    <p class="text-xs text-stone-600">Philippines</p>
-                    <p class="text-xs text-stone-600">+639972430944</p>
+                    <div v-if="defaultAddress" class="flex flex-col">
+                        <p
+                            class="mt-2 text-xs font-semibold capitalize text-black"
+                        >
+                            {{ defaultAddress.name }}
+                        </p>
+                        <p class="text-xs capitalize text-stone-600">
+                            {{ defaultAddress.street }}
+                        </p>
+                        <p class="text-xs capitalize text-stone-600">
+                            Poblacion
+                        </p>
+                        <p class="text-xs capitalize text-stone-600">
+                            {{ defaultAddress.city }},
+                            {{ defaultAddress.province }}
+                            {{ defaultAddress.zipcode }}
+                        </p>
+                        <p class="text-xs capitalize text-stone-600">
+                            Philippines
+                        </p>
+                        <p class="text-xs capitalize text-stone-600">
+                            {{ defaultAddress.phone }}
+                        </p>
+                    </div>
                 </div>
                 <div class="flex">
                     <Link
@@ -65,10 +95,11 @@ const checkoutLink = computed(() => {
                 </div>
             </div>
             <div
-                class="flex w-full items-center justify-between px-5 py-5 shadow"
+                class="flex w-full items-center justify-between px-5 py-5 shadow-sm"
             >
                 <div class="flex flex-col">
                     <h2 class="font-semibold text-black">Shipping Method</h2>
+
                     <p class="mt-2 text-xs font-semibold text-black">
                         Johnny Roger Sunico Demadara
                     </p>
@@ -83,13 +114,34 @@ const checkoutLink = computed(() => {
                 </div>
             </div>
             <div
-                class="flex w-full items-center justify-between px-5 py-5 shadow"
+                class="flex w-full items-center justify-between px-5 py-5 shadow-sm"
             >
                 <div class="flex flex-col">
                     <h2 class="font-semibold text-black">Payment Method</h2>
-                    <p class="mt-2 text-xs font-semibold text-black">
-                        Johnny Roger Sunico Demadara
-                    </p>
+                    <div class="mt-2 flex flex-col items-start justify-center">
+                        <p class="mb-4 text-sm text-stone-700">
+                            Select Payment Method
+                        </p>
+                        <div class="flex items-center justify-center space-x-5">
+                            <img
+                                src="../../assets/images/gcash.png"
+                                alt="maya"
+                                class="h-8 rounded-sm"
+                            />
+
+                            <img
+                                src="../../assets/images/maya.png"
+                                alt="maya"
+                                class="h-8 rounded-sm bg-black p-1"
+                            />
+
+                            <img
+                                src="../../assets/images/visa.svg"
+                                alt="maya"
+                                class="h-8"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div class="flex">
                     <Link
@@ -101,13 +153,31 @@ const checkoutLink = computed(() => {
                 </div>
             </div>
             <div
-                class="flex w-full items-center justify-between px-5 py-5 shadow"
+                class="flex w-full items-center justify-between px-5 py-5 shadow-sm"
             >
                 <div class="flex flex-col">
-                    <h2 class="font-semibold text-black">2 Items</h2>
-                    <p class="mt-2 text-xs font-semibold text-black">
-                        Johnny Roger Sunico Demadara
-                    </p>
+                    <h2 class="font-semibold text-black">
+                        {{ bagStore.bagCount }} Items
+                    </h2>
+                    <div
+                        v-if="bagStore.bagCount > 0"
+                        class="mt-4 flex space-x-4"
+                    >
+                        <div
+                            v-for="item in bagStore.items"
+                            :key="item.id"
+                            class="flex flex-col items-center justify-center"
+                        >
+                            <img
+                                :src="`/images/${item.id}.png`"
+                                alt="Product Image"
+                                class="h-14"
+                            />
+                            <p class="mt-2 text-sm text-black">
+                                x {{ item.quantity }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex">
                     <Link
@@ -132,12 +202,12 @@ const checkoutLink = computed(() => {
                 </h4>
             </div>
 
-            <Link
-                :href="checkoutLink"
+            <button
+                @click="placeOrder"
                 class="flex h-14 w-full max-w-md items-center justify-center rounded-full bg-[#EF6B21] px-6 py-3 text-center font-medium text-white shadow-md"
             >
                 <span class="font-mono">Place Order</span>
-            </Link>
+            </button>
         </div>
     </AuthenticatedLayout>
 </template>

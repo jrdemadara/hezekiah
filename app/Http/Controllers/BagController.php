@@ -107,7 +107,7 @@ class BagController extends Controller
 
         $bagItem = $user->bags()->where('product_id', $productId)->first();
 
-        if ($bagItem->exists) {
+        if ($bagItem->exists && $bagItem->quantity > 1) {
             $bagItem->decrement('quantity');
         }
 

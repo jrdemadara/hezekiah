@@ -33,17 +33,15 @@ const changeDefaultForm = useForm({
 
 const save = async () => {
     addForm.post(route('address.save'), {
-        onSuccess: ({ props }) => {
-            console.log(props);
+        onSuccess: () => {
             toast.success('Success!');
         },
-        onError: (errors) => {
-            console.log(errors);
+        onError: () => {
             toast.error('Failed to add address!');
         },
     });
 };
-console.log(props);
+
 const changeDefault = async (id) => {
     changeDefaultForm.id = id;
     changeDefaultForm.default = true;
