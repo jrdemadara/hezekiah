@@ -8,10 +8,12 @@ import avatar from '../../assets/images/avatar.jpg';
 
 import {
     Check,
+    Coins,
     Copy,
     Info,
     Network,
     QrCode,
+    Repeat2,
     UserCog2,
     UserPlus2,
     UsersRound,
@@ -241,12 +243,21 @@ const shareInvite = () => {
         </template>
 
         <div class="flex flex-col bg-white px-4">
-            <div class="flex flex-col">
-                <h6 class="text-gray-400">Total Points</h6>
-                <h2 class="text-5xl font-semibold tracking-wider">
-                    ₱{{ props.auth.user.points }}
-                </h2>
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                    <h6 class="text-gray-400">Total Points</h6>
+                    <h2 class="text-5xl font-semibold tracking-wider">
+                        ₱{{ props.auth.user.points }}
+                    </h2>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h6 class="text-gray-400">Rank</h6>
+                    <h2 class="text-5xl font-semibold tracking-wider">
+                        1<small>st</small>
+                    </h2>
+                </div>
             </div>
+
             <div class="mb-4 mt-5 grid w-full grid-cols-2 gap-2 sm:grid-cols-2">
                 <div
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#AFEC70] p-4"
@@ -257,6 +268,7 @@ const shareInvite = () => {
                         >
                             Referrals
                         </h4>
+
                         <div class="rounded-full bg-green-900 p-3">
                             <UsersRound :size="20" class="text-[#AFEC70]" />
                         </div>
@@ -270,7 +282,7 @@ const shareInvite = () => {
                     </div>
                 </div>
                 <div
-                    class="flex h-32 flex-col justify-between rounded-3xl bg-black p-4"
+                    class="flex h-32 flex-col justify-between rounded-3xl bg-[#16151A] p-4"
                 >
                     <div class="flex items-center justify-between">
                         <h4
@@ -290,8 +302,60 @@ const shareInvite = () => {
                         </h2>
                     </div>
                 </div>
+
+                <div
+                    class="flex h-32 flex-col justify-between rounded-3xl bg-[#C6EBCD] p-4"
+                >
+                    <div class="flex items-center justify-between">
+                        <h4
+                            class="text-lg font-semibold tracking-wide text-[#455b49]"
+                        >
+                            Uni Level
+                        </h4>
+                        <div class="rounded-full bg-[#a6d9af] p-3">
+                            <Repeat2 :size="20" class="text-black" />
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-xs text-[#455b49]">Repeat Profits</p>
+                        <h2 class="text-2xl font-semibold text-[#455b49]">
+                            {{ props.auth.downlines
+                            }}<span class="text-xs font-normal">/Orders</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <div
+                    class="flex h-32 flex-col justify-between rounded-3xl bg-[#fd8641] p-4"
+                >
+                    <div class="flex items-center justify-between">
+                        <h4
+                            class="text-lg font-semibold tracking-wide text-white"
+                        >
+                            Cashouts
+                        </h4>
+                        <div class="rounded-full bg-[#df6a27] p-3">
+                            <Coins :size="20" class="text-gray-100" />
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-xs text-gray-100">Rewards Cashouts</p>
+                        <h2 class="text-2xl font-semibold text-gray-100">
+                            {{ props.auth.downlines
+                            }}<span class="text-xs font-normal">/History</span>
+                        </h2>
+                    </div>
+                </div>
             </div>
-            <div class="mt-2 flex flex-col bg-transparent">
+
+            <button
+                class="flex h-12 w-full items-center justify-center space-x-2 rounded-xl border bg-gradient-to-tl from-slate-50 via-slate-100 to-slate-200"
+            >
+                <h4>View Network</h4>
+                <Network :size="18" />
+            </button>
+
+            <div class="mt-5 flex flex-col bg-transparent">
                 <h6 class="text-gray-400">Network Trends</h6>
                 <div
                     class="mt-1 h-full w-full rounded-lg p-3 shadow-sm ring-1 ring-gray-200"
@@ -302,7 +366,7 @@ const shareInvite = () => {
 
             <div
                 @click="shareInvite"
-                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#2B542C] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
+                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#458500] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
             >
                 <div class="flex flex-col space-y-2">
                     <h2 class="text-lg font-semibold text-[#AFEC70]">

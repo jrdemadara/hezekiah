@@ -47,7 +47,6 @@ const changeDefault = async (id) => {
     changeDefaultForm.default = true;
     changeDefaultForm.patch(route('address.change'), {
         onSuccess: () => {
-            toast.success('Default address changed!');
             location.reload(); // change this to more efficient way
             // router.reload({ only: ['auth.address'] });
             // router.reload({

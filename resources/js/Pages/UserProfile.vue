@@ -1,11 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import {} from '@inertiajs/vue3';
 import { MoveLeft } from 'lucide-vue-next';
+import { useBagStore } from '@/Stores/bag';
+
 const { props } = usePage();
 const code = props.auth.user.code;
+const bagStore = useBagStore();
 
 const shareInvite = () => {
     const shareData = {
@@ -23,6 +26,12 @@ const shareInvite = () => {
         alert('Sharing is not supported on your browser.');
     }
 };
+
+const logoutLink = computed(() => {
+    console.log('logout');
+    bagStore.clearBag();
+    return props.auth.user ? route('logout') : route('auth');
+});
 </script>
 
 <template>
@@ -67,7 +76,12 @@ const shareInvite = () => {
                     <span v-else> <Check class="mr-0.5" :size="16" /></span>
                 </div>
             </div>
-            <Link :href="route('logout')" method="post" as="button">
+            <Link
+                @click="bagStore.clearBag()"
+                :href="logoutLink"
+                method="post"
+                as="button"
+            >
                 Log Out
             </Link>
         </div>

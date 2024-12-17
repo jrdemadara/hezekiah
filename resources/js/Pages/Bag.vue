@@ -165,7 +165,7 @@ const checkoutLink = computed(() => {
             v-if="bagStore.bagCount > 0"
             class="fixed bottom-0 left-0 right-0 flex items-center justify-between bg-white p-4 px-4 sm:px-6 lg:px-8"
         >
-            <h4 class="font-mono text-4xl font-semibold tracking-tighter">
+            <h4 class="font-mono text-3xl font-semibold tracking-tighter">
                 <span>₱</span>{{ bagStore.subtotal }}
             </h4>
             <Link

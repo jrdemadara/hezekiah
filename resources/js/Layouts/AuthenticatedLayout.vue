@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -21,6 +21,12 @@ defineProps({
     status: {
         type: String,
     },
+});
+
+const logoutLink = computed(() => {
+    console.log('logout');
+    bagStore.clearBag();
+    return props.auth.user ? route('logout') : route('auth');
 });
 
 onMounted(() => {
@@ -117,13 +123,14 @@ onMounted(() => {
                                     <DropdownLink :href="route('profile.edit')">
                                         Profile
                                     </DropdownLink>
-                                    <DropdownLink
-                                        :href="route('logout')"
+                                    <Link
+                                        @click="bagStore.clearBag()"
+                                        :href="logoutLink"
                                         method="post"
                                         as="button"
                                     >
                                         Log Out
-                                    </DropdownLink>
+                                    </Link>
                                 </template>
                             </Dropdown>
                         </div>

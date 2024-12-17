@@ -181,7 +181,7 @@ const placeOrder = async () => {
                 </div>
                 <div class="flex">
                     <Link
-                        :href="route('address.index')"
+                        :href="route('bag')"
                         class="rounded-full bg-stone-200 p-2"
                     >
                         <ChevronRight />
@@ -197,7 +197,7 @@ const placeOrder = async () => {
             <div class="flex flex-col">
                 <small class="text-blue-600">Checkout Total</small>
 
-                <h4 class="font-mono text-4xl font-semibold">
+                <h4 class="font-mono text-3xl font-semibold">
                     <span>₱</span>{{ bagStore.subtotal }}
                 </h4>
             </div>
