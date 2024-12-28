@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
+            $table->string('phone')->unique();
+            $table->string('address')->unique()->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->integer('points')->default(0);

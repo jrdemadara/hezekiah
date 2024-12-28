@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AddMemberController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReferralCodeController;
@@ -34,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode');
 
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::patch('/order', [OrderController::class, 'store'])->name('order.store');
+
     Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
 
     Route::get('/address', [AddressController::class, 'index'])->name('address.index');
@@ -48,6 +53,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/referral-code', [ReferralCodeController::class, 'index'])->name('referral-code.index');
     Route::post('/referral-code', [ReferralCodeController::class, 'checkReferralCode'])->name('referral-code.check');
+
+    Route::get('/add-member', [AddMemberController::class, 'index'])->name('add-member.index');
+    Route::post('/add-member', [AddMemberController::class, 'store'])->name('add-member.store');
 
     // Only referred user can access this routes
     Route::middleware(['mustReferred'])->group(function () {

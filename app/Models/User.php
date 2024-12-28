@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'firstname',
         'middlename',
         'email',
+        'phone',
         'password',
         'points',
         'province',
@@ -39,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'coordinates',
         'referred_by',
         'email_verified_at',
+        'phone_verified_at',
         'auth_provider',
     ];
 
@@ -67,11 +69,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function bags()
-    {
-        return $this->hasMany(Bag::class, 'user_id');
-    }
-
     public function referrals()
     {
         return $this->hasMany(User::class, 'referred_by');
@@ -82,9 +79,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->referrals()->count();
     }
 
-    public function addresses()
+    public function transactions()
     {
-        return $this->hasMany(Address::class)->orderBy('is_default', 'DESC');
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 
+    public function codes()
+    {
+        return $this->hasMany(Code::class, 'orderer');
     }
 }

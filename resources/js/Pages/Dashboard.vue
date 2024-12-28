@@ -73,8 +73,6 @@ onMounted(() => {
         .y1((d) => y(d.close))
         .y0(height - marginBottom); // Baseline of the area
 
-    // Appe
-
     // Create the SVG container.
     const svg = d3
         .create('svg')
@@ -155,23 +153,6 @@ onMounted(() => {
     // Attach the SVG element to the DOM inside the `#chart` div
     chart.value.appendChild(svg.node());
 });
-
-const shareInvite = () => {
-    const shareData = {
-        title: 'Invite Friends',
-        text: 'Join me on this amazing platform and enjoy great rewards! Sign up now.',
-        url: `https://hezekiahhealth.com/invite?code=${code}`,
-    };
-
-    if (navigator.share) {
-        navigator
-            .share(shareData)
-            .then(() => console.log('Shared successfully'))
-            .catch((error) => console.error('Error sharing:', error));
-    } else {
-        alert('Sharing is not supported on your browser.');
-    }
-};
 </script>
 
 <template>
@@ -251,10 +232,11 @@ const shareInvite = () => {
                     </h2>
                 </div>
                 <div class="flex flex-col items-end">
-                    <h6 class="text-gray-400">Rank</h6>
-                    <h2 class="text-5xl font-semibold tracking-wider">
-                        1<small>st</small>
-                    </h2>
+                    <img
+                        src="../../assets/images/rank.svg"
+                        width="68"
+                        alt="rank"
+                    />
                 </div>
             </div>
 
@@ -266,7 +248,7 @@ const shareInvite = () => {
                         <h4
                             class="text-lg font-semibold tracking-wide text-[#215439]"
                         >
-                            Referrals
+                            Direct
                         </h4>
 
                         <div class="rounded-full bg-green-900 p-3">
@@ -274,7 +256,7 @@ const shareInvite = () => {
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <p class="text-xs text-lime-700">Invite Success</p>
+                        <p class="text-xs text-lime-700">Direct Invites</p>
                         <h2 class="text-2xl font-semibold text-lime-900">
                             {{ props.auth.referrals
                             }}<span class="text-xs font-normal">/Invites</span>
@@ -288,43 +270,20 @@ const shareInvite = () => {
                         <h4
                             class="text-lg font-semibold tracking-wide text-white"
                         >
-                            Downlines
+                            Indirect
                         </h4>
                         <div class="rounded-full bg-[#AFEC70] p-3">
                             <Network :size="20" class="text-black" />
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <p class="text-xs text-gray-500">Build Networks</p>
+                        <p class="text-xs text-gray-500">Indirect Invites</p>
                         <h2 class="text-2xl font-semibold text-[#AFEC70]">
-                            {{ props.auth.downlines
+                            {{ props.auth.indirect
                             }}<span class="text-xs font-normal">/Networks</span>
                         </h2>
                     </div>
                 </div>
-
-                <div
-                    class="flex h-32 flex-col justify-between rounded-3xl bg-[#C6EBCD] p-4"
-                >
-                    <div class="flex items-center justify-between">
-                        <h4
-                            class="text-lg font-semibold tracking-wide text-[#455b49]"
-                        >
-                            Uni Level
-                        </h4>
-                        <div class="rounded-full bg-[#a6d9af] p-3">
-                            <Repeat2 :size="20" class="text-black" />
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <p class="text-xs text-[#455b49]">Repeat Profits</p>
-                        <h2 class="text-2xl font-semibold text-[#455b49]">
-                            {{ props.auth.downlines
-                            }}<span class="text-xs font-normal">/Orders</span>
-                        </h2>
-                    </div>
-                </div>
-
                 <div
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#fd8641] p-4"
                 >
@@ -332,16 +291,37 @@ const shareInvite = () => {
                         <h4
                             class="text-lg font-semibold tracking-wide text-white"
                         >
-                            Cashouts
+                            Uni Level
                         </h4>
                         <div class="rounded-full bg-[#df6a27] p-3">
-                            <Coins :size="20" class="text-gray-100" />
+                            <Repeat2 :size="20" class="text-gray-100" />
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <p class="text-xs text-gray-100">Rewards Cashouts</p>
+                        <p class="text-xs text-gray-100">Repeat Profits</p>
                         <h2 class="text-2xl font-semibold text-gray-100">
-                            {{ props.auth.downlines
+                            {{ props.auth.indirect
+                            }}<span class="text-xs font-normal">/Orders</span>
+                        </h2>
+                    </div>
+                </div>
+                <div
+                    class="flex h-32 flex-col justify-between rounded-3xl bg-[#C6EBCD] p-4"
+                >
+                    <div class="flex items-center justify-between">
+                        <h4
+                            class="text-lg font-semibold tracking-wide text-[#455b49]"
+                        >
+                            Cashouts
+                        </h4>
+                        <div class="rounded-full bg-[#a6d9af] p-3">
+                            <Coins :size="20" class="text-black" />
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-xs text-[#455b49]">Reward Cashouts</p>
+                        <h2 class="text-2xl font-semibold text-[#455b49]">
+                            {{ props.auth.indirect
                             }}<span class="text-xs font-normal">/History</span>
                         </h2>
                     </div>
@@ -364,21 +344,21 @@ const shareInvite = () => {
                 ></div>
             </div>
 
-            <div
-                @click="shareInvite"
+            <Link
+                :href="route('add-member.index')"
                 class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#458500] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
             >
                 <div class="flex flex-col space-y-2">
                     <h2 class="text-lg font-semibold text-[#AFEC70]">
-                        Invite Friends
+                        Add Member
                     </h2>
                     <p class="text-xs leading-5 text-gray-200">
-                        Invite your friends to join, and both of you can enjoy
-                        amazing rewards and benefits!
+                        Expand your network by adding members and fostering
+                        meaningful connections.
                     </p>
                 </div>
                 <UserPlus2 :size="92" class="text-[#AFEC70]" />
-            </div>
+            </Link>
         </div>
     </AuthenticatedLayout>
 </template>

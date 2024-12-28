@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 class Product extends Model
 {
@@ -27,5 +28,10 @@ class Product extends Model
     public function bags()
     {
         return $this->hasMany(Bag::class, 'product_id');
+    }
+
+    public function codes()
+    {
+        return $this->hasMany(Code::class, 'product_id');
     }
 }

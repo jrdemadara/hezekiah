@@ -6,7 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { usePage, Link } from '@inertiajs/vue3';
-import { Bell, ShoppingBag } from 'lucide-vue-next';
+import { Bell, ScanBarcode, ShoppingBag } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
 
 const { props } = usePage();
@@ -24,7 +24,6 @@ defineProps({
 });
 
 const logoutLink = computed(() => {
-    console.log('logout');
     bagStore.clearBag();
     return props.auth.user ? route('logout') : route('auth');
 });
@@ -150,16 +149,10 @@ onMounted(() => {
 
                         <!-- Shopping Bag -->
                         <Link
-                            :href="route('bag')"
-                            class="relative rounded-full p-2"
+                            :href="route('order.index')"
+                            class="rounded-full p-2"
                         >
-                            <ShoppingBag class="text-gray-800" />
-                            <span
-                                v-if="bagStore.bagCount > 0"
-                                class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
-                            >
-                                {{ bagStore.bagCount }}
-                            </span>
+                            <ScanBarcode class="text-gray-800" />
                         </Link>
 
                         <!-- Hamburger Menu -->

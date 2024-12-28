@@ -20,56 +20,33 @@ import {
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
-const pageStatus = ref('check-email');
+const pageStatus = ref('check-phone');
 const loginFailed = ref(false);
-const registerFailed = ref(false);
 
 const bagStore = useBagStore(); // Access Pinia store
 
-const checkEmailForm = useForm({
-    email: '',
+const checkPhoneForm = useForm({
+    phone: null,
 });
 
-const registerForm = useForm({
-    referral_code: '',
-    lastname: '',
-    firstname: '',
-    email: computed(() => checkEmailForm.email),
-    password: '',
-    bag_items: computed(() => bagStore.items),
-});
-
-// Method to check the email
-const checkEmail = async () => {
-    checkEmailForm.post(route('check-email'), {
+// Method to check the phone
+const checkPhone = async () => {
+    checkPhoneForm.post(route('check-phone'), {
         onSuccess: ({ props }) => {
             if (props.status) {
                 pageStatus.value = 'login';
             } else {
-                pageStatus.value = 'register';
+                pageStatus.value = 'unregistered';
             }
         },
         onError: (e) => {
             // Handle validation errors if needed
-            registerFailed.value = true;
-        },
-    });
-};
-
-const register = async () => {
-    registerForm.post(route('register'), {
-        onSuccess: ({ props }) => {
-            console.log(props);
-        },
-        onError: (e) => {
-            // Handle validation errors if needed
-            registerFailed.value = true;
         },
     });
 };
 
 const loginForm = useForm({
-    email: computed(() => checkEmailForm.email),
+    phone: computed(() => checkPhoneForm.phone),
     password: '',
 });
 
@@ -79,7 +56,7 @@ const login = async () => {
             console.log(props);
         },
         onError: (errors) => {
-            if (errors.email) {
+            if (errors.phone) {
                 loginFailed.value = true;
             }
         },
@@ -88,10 +65,8 @@ const login = async () => {
 
 const formHeader = computed(() => {
     switch (pageStatus.value) {
-        case 'check-email':
-            return 'Sign in or create an account';
-        case 'register':
-            return 'Create a new account';
+        case 'check-phone':
+            return 'Sign in to your account';
         case 'login':
             return '';
         default:
@@ -106,16 +81,11 @@ const togglePasswordVisibility = () => {
     isPasswordVisible.value = !isPasswordVisible.value;
 };
 
-// Google login
-const googleLogin = () => {
-    window.location.href = '/auth/google';
-};
-
 defineProps(['status']);
 </script>
 
 <template>
-    <Head title="Register" />
+    <Head title="Authenticate" />
     <div
         class="flex flex-col items-center justify-center space-y-4 px-0 sm:h-screen sm:space-y-7 sm:px-32"
     >
@@ -128,7 +98,7 @@ defineProps(['status']);
             }"
         >
             <Link
-                v-show="pageStatus === 'check-email'"
+                v-show="pageStatus === 'check-phone'"
                 :href="route('home')"
                 class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
             >
@@ -136,8 +106,8 @@ defineProps(['status']);
             </Link>
 
             <h4
-                v-show="pageStatus !== 'check-email'"
-                @click="pageStatus = 'check-email'"
+                v-show="pageStatus !== 'check-phone'"
+                @click="pageStatus = 'check-phone'"
                 class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
                 :class="{
                     'py-2': pageStatus !== 'login',
@@ -162,13 +132,6 @@ defineProps(['status']);
                 <span>Something went wrong! Please try again later.</span>
             </div>
 
-            <!-- <div
-                v-if="status"
-                class="my-4 flex w-full items-center justify-start space-x-1 rounded-lg bg-red-200/90 p-2"
-            >
-                <CircleX class="flex-shrink-0 text-red-600" />
-                <span> {{ status }}</span>
-            </div> -->
             <h4
                 v-show="pageStatus"
                 class="mt-5 text-center text-2xl font-semibold sm:mt-0"
@@ -176,11 +139,11 @@ defineProps(['status']);
                 {{ formHeader }}
             </h4>
             <p
-                v-show="pageStatus == 'check-email'"
+                v-show="pageStatus == 'check-phone'"
                 class="mt-2 text-center text-base text-stone-600"
             >
-                Enter your email or mobile number to get started. If you already
-                have an account, we’ll find it for you.
+                Enter your mobile number to get started. If you already have an
+                account, we’ll find it for you.
             </p>
 
             <div
@@ -199,37 +162,37 @@ defineProps(['status']);
                     }"
                 >
                     <form
-                        v-show="pageStatus === 'check-email'"
-                        @submit.prevent="checkEmail"
+                        v-show="pageStatus === 'check-phone'"
+                        @submit.prevent="checkPhone"
                         class="w-full"
                     >
                         <div>
                             <TextInput
-                                id="email"
-                                type="email"
+                                id="phone"
+                                type="text"
                                 class="mt-1 block h-12 w-full"
-                                v-model="checkEmailForm.email"
+                                v-model="checkPhoneForm.phone"
                                 required
-                                placeholder="Email"
-                                autocomplete="username"
+                                placeholder="Phone Number"
+                                autocomplete="phone"
                             />
                             <InputError
                                 class="mt-2"
-                                :message="checkEmailForm.errors.email"
+                                :message="checkPhoneForm.errors.phone"
                             />
                         </div>
                         <button
                             class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
-                            :class="{ 'opacity-25': checkEmailForm.processing }"
-                            :disabled="checkEmailForm.processing"
+                            :class="{ 'opacity-25': checkPhoneForm.processing }"
+                            :disabled="checkPhoneForm.processing"
                         >
                             <Loader2
                                 class="flex-shrink-0 animate-spin"
-                                v-if="checkEmailForm.processing"
+                                v-if="checkPhoneForm.processing"
                             />
                             <span
                                 v-text="
-                                    checkEmailForm.processing
+                                    checkPhoneForm.processing
                                         ? 'Please wait...'
                                         : 'Continue'
                                 "
@@ -237,154 +200,33 @@ defineProps(['status']);
                         </button>
                     </form>
 
-                    <form
-                        v-show="pageStatus === 'register'"
-                        @submit.prevent="register"
-                        class="w-full"
-                    >
+                    <form v-show="pageStatus === 'unregistered'" class="w-full">
                         <div class="flex flex-col">
-                            <small>Email Address:</small>
+                            <small>Phone Number:</small>
                             <div
-                                class="flex items-center justify-start space-x-6"
+                                class="flex items-center justify-between space-x-6"
                             >
                                 <span class="font-bold">{{
-                                    checkEmailForm.email
+                                    checkPhoneForm.phone
                                 }}</span>
                                 <span
-                                    @click="pageStatus = 'check-email'"
+                                    @click="pageStatus = 'check-phone'"
                                     class="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
                                     >change</span
                                 >
                             </div>
                         </div>
                         <p class="mt-2">
-                            We didn’t find an account with that email address.
-                            Provide your name and password to create a new
-                            account.
+                            We didn’t find an account with that phone number. If
+                            you’re interested in becoming a member, we invite
+                            you to join us.
                         </p>
-                        <div class="my-4">
-                            <TextInput
-                                id="referral_code"
-                                type="text"
-                                class="mt-1 block h-12 w-full"
-                                v-model="registerForm.referral_code"
-                                required
-                                placeholder="Referral code"
-                            />
-                            <InputError
-                                class="mt-2"
-                                :message="registerForm.errors.referral_code"
-                            />
-                        </div>
-                        <div class="my-4">
-                            <div class="flex space-x-2">
-                                <div>
-                                    <input
-                                        id="lastname"
-                                        type="text"
-                                        class="focus:border-indigo-[#458500] mt-1 block h-12 w-full rounded-lg border-gray-300 capitalize shadow-sm focus:border-none focus:outline-none focus:ring-[#458500]"
-                                        v-model="registerForm.lastname"
-                                        required
-                                        placeholder="Lastname"
-                                        autocomplete="lastname"
-                                    />
-                                    <InputError
-                                        class="mt-2"
-                                        :message="registerForm.errors.lastname"
-                                    />
-                                </div>
-
-                                <div>
-                                    <input
-                                        id="name"
-                                        type="text"
-                                        class="focus:border-indigo-[#458500] mt-1 block h-12 w-full rounded-lg border-gray-300 capitalize shadow-sm focus:border-none focus:outline-none focus:ring-[#458500]"
-                                        v-model="registerForm.firstname"
-                                        required
-                                        placeholder="Firstname"
-                                        autocomplete="firstname"
-                                    />
-                                    <InputError
-                                        class="mt-2"
-                                        :message="registerForm.errors.firstname"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <div class="relative">
-                                <!-- Password input field -->
-                                <input
-                                    v-model="registerForm.password"
-                                    :type="
-                                        isPasswordVisible ? 'text' : 'password'
-                                    "
-                                    class="focus:border-indigo-[#458500] h-12 w-full rounded-lg border-gray-300 shadow-sm focus:border-none focus:outline-none focus:ring-[#458500]"
-                                    placeholder="Create a password"
-                                />
-
-                                <!-- Eye icon for toggling password visibility -->
-                                <button
-                                    type="button"
-                                    @click="togglePasswordVisibility"
-                                    class="absolute right-4 top-1/2 -translate-y-1/2 transform"
-                                >
-                                    <EyeClosed v-if="!isPasswordVisible" />
-                                    <Eye v-if="isPasswordVisible" />
-                                </button>
-                            </div>
-                            <InputError
-                                class="mt-2"
-                                :message="registerForm.errors.password"
-                            />
-                        </div>
-                        <div class="mt-4 flex space-x-2">
-                            <!-- Agreement Checkbox -->
-                            <input
-                                type="checkbox"
-                                id="agreement"
-                                v-model="isAgreed"
-                                class="h-5 w-5 rounded border-gray-300 text-[#458500] focus:ring-[#458500]"
-                            />
-                            <label
-                                for="agreement"
-                                class="text-sm text-gray-700"
-                            >
-                                I want to receive exclusive deals and Rewards
-                                offers by email.
-                            </label>
-                        </div>
-                        <small class="mt-4 line-clamp-2"
-                            >By continuing, you’ve read and agree to our
-                            <span
-                                class="cursor-pointer text-blue-500 hover:underline"
-                                >Terms and Conditions</span
-                            >
-                            and
-                            <span
-                                class="cursor-pointer text-blue-500 hover:underline"
-                                >Privacy Policy</span
-                            >
-                            .
-                        </small>
-                        <button
+                        <Link
                             class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00] sm:mt-4"
-                            :class="{ 'opacity-25': registerForm.processing }"
-                            :disabled="registerForm.processing"
+                            :href="route('home')"
                         >
-                            <Loader2
-                                class="flex-shrink-0 animate-spin"
-                                v-if="registerForm.processing"
-                            />
-                            <span
-                                v-text="
-                                    registerForm.processing
-                                        ? 'Please wait...'
-                                        : 'Create account'
-                                "
-                            ></span>
-                        </button>
+                            <span>Home</span>
+                        </Link>
                     </form>
 
                     <form
@@ -393,15 +235,15 @@ defineProps(['status']);
                         class="w-full"
                     >
                         <div class="flex flex-col">
-                            <small>Email Address:</small>
+                            <small>Phone Number:</small>
                             <div
-                                class="flex items-center justify-start space-x-6"
+                                class="flex items-center justify-between space-x-6"
                             >
                                 <span class="font-bold">{{
-                                    loginForm.email
+                                    loginForm.phone
                                 }}</span>
                                 <span
-                                    @click="pageStatus = 'check-email'"
+                                    @click="pageStatus = 'check-phone'"
                                     class="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
                                     >change</span
                                 >
@@ -480,51 +322,8 @@ defineProps(['status']);
                         </button>
                     </form>
 
-                    <!-- Divider -->
-                    <div
-                        v-show="pageStatus !== 'register'"
-                        class="flex w-full items-center"
-                    >
-                        <div class="my-2 h-px w-full bg-stone-200/80"></div>
-                        <span class="mx-4">or</span>
-                        <div class="my-2 h-px w-full bg-stone-200/80"></div>
-                    </div>
-
-                    <!-- Social Login Buttons -->
-                    <div
-                        v-show="pageStatus !== 'register'"
-                        class="flex w-full flex-col space-y-3"
-                    >
-                        <button
-                            @click="googleLogin"
-                            class="flex h-12 w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
-                        >
-                            <img
-                                src="../../../assets/images/google.png"
-                                alt="Google Logo"
-                                class="mr-2 h-5 w-5"
-                            />
-                            <span class="flex-grow text-center"
-                                >Sign in with Google</span
-                            >
-                        </button>
-
-                        <button
-                            class="flex h-12 w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
-                        >
-                            <img
-                                src="../../../assets/images/facebook.png"
-                                alt="Google Logo"
-                                class="mr-2 h-5 w-5"
-                            />
-                            <span class="flex-grow text-center"
-                                >Sign in with Facebook</span
-                            >
-                        </button>
-                    </div>
-
                     <p
-                        v-show="pageStatus === 'check-email'"
+                        v-show="pageStatus === 'check-phone'"
                         class="mt-4 text-xs sm:mt-0"
                     >
                         By continuing, you’ve read and agree to our

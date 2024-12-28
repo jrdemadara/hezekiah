@@ -28,18 +28,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function checkEmail(Request $request): RedirectResponse
+    public function checkPhone(Request $request): RedirectResponse
     {
         // Validate the email input
         $request->validate([
-            'email' => 'required|email',
+            'phone' => 'required|string',
         ]);
 
         // Check if the email is already registered
-        $isEmailExist = User::where('email', $request->email)->exists();
+        $isPhoneExist = User::where('phone', $request->phone)->exists();
 
         return back()->with([
-            'status' => $isEmailExist,
+            'status' => $isPhoneExist,
         ]);
 
     }
@@ -50,7 +50,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->validate([
-            'email' => 'required|email|max:255',
+            'phone' => 'required|string',
             'password' => 'required|string',
         ]);
 

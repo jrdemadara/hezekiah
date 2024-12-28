@@ -33,11 +33,12 @@ class HandleInertiaRequests extends Middleware
         $user = $request->user();
 
         // Initialize downline count to 0 in case the user is not authenticated
-        $downlines = 0;
+        $directDownlines = 0;
+        $indirectDownlines = 0;
 
         // If the user is authenticated, calculate the downline count
         if ($user) {
-            $allDownline = DB::select('
+            $directCount = DB::select('
             WITH RECURSIVE referral_hierarchy AS (
                 SELECT id, referred_by FROM users WHERE id = ?
                 UNION ALL
@@ -45,41 +46,41 @@ class HandleInertiaRequests extends Middleware
                 FROM users u
                 INNER JOIN referral_hierarchy rh ON rh.id = u.referred_by
             )
-            SELECT COUNT(*) AS downline_count
+            SELECT COUNT(*) AS direct_downline_count
             FROM referral_hierarchy
             WHERE id != ?;
         ', [$user->id, $user->id]);
 
-            // $bags = Bag::find($use);
-            $downlines = $allDownline[0]->downline_count ?? 0;
+            $indirectCount = DB::select('
+    WITH RECURSIVE referral_hierarchy AS (
+        -- Start from the current user
+        SELECT id, referred_by, 0 AS level
+        FROM users
+        WHERE id = ?
+
+        UNION ALL
+
+        -- Recursively find referrals
+        SELECT u.id, u.referred_by, rh.level + 1 AS level
+        FROM users u
+        INNER JOIN referral_hierarchy rh ON rh.id = u.referred_by
+    )
+    SELECT COUNT(*) AS indirect_downline_count
+    FROM referral_hierarchy
+    WHERE level > 1; -- Exclude direct referrals
+', [$user->id]);
+
+            $directDownlines = $directCount[0]->direct_downline_count ?? 0;
+            $indirectDownlines = $indirectCount[0]->indirect_downline_count ?? 0;
         }
-
-        // If the user is authenticated, retrieve bags with products, otherwise return an empty array
-        $bags = $user ? $user->bags()->with('product')->get() : collect();
-
-        // Transform the bags to include product details
-        $mergedBags = $bags->map(function ($bag) {
-            return [
-                'id' => $bag->product_id,
-                'name' => $bag->product->name ?? null,
-                'description' => $bag->product->description ?? null,
-                'price' => $bag->product->price ?? 0,
-                'image_url' => $bag->product->image_url ?? null,
-                'quantity' => $bag->quantity,
-                'user_id' => $bag->user_id,
-            ];
-        });
-
-        $address = $user ? $user->addresses()->get() : null;
 
         return [
              ...parent::share($request),
             'auth' => [
                 'user' => $user,
                 'referrals' => $user ? $user->referrals()->count() : 0,
-                'downlines' => $downlines,
-                "bags" => $mergedBags,
-                "address" => $address,
+                'direct' => $directDownlines,
+                'indirect' => $indirectDownlines,
             ],
         ];
 
