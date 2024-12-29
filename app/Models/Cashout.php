@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Bag extends Model
+class Cashout extends Model
 {
 
     use SoftDeletes;
 
     protected $fillable = [
+        'amound',
+        'status',
         'user_id',
-        'product_id',
-        'quantity',
     ];
 
     protected $hidden = [
@@ -29,6 +29,6 @@ class Bag extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
 }

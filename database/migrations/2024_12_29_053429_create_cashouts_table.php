@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('referrals', function (Blueprint $table) {
+        Schema::create('cashouts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('referrer_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('referred_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->index(['referrer_id', 'referred_id']);
+            $table->decimal('amount', total: 10, places: 2);
+            $table->enum('status', ['pending', 'done', 'canceled']);
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
-
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('referrals');
+        Schema::dropIfExists('cashouts');
     }
 };

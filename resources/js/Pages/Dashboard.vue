@@ -14,9 +14,11 @@ import {
     Network,
     QrCode,
     Repeat2,
+    SquareStack,
     UserCog2,
     UserPlus2,
     UsersRound,
+    Waypoints,
 } from 'lucide-vue-next';
 import * as d3 from 'd3';
 const { props } = usePage();
@@ -160,25 +162,7 @@ onMounted(() => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div
-                v-if="!props.auth.user.referred_by"
-                class="mb-4 flex w-full items-center justify-start space-x-2 rounded-xl bg-[#8770ec] p-2 text-white"
-            >
-                <div class="flex-shrink-0">
-                    <Info :size="32" />
-                </div>
-                <p>
-                    Can you tell us who invited you?
-                    <Link
-                        :href="route('referral-code.index')"
-                        class="font-semibold underline"
-                        ><br />
-                        Click to proceed
-                    </Link>
-                </p>
-            </div>
-
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between font-mono">
                 <div class="flex items-center space-x-2">
                     <img
                         :src="props.auth.user.avatar || avatar"
@@ -193,7 +177,7 @@ onMounted(() => {
 
                         <div
                             @click="copy(source)"
-                            class="flex cursor-pointer items-center space-x-1 text-sm font-bold uppercase text-[#458500] active:underline"
+                            class="flex cursor-pointer items-center space-x-1 font-bold uppercase text-[#458500] active:underline"
                         >
                             <span> {{ code }}</span>
 
@@ -213,34 +197,51 @@ onMounted(() => {
                     >
                         <QrCode :size="24" class="text-[#215439]" />
                     </Link>
-                    <Link
+                    <!-- <Link
                         :href="route('profile.index')"
                         class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
                     >
                         <UserCog2 :size="24" class="text-[#215439]" />
-                    </Link>
+                    </Link> -->
                 </div>
             </div>
         </template>
 
-        <div class="flex flex-col bg-white px-4">
-            <div class="flex items-center justify-between">
+        <div class="flex flex-col bg-white px-4 font-mono">
+            <div class="flex">
                 <div class="flex flex-col">
-                    <h6 class="text-gray-400">Total Points</h6>
+                    <h6 class="text-gray-500">Total Balance</h6>
                     <h2 class="text-5xl font-semibold tracking-wider">
                         ₱{{ props.auth.user.points }}
                     </h2>
                 </div>
-                <div class="flex flex-col items-end">
-                    <img
-                        src="../../assets/images/rank.svg"
-                        width="68"
-                        alt="rank"
-                    />
-                </div>
             </div>
 
-            <div class="mb-4 mt-5 grid w-full grid-cols-2 gap-2 sm:grid-cols-2">
+            <div
+                class="mt-5 flex w-full items-center justify-between rounded-2xl bg-[#FFCB14] px-6 py-3"
+            >
+                <div class="flex flex-col text-gray-800">
+                    <small class="text-xs">Referrals</small>
+                    <big class="font-semibold"
+                        >+{{ props.auth.user.referral_points }}</big
+                    >
+                </div>
+                <div class="h-8 w-px bg-gray-400"></div>
+                <div class="flex flex-col text-gray-800">
+                    <small class="text-xs">Uni-Level</small>
+                    <big class="font-semibold"
+                        >+{{ props.auth.user.order_points }}</big
+                    >
+                </div>
+                <div class="h-8 w-px bg-gray-400"></div>
+                <div class="flex flex-col text-gray-800">
+                    <small class="text-xs">Pac. Bonus</small>
+                    <big class="font-semibold"
+                        >+{{ props.auth.user.package_points }}</big
+                    >
+                </div>
+            </div>
+            <div class="mb-4 mt-2 grid w-full grid-cols-2 gap-2 sm:grid-cols-2">
                 <div
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#AFEC70] p-4"
                 >
@@ -252,7 +253,7 @@ onMounted(() => {
                         </h4>
 
                         <div class="rounded-full bg-green-900 p-3">
-                            <UsersRound :size="20" class="text-[#AFEC70]" />
+                            <Network :size="20" class="text-[#AFEC70]" />
                         </div>
                     </div>
                     <div class="flex flex-col">
@@ -273,7 +274,7 @@ onMounted(() => {
                             Indirect
                         </h4>
                         <div class="rounded-full bg-[#AFEC70] p-3">
-                            <Network :size="20" class="text-black" />
+                            <Waypoints :size="20" class="text-black" />
                         </div>
                     </div>
                     <div class="flex flex-col">
@@ -291,14 +292,14 @@ onMounted(() => {
                         <h4
                             class="text-lg font-semibold tracking-wide text-white"
                         >
-                            Uni Level
+                            Rank
                         </h4>
                         <div class="rounded-full bg-[#df6a27] p-3">
-                            <Repeat2 :size="20" class="text-gray-100" />
+                            <SquareStack :size="20" class="text-gray-100" />
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <p class="text-xs text-gray-100">Repeat Profits</p>
+                        <p class="text-xs text-gray-100">Package Rank</p>
                         <h2 class="text-2xl font-semibold text-gray-100">
                             {{ props.auth.indirect
                             }}<span class="text-xs font-normal">/Orders</span>
@@ -336,7 +337,7 @@ onMounted(() => {
             </button>
 
             <div class="mt-5 flex flex-col bg-transparent">
-                <h6 class="text-gray-400">Network Trends</h6>
+                <h6 class="text-gray-500">Network Trends</h6>
                 <div
                     class="mt-1 h-full w-full rounded-lg p-3 shadow-sm ring-1 ring-gray-200"
                     id="chart"

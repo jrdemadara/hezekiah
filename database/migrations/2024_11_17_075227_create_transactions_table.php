@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('points_earned');
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->unsignedInteger('points_earned');
             $table->string('description');
-            $table->index('user_id');
+            $table->enum('type', ['referral', 'uni-level', 'pacakge']);
             $table->timestamps();
-            
+            $table->softDeletes();
         });
     }
 

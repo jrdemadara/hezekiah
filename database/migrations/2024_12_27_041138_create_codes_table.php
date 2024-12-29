@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('codes', function (Blueprint $table) {
             $table->id();
-            $table->string('trans_code');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('trans_code', 16);
             $table->string('code')->unique();
             $table->boolean('is_used')->default(0);
-            $table->foreignId('orderer')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('orderer')->nullable()->constrained('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

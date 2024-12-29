@@ -20,13 +20,19 @@ return new class extends Migration
             $table->string('middlename')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique();
-            $table->string('address')->unique()->nullable();
+            $table->string('address')->nullable(); // address can be nullable
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->integer('points')->default(0);
-            $table->foreignId('referred_by')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('auth_provider')->default('default');
+
+            // Precision and scale for decimal columns (referral, order, and package points)
+            $table->decimal('referral_points', 10, 2)->default(0); // Set a default value if needed
+            $table->decimal('order_points', 10, 2)->default(0);
+            $table->decimal('package_points', 10, 2)->default(0);
+
+            // Make referred_by nullable to allow users without a referrer
+            $table->foreignId('referred_by')->nullable()->constrained('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->boolean('is_active')->default(true);
             $table->index(['code']);
             $table->timestamps();
         });
