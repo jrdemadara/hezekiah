@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
         // Initialize downline count to 0 in case the user is not authenticated
         $indirectDownlines = 0;
         $packageCounts = [];
+        $formattedData = [];
 
         // If the user is authenticated, calculate the downline count
         if ($user) {
@@ -123,7 +124,6 @@ class HandleInertiaRequests extends Middleware
     ORDER BY month;
 ', [$user->id, $currentYear]);
 
-            $formattedData = [];
             foreach ($data as $row) {
                 // Ensure the month is valid (1-12) before proceeding
                 if ($row->month >= 1 && $row->month <= 12) {
