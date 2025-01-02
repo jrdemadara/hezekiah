@@ -50,7 +50,7 @@ class AddMemberController extends Controller
                     'lastname' => Str::lower($request->lastname),
                     'firstname' => Str::lower($request->firstname),
                     'middlename' => Str::lower($request->middlename),
-                    'phone' => $request->phone,
+                    'phone' => Str::start((string) $request->phone, '0'),
                     'address' => Str::lower($request->address),
                     'referred_by' => $user->id,
                     'password' => Hash::make(Str::lower($tempPass)),
@@ -109,9 +109,10 @@ class AddMemberController extends Controller
 
     protected function awardPoints(User $user, int $points, User $newUser)
     {
-        $user->increment('points', $points);
+        $user->increment('referral_points', $points);
         $user->transactions()->create([
             'points_earned' => $points,
+            'type' => 'referral',
             'description' => "Referral bonus: {$points} points earned from downline user ID: {$newUser->id}",
         ]);
     }

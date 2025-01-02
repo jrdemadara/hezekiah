@@ -81,19 +81,20 @@ onMounted(() => {
 
                 <div class="flex items-center justify-center space-x-5">
                     <div class="flex items-center justify-center space-x-2">
-                        <Link
+                        <!-- <Link
                             :href="route('bag')"
                             class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
                         >
                             <ShoppingBag class="text-black" />
                             <!-- Badge for showing the item count -->
-                            <span
+                        <!-- <span
                                 v-if="bagStore.bagCount > 0"
                                 class="absolute -right-0 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
                             >
                                 {{ bagStore.bagCount }}
                             </span>
-                        </Link>
+                        </Link> -->
+
                         <NavLink
                             :href="route('dashboard')"
                             class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"

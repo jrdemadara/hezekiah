@@ -10,14 +10,10 @@ import {
     Check,
     Coins,
     Copy,
-    Info,
     Network,
     QrCode,
-    Repeat2,
     SquareStack,
-    UserCog2,
     UserPlus2,
-    UsersRound,
     Waypoints,
 } from 'lucide-vue-next';
 import * as d3 from 'd3';
@@ -28,7 +24,7 @@ source.value = code;
 
 const { copy, copied } = useClipboard({ source });
 
-const aapl = [
+const sam = [
     // Example data structure (replace this with your actual data)
     { date: new Date(2024, 1), close: 0 },
     { date: new Date(2024, 2), close: 14.34 },
@@ -38,7 +34,11 @@ const aapl = [
     { date: new Date(2024, 6), close: 7.45 },
     { date: new Date(2024, 7), close: 14.67 },
 ];
+
+const aapl = props.auth.referral_trend; // Get referral trend data
 const chart = ref(null);
+
+console.log(aapl);
 onMounted(() => {
     // Declare chart dimensions and margins.
     const width = 928;
@@ -47,17 +47,24 @@ onMounted(() => {
     const marginRight = 30;
     const marginBottom = 30;
     const marginLeft = 40;
+    console.log(aapl);
+    // Parse the date and ensure it's a Date object if not already
+    aapl.forEach((d) => {
+        // If the date is a string in 'YYYY-M' format, parse it as a Date
+        d.date = new Date(`${d.date}-01`); // Convert 'YYYY-M' to 'YYYY-M-01'
+        d.close = +d.close; // Ensure 'close' is a number
+    });
 
     // Declare the x (horizontal position) scale.
     const x = d3.scaleUtc(
-        d3.extent(aapl, (d) => d.date),
-        [marginLeft, width - marginRight],
+        d3.extent(aapl, (d) => d.date), // Set x-axis domain based on the min/max of dates
+        [marginLeft, width - marginRight], // Position it with margins
     );
 
     // Declare the y (vertical position) scale.
     const y = d3.scaleLinear(
-        [0, d3.max(aapl, (d) => d.close)],
-        [height - marginBottom, marginTop],
+        [0, d3.max(aapl, (d) => d.close)], // Set y-axis domain based on max of referral count
+        [height - marginBottom, marginTop], // Position it with margins
     );
 
     // Declare the line generator.
@@ -112,7 +119,7 @@ onMounted(() => {
                 .attr('y', 10)
                 .attr('fill', 'currentColor')
                 .attr('text-anchor', 'start')
-                .text('↑ Network Trends'),
+                .text('↑ Referral Trend'),
         );
 
     // Add vertical grid lines
@@ -147,7 +154,7 @@ onMounted(() => {
         .join('circle') // Enter pattern for circles
         .attr('cx', (d) => x(d.date)) // Position circles horizontally
         .attr('cy', (d) => y(d.close)) // Position circles vertically
-        .attr('r', (d, i) => (i === 0 ? 0 : 14)) // Set radius to 0 for the first point
+        .attr('r', 14) // Set radius to 14 for the circles
         .attr('fill', '#5DA414') // Circle color
         .attr('stroke', 'white') // Optional: Add a border
         .attr('stroke-width', 0.5); // Optional: Thickness of the border
@@ -212,7 +219,10 @@ onMounted(() => {
                 <div class="flex flex-col">
                     <h6 class="text-gray-500">Total Balance</h6>
                     <h2 class="text-5xl font-semibold tracking-wider">
-                        ₱{{ props.auth.user.points }}
+                        ₱{{
+                            parseFloat(props.auth.user.referral_points || 0) +
+                            parseFloat(props.auth.user.order_points || 0)
+                        }}
                     </h2>
                 </div>
             </div>
@@ -221,23 +231,16 @@ onMounted(() => {
                 class="mt-5 flex w-full items-center justify-between rounded-2xl bg-[#FFCB14] px-6 py-3"
             >
                 <div class="flex flex-col text-gray-800">
-                    <small class="text-xs">Referrals</small>
+                    <small class="text-xs">Referral Bonus</small>
                     <big class="font-semibold"
                         >+{{ props.auth.user.referral_points }}</big
                     >
                 </div>
                 <div class="h-8 w-px bg-gray-400"></div>
                 <div class="flex flex-col text-gray-800">
-                    <small class="text-xs">Uni-Level</small>
-                    <big class="font-semibold"
+                    <small class="text-xs">Uni-Level Bonus</small>
+                    <big class="text-end font-semibold"
                         >+{{ props.auth.user.order_points }}</big
-                    >
-                </div>
-                <div class="h-8 w-px bg-gray-400"></div>
-                <div class="flex flex-col text-gray-800">
-                    <small class="text-xs">Pac. Bonus</small>
-                    <big class="font-semibold"
-                        >+{{ props.auth.user.package_points }}</big
                     >
                 </div>
             </div>
@@ -292,17 +295,17 @@ onMounted(() => {
                         <h4
                             class="text-lg font-semibold tracking-wide text-white"
                         >
-                            Rank
+                            Ranking
                         </h4>
                         <div class="rounded-full bg-[#df6a27] p-3">
                             <SquareStack :size="20" class="text-gray-100" />
                         </div>
                     </div>
                     <div class="flex flex-col">
-                        <p class="text-xs text-gray-100">Package Rank</p>
+                        <p class="text-xs text-gray-100">Package Bonus</p>
                         <h2 class="text-2xl font-semibold text-gray-100">
                             {{ props.auth.indirect
-                            }}<span class="text-xs font-normal">/Orders</span>
+                            }}<span class="text-xs font-normal">/Bonus</span>
                         </h2>
                     </div>
                 </div>
@@ -322,7 +325,7 @@ onMounted(() => {
                     <div class="flex flex-col">
                         <p class="text-xs text-[#455b49]">Reward Cashouts</p>
                         <h2 class="text-2xl font-semibold text-[#455b49]">
-                            {{ props.auth.indirect
+                            {{ props.auth.cashouts
                             }}<span class="text-xs font-normal">/History</span>
                         </h2>
                     </div>

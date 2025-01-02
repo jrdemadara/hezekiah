@@ -213,13 +213,13 @@ const addToBag = (product) => {
                         <p class="mt-2 font-semibold">
                             ₱{{ product.price.toLocaleString() }}
                         </p>
-                        <button
+                        <Link
+                            :href="route('auth')"
                             class="mt-4 flex justify-center rounded-full bg-orange-500 px-4 py-2 text-white transition hover:bg-orange-400"
-                            @click="addToBag(product)"
                         >
                             <Plus />
-                            Add to bag
-                        </button>
+                            Join us!
+                        </Link>
                     </div>
                 </div>
             </div>

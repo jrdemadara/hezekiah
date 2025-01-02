@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
             $table->unsignedInteger('points_earned');
             $table->string('description');
-            $table->enum('type', ['referral', 'uni-level', 'pacakge']);
+            $table->enum('type', ['referral', 'uni-level', 'package']);
             $table->timestamps();
             $table->softDeletes();
         });

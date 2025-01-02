@@ -69,47 +69,43 @@ class OrderController extends Controller
         // Get the appropriate points configuration based on the product name
         $productPoints = $levelPoints[strtolower($product->name)] ?? null;
 
-        if (!$productPoints) {
-            // Handle case where product name is not defined in the levelPoints array
-            return back()->withErrors([
-                'message' => 'ERR701: Something went wrong. Please contact the developer.',
-            ]);
+        if ($productPoints) {
+            $level = 1; // Start at level 1
+            $currentUserId = $orderer->referred_by;
 
-        }
+            // Traverse up to 10 levels
+            while ($currentUserId && $level <= 10) {
+                $referrer = User::find($currentUserId);
 
-        $level = 1; // Start at level 1
-        $currentUserId = $orderer->referred_by;
+                if ($referrer) {
+                    // Determine points based on the level
+                    $points = $level <= 5 ? $productPoints['level_1_5'] : $productPoints['level_6_10'];
 
-        // Traverse up to 10 levels
-        while ($currentUserId && $level <= 10) {
-            $referrer = User::find($currentUserId);
+                    // Award points
+                    $this->awardPoints($referrer, $points, $orderer, $product);
 
-            if ($referrer) {
-                // Determine points based on the level
-                $points = $level <= 5 ? $productPoints['level_1_5'] : $productPoints['level_6_10'];
+                    // Move to the next referrer
+                    $currentUserId = $referrer->referred_by;
+                } else {
+                    break; // Stop if no referrer is found
+                }
 
-                // Award points
-                $this->awardPoints($referrer, $points, $orderer, $product);
-
-                // Move to the next referrer
-                $currentUserId = $referrer->referred_by;
-            } else {
-                break; // Stop if no referrer is found
+                $level++;
             }
 
-            $level++;
         }
     }
 
     protected function awardPoints(User $referrer, int $points, User $orderer, Product $product)
     {
         // Increment the referrer's points
-        $referrer->increment('points', $points);
+        $referrer->increment('order_points', $points);
 
         // Log the transaction for accountability
         $referrer->transactions()->create([
             'points_earned' => $points,
-            'description' => "Earned {$points} points from order by user:{$orderer->id} for product:{$product->id}",
+            'type' => 'uni-level',
+            'description' => "Product bonus: {$points} points from order by user:{$orderer->id} for product:{$product->id}",
         ]);
     }
 }

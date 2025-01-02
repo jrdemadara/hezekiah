@@ -79,7 +79,7 @@ onMounted(() => {
                     <!-- Right Section: Desktop Cart and User Menu -->
                     <div class="hidden sm:flex sm:items-center sm:space-x-2">
                         <!-- Shopping Bag -->
-                        <Link
+                        <!-- <Link
                             :href="route('bag')"
                             class="relative rounded-full p-2 hover:bg-[#328458] hover:text-white"
                         >
@@ -90,7 +90,7 @@ onMounted(() => {
                             >
                                 {{ bagStore.bagCount }}
                             </span>
-                        </Link>
+                        </Link> -->
 
                         <!-- User Dropdown -->
                         <div class="relative">

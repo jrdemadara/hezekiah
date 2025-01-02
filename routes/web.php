@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    $products = Product::select('id', 'name', 'description', 'price', 'image_url')->get();
+    $products = Product::select('id', 'name', 'description', 'price', 'image_url')
+        ->where('id', '!=', 4)
+        ->get();
 
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
