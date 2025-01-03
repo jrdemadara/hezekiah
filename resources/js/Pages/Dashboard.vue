@@ -218,7 +218,7 @@ onMounted(() => {
             <div class="flex">
                 <div class="flex flex-col">
                     <h6 class="text-gray-500">Total Balance</h6>
-                    <h2 class="font-mono text-5xl font-semibold tracking-wider">
+                    <h2 class="text-5xl font-semibold tracking-wider">
                         ₱{{
                             parseFloat(props.auth.user.referral_points || 0) +
                             parseFloat(props.auth.user.order_points || 0)
@@ -232,14 +232,14 @@ onMounted(() => {
             >
                 <div class="flex flex-col text-gray-800">
                     <small class="text-xs">Referral Bonus</small>
-                    <big class="font-mono font-semibold"
+                    <big class="font-semibold"
                         >+{{ props.auth.user.referral_points }}</big
                     >
                 </div>
                 <div class="h-8 w-px bg-gray-400"></div>
                 <div class="flex flex-col text-gray-800">
                     <small class="text-xs">Uni-Level Bonus</small>
-                    <big class="text-end font-mono font-semibold"
+                    <big class="text-end font-semibold"
                         >+{{ props.auth.user.order_points }}</big
                     >
                 </div>
@@ -261,9 +261,7 @@ onMounted(() => {
                     </div>
                     <div class="flex flex-col">
                         <p class="text-xs text-lime-700">Direct Invites</p>
-                        <h2
-                            class="font-mono text-2xl font-semibold text-lime-900"
-                        >
+                        <h2 class="text-2xl font-semibold text-lime-900">
                             {{ props.auth.referrals
                             }}<span class="text-xs font-normal">/Invites</span>
                         </h2>
@@ -284,9 +282,7 @@ onMounted(() => {
                     </div>
                     <div class="flex flex-col">
                         <p class="text-xs text-gray-500">Indirect Invites</p>
-                        <h2
-                            class="font-mono text-2xl font-semibold text-[#AFEC70]"
-                        >
+                        <h2 class="text-2xl font-semibold text-[#AFEC70]">
                             {{ props.auth.indirect
                             }}<span class="text-xs font-normal">/Networks</span>
                         </h2>
@@ -307,9 +303,7 @@ onMounted(() => {
                     </div>
                     <div class="flex flex-col">
                         <p class="text-xs text-gray-100">Package Bonus</p>
-                        <h2
-                            class="font-mono text-2xl font-semibold text-gray-100"
-                        >
+                        <h2 class="text-2xl font-semibold text-gray-100">
                             {{ props.auth.indirect
                             }}<span class="text-xs font-normal">/Bonus</span>
                         </h2>
@@ -330,9 +324,7 @@ onMounted(() => {
                     </div>
                     <div class="flex flex-col">
                         <p class="text-xs text-[#455b49]">Reward Cashouts</p>
-                        <h2
-                            class="font-mono text-2xl font-semibold text-[#455b49]"
-                        >
+                        <h2 class="text-2xl font-semibold text-[#455b49]">
                             {{ props.auth.cashouts
                             }}<span class="text-xs font-normal">/History</span>
                         </h2>
