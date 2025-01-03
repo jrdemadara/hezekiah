@@ -13,6 +13,7 @@ import {
     Network,
     QrCode,
     SquareStack,
+    UserCog2,
     UserPlus2,
     Waypoints,
 } from 'lucide-vue-next';
@@ -204,27 +205,25 @@ onMounted(() => {
                     >
                         <QrCode :size="24" class="text-[#215439]" />
                     </Link>
-                    <!-- <Link
-                        :href="route('profile.index')"
+                    <Link
+                        :href="route('profile.edit')"
                         class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
                     >
                         <UserCog2 :size="24" class="text-[#215439]" />
-                    </Link> -->
+                    </Link>
                 </div>
             </div>
         </template>
 
         <div class="flex flex-col bg-white px-4">
-            <div class="flex">
-                <div class="flex flex-col">
-                    <h6 class="text-sm text-gray-500">Total Balance</h6>
-                    <h2 class="text-4xl font-semibold">
-                        ₱{{
-                            parseFloat(props.auth.user.referral_points || 0) +
-                            parseFloat(props.auth.user.order_points || 0)
-                        }}
-                    </h2>
-                </div>
+            <div class="flex flex-col">
+                <h6 class="text-sm text-gray-500">Total Balance</h6>
+                <h2 class="text-4xl font-semibold">
+                    ₱{{
+                        parseFloat(props.auth.user.referral_points || 0) +
+                        parseFloat(props.auth.user.order_points || 0)
+                    }}
+                </h2>
             </div>
 
             <div
@@ -331,14 +330,23 @@ onMounted(() => {
                 <Network :size="18" />
             </button>
 
-            <div class="mt-5 flex flex-col bg-transparent">
+            <div class="mt-5 flex flex-col">
+                <h6 class="text-sm text-gray-500">Order History</h6>
+                <h2 class="text-4xl font-semibold">
+                    ₱{{
+                        parseFloat(props.auth.user.referral_points || 0) +
+                        parseFloat(props.auth.user.order_points || 0)
+                    }}
+                </h2>
+            </div>
+            <!-- <div class="mt-5 flex flex-col bg-transparent">
                 <h6 class="text-sm text-gray-500">Network Trends</h6>
                 <div
                     class="mt-1 h-full w-full rounded-lg p-3 shadow-sm ring-1 ring-gray-200"
                     id="chart"
                     ref="chart"
                 ></div>
-            </div>
+            </div> -->
 
             <Link
                 :href="route('add-member.index')"

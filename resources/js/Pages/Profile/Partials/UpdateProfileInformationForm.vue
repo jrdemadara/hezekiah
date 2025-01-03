@@ -17,8 +17,11 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
-    name: user.name,
-    email: user.email,
+    lastname: user.lastname,
+    firstname: user.firstname,
+    middlename: user.middlename,
+    phone: user.phone,
+    address: user.address,
 });
 </script>
 
@@ -30,7 +33,7 @@ const form = useForm({
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Update your account's profile information and email address.
+                Update your account's profile information.
             </p>
         </header>
 
@@ -39,34 +42,97 @@ const form = useForm({
             class="mt-6 space-y-6"
         >
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="lastname" value="Lastname" />
 
                 <TextInput
-                    id="name"
+                    id="lastname"
                     type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
+                    class="mt-1 block w-full capitalize"
+                    v-model="form.lastname"
                     required
                     autofocus
-                    autocomplete="name"
+                    autocomplete="lastname"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2" :message="form.errors.lastname" />
+            </div>
+            <div>
+                <InputLabel for="lastname" value="Lastname" />
+
+                <TextInput
+                    id="lastname"
+                    type="text"
+                    class="mt-1 block w-full capitalize"
+                    v-model="form.lastname"
+                    required
+                    autofocus
+                    autocomplete="lastname"
+                />
+
+                <InputError class="mt-2" :message="form.errors.lastname" />
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="firstname" value="Firstname" />
 
                 <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
+                    id="firstname"
+                    type="text"
+                    class="mt-1 block w-full capitalize"
+                    v-model="form.firstname"
                     required
-                    autocomplete="username"
+                    autofocus
+                    autocomplete="firstname"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.errors.firstname" />
+            </div>
+
+            <div>
+                <InputLabel for="middlename" value="Middlename" />
+
+                <TextInput
+                    id="middlename"
+                    type="text"
+                    class="mt-1 block w-full capitalize"
+                    v-model="form.middlename"
+                    required
+                    autofocus
+                    autocomplete="middlename"
+                />
+
+                <InputError class="mt-2" :message="form.errors.middlename" />
+            </div>
+
+            <div>
+                <InputLabel for="phone" value="Phone" />
+
+                <TextInput
+                    id="phone"
+                    type="phone"
+                    class="mt-1 block w-full"
+                    v-model="form.phone"
+                    required
+                    readonly
+                    autocomplete="phone"
+                />
+
+                <InputError class="mt-2" :message="form.errors.phone" />
+            </div>
+
+            <div>
+                <InputLabel for="address" value="Address" />
+
+                <TextInput
+                    id="address"
+                    type="address"
+                    class="mt-1 block w-full capitalize"
+                    v-model="form.address"
+                    required
+                    autocomplete="address"
+                />
+
+                <InputError class="mt-2" :message="form.errors.address" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
