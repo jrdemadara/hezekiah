@@ -177,14 +177,14 @@ onMounted(() => {
                         class="w-14 rounded-full"
                     />
                     <div class="flex flex-col">
-                        <h4 class="text-lg font-semibold capitalize">
+                        <h4 class="font-semibold capitalize">
                             {{ props.auth.user.firstname }}
                             {{ props.auth.user.lastname }}
                         </h4>
 
                         <div
                             @click="copy(source)"
-                            class="flex cursor-pointer items-center space-x-1 font-bold uppercase text-[#458500] active:underline"
+                            class="flex cursor-pointer items-center space-x-1 font-semibold uppercase text-[#458500] active:underline"
                         >
                             <span> {{ code }}</span>
 
@@ -217,8 +217,8 @@ onMounted(() => {
         <div class="flex flex-col bg-white px-4">
             <div class="flex">
                 <div class="flex flex-col">
-                    <h6 class="text-gray-500">Total Balance</h6>
-                    <h2 class="text-5xl font-semibold tracking-wider">
+                    <h6 class="text-sm text-gray-500">Total Balance</h6>
+                    <h2 class="text-4xl font-semibold">
                         ₱{{
                             parseFloat(props.auth.user.referral_points || 0) +
                             parseFloat(props.auth.user.order_points || 0)
@@ -249,9 +249,7 @@ onMounted(() => {
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#AFEC70] p-4"
                 >
                     <div class="flex items-center justify-between">
-                        <h4
-                            class="text-lg font-semibold tracking-wide text-[#215439]"
-                        >
+                        <h4 class="font-semibold tracking-wide text-[#215439]">
                             Direct
                         </h4>
 
@@ -271,9 +269,7 @@ onMounted(() => {
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#16151A] p-4"
                 >
                     <div class="flex items-center justify-between">
-                        <h4
-                            class="text-lg font-semibold tracking-wide text-white"
-                        >
+                        <h4 class="font-semibold tracking-wide text-white">
                             Indirect
                         </h4>
                         <div class="rounded-full bg-[#AFEC70] p-3">
@@ -292,9 +288,7 @@ onMounted(() => {
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#fd8641] p-4"
                 >
                     <div class="flex items-center justify-between">
-                        <h4
-                            class="text-lg font-semibold tracking-wide text-white"
-                        >
+                        <h4 class="font-semibold tracking-wide text-white">
                             Ranking
                         </h4>
                         <div class="rounded-full bg-[#df6a27] p-3">
@@ -313,9 +307,7 @@ onMounted(() => {
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#C6EBCD] p-4"
                 >
                     <div class="flex items-center justify-between">
-                        <h4
-                            class="text-lg font-semibold tracking-wide text-[#455b49]"
-                        >
+                        <h4 class="font-semibold tracking-wide text-[#455b49]">
                             Cashouts
                         </h4>
                         <div class="rounded-full bg-[#a6d9af] p-3">
@@ -340,7 +332,7 @@ onMounted(() => {
             </button>
 
             <div class="mt-5 flex flex-col bg-transparent">
-                <h6 class="text-gray-500">Network Trends</h6>
+                <h6 class="text-sm text-gray-500">Network Trends</h6>
                 <div
                     class="mt-1 h-full w-full rounded-lg p-3 shadow-sm ring-1 ring-gray-200"
                     id="chart"
@@ -350,12 +342,10 @@ onMounted(() => {
 
             <Link
                 :href="route('add-member.index')"
-                class="mt-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#458500] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
+                class="my-4 flex h-28 w-full items-center justify-between rounded-lg bg-gradient-to-tl from-[#458500] to-[#2B542C] p-4 hover:bg-[#3f7b40]"
             >
                 <div class="flex flex-col space-y-2">
-                    <h2 class="text-lg font-semibold text-[#AFEC70]">
-                        Add Member
-                    </h2>
+                    <h2 class="font-semibold text-[#AFEC70]">Add Member</h2>
                     <p class="text-xs leading-5 text-gray-200">
                         Expand your network by adding members and fostering
                         meaningful connections.
