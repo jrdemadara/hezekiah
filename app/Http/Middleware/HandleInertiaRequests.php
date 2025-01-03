@@ -125,19 +125,31 @@ class HandleInertiaRequests extends Middleware
 ', [$user->id, $currentYear]);
 
             foreach ($data as $row) {
-                // Ensure the month is valid (1-12) before proceeding
-                if ($row->month >= 1 && $row->month <= 12) {
-                    // Get the last day of the month based on the current year and month
-                    $date = new \DateTime("{$currentYear}-{$row->month}-01");
+                // Ensure the month value is valid
+                if (
+                    isset($row->month) &&
+                    is_numeric($row->month) &&
+                    $row->month >= 1 &&
+                    $row->month <= 12
+                ) {
+                    try {
+                        // Use the current year and the month to create a valid date
+                        $month = (int) $row->month; // Ensure it's an integer
+                        $date = new \DateTime("{$currentYear}-{$month}-01"); // Start of the month
+                        $date->modify('last day of this month'); // Last day of the month
 
-                    // Modify to get the last day of the month
-                    $date->modify('last day of this month');
-
-                    // Add the formatted data
-                    $formattedData[] = [
-                        'date' => $date->format('Y-m-d'), // Format the date as 'YYYY-MM-DD' (last day of the month)
-                        'close' => (float) $row->referral_count, // Referral count (use the count as "close")
-                    ];
+                        // Add the formatted data
+                        $formattedData[] = [
+                            'date' => "{$currentYear}, {$month}", // Format as 'YYYY, M'
+                            'close' => (float) $row->referral_count, // Use referral count as "close"
+                        ];
+                    } catch (\Exception $e) {
+                        // Handle exceptions
+                        error_log("Error creating date for month {$row->month}: " . $e->getMessage());
+                    }
+                } else {
+                    // Log invalid month values
+                    error_log("Invalid month value: " . var_export($row->month, true));
                 }
             }
 
@@ -151,7 +163,7 @@ class HandleInertiaRequests extends Middleware
                 'indirect' => $indirectDownlines,
                 'cashouts' => $user ? $user->cashouts()->count() : 0,
                 'package_bonus' => $packageCounts,
-                'referral_trend' => $formattedData,
+                'referral_trend' => $data,
             ],
         ];
 

@@ -39,7 +39,7 @@ const sam = [
 const aapl = props.auth.referral_trend; // Get referral trend data
 const chart = ref(null);
 
-console.log(aapl);
+console.log(props);
 onMounted(() => {
     // Declare chart dimensions and margins.
     const width = 928;
@@ -48,7 +48,7 @@ onMounted(() => {
     const marginRight = 30;
     const marginBottom = 30;
     const marginLeft = 40;
-    console.log(aapl);
+
     // Parse the date and ensure it's a Date object if not already
     aapl.forEach((d) => {
         // If the date is a string in 'YYYY-M' format, parse it as a Date
@@ -330,14 +330,13 @@ onMounted(() => {
                 <Network :size="18" />
             </button>
 
-            <div class="mt-5 flex flex-col">
+            <div class="mt-5 flex flex-col bg-slate-50 p-4 shadow-sm">
                 <h6 class="text-sm text-gray-500">Order History</h6>
-                <h2 class="text-4xl font-semibold">
-                    ₱{{
-                        parseFloat(props.auth.user.referral_points || 0) +
-                        parseFloat(props.auth.user.order_points || 0)
-                    }}
-                </h2>
+                <h2 class="text- font-semibold">Coming Soon</h2>
+            </div>
+            <div class="mt-5 flex flex-col bg-slate-50 p-4 shadow-sm">
+                <h6 class="text-sm text-gray-500">Network Trends</h6>
+                <h2 class="text- font-semibold">Coming Soon</h2>
             </div>
             <!-- <div class="mt-5 flex flex-col bg-transparent">
                 <h6 class="text-sm text-gray-500">Network Trends</h6>
@@ -359,7 +358,7 @@ onMounted(() => {
                         meaningful connections.
                     </p>
                 </div>
-                <UserPlus2 :size="92" class="text-[#AFEC70]" />
+                <UserPlus2 :size="82" class="text-[#AFEC70]" />
             </Link>
         </div>
     </AuthenticatedLayout>
