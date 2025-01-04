@@ -36,6 +36,17 @@ class OrderController extends Controller
             return back()->withErrors(['message' => 'Code does not exist!']);
         }
 
+        if ($code->product_id == 3) {
+            $this->distributePackagePoints($user, [
+                1 => 500,
+                2 => 150,
+                3 => 100,
+                4 => 50,
+                5 => 30,
+                6 => 20,
+            ]);
+        }
+
         $product = $code->product;
 
         if (!$product) {
@@ -106,6 +117,35 @@ class OrderController extends Controller
             'points_earned' => $points,
             'type' => 'uni-level',
             'description' => "Product bonus: {$points} points from order by user:{$orderer->id} for product:{$product->id}",
+        ]);
+    }
+
+    public function distributePackagePoints(User $user, array $levelPoints)
+    {
+        $level = 1;
+        $currentUserId = $user->referred_by;
+
+        while ($currentUserId && $level <= count($levelPoints)) {
+            $referrer = User::find($currentUserId);
+
+            if ($referrer) {
+                $this->awardPackagePoints($referrer, $levelPoints[$level], $user);
+                $currentUserId = $referrer->referred_by;
+            } else {
+                break;
+            }
+
+            $level++;
+        }
+    }
+
+    protected function awardPackagePoints(User $user, int $points, User $newUser)
+    {
+        $user->increment('referral_points', $points);
+        $user->transactions()->create([
+            'points_earned' => $points,
+            'type' => 'referral',
+            'description' => "Referral bonus: {$points} points earned from downline user ID: {$newUser->id}",
         ]);
     }
 }
