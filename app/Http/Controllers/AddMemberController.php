@@ -34,7 +34,7 @@ class AddMemberController extends Controller
 
         // Check the code
         $code = Code::where('code', Str::lower($request->code))
-            ->where('product_id', 4)
+            ->whereIn('product_id', [3, 4])
             ->where('is_used', false)
             ->first();
 
@@ -62,14 +62,16 @@ class AddMemberController extends Controller
                 // Update the code to mark it as used
                 $code->update(['is_used' => true]);
 
-                $this->distributeReferralPoints($member, [
-                    1 => 500,
-                    2 => 150,
-                    3 => 100,
-                    4 => 50,
-                    5 => 30,
-                    6 => 20,
-                ]);
+                if ($code->product_id == 3) {
+                    $this->distributeReferralPoints($member, [
+                        1 => 500,
+                        2 => 150,
+                        3 => 100,
+                        4 => 50,
+                        5 => 30,
+                        6 => 20,
+                    ]);
+                }
 
                 return back()->with([
                     'success' => 'Member is created',
