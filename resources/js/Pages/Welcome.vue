@@ -249,7 +249,7 @@ const addToBag = (product) => {
                     <Link
                         :href="route('auth')"
                         style="animation-delay: 0.3s"
-                        class="flex h-14 w-full animate-slideUp items-center justify-center rounded-full bg-[#328458] text-lg font-medium text-white sm:w-40"
+                        class="mb-4 flex h-14 w-full animate-slideUp items-center justify-center rounded-full bg-[#328458] text-lg font-medium text-white sm:w-40"
                     >
                         About us
                     </Link>

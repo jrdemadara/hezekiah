@@ -125,7 +125,9 @@ watch(
             </div>
         </template>
 
-        <div class="mx-auto w-full max-w-screen-lg px-4 sm:px-6 lg:px-8">
+        <div
+            class="mx-auto w-full max-w-screen-lg overflow-scroll px-4 sm:px-6 lg:px-8"
+        >
             <div ref="chartRef" class="relative overflow-scroll">
                 <!-- Chart content will be appended here -->
             </div>
