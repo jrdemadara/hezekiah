@@ -60,7 +60,10 @@ class AddMemberController extends Controller
             // Check if the member was newly created or updated
             if ($member->wasRecentlyCreated) {
                 // Update the code to mark it as used
-                $code->update(['is_used' => true]);
+                $code->update([
+                    'is_used' => true,
+                    'orderer' => $member->id,
+                ]);
 
                 if ($code->product_id == 3) {
                     $this->distributeReferralPoints($member, [
