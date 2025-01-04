@@ -6,7 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { usePage, Link } from '@inertiajs/vue3';
-import { Bell, ScanBarcode, ShoppingBag } from 'lucide-vue-next';
+import { Bell, ScanBarcode } from 'lucide-vue-next';
 import { useBagStore } from '@/Stores/bag';
 
 const { props } = usePage();

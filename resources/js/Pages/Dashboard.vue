@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
@@ -10,8 +10,8 @@ import {
     Check,
     Coins,
     Copy,
+    LogOut,
     Network,
-    QrCode,
     SquareStack,
     UserCog2,
     UserPlus2,
@@ -25,7 +25,7 @@ source.value = code;
 
 const { copy, copied } = useClipboard({ source });
 
-const sam = [
+const aapl = [
     // Example data structure (replace this with your actual data)
     { date: new Date(2024, 1), close: 0 },
     { date: new Date(2024, 2), close: 14.34 },
@@ -36,10 +36,9 @@ const sam = [
     { date: new Date(2024, 7), close: 14.67 },
 ];
 
-const aapl = props.auth.referral_trend; // Get referral trend data
+//const aapl = props.auth.referral_trend; // Get referral trend data
 const chart = ref(null);
 
-console.log(props);
 onMounted(() => {
     // Declare chart dimensions and margins.
     const width = 928;
@@ -200,16 +199,19 @@ onMounted(() => {
                 </div>
                 <div class="flex space-x-3">
                     <Link
-                        :href="route('qrcode')"
-                        class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
-                    >
-                        <QrCode :size="24" class="text-[#215439]" />
-                    </Link>
-                    <Link
                         :href="route('profile.edit')"
                         class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
                     >
                         <UserCog2 :size="24" class="text-[#215439]" />
+                    </Link>
+                    <Link
+                        @click="location.reload()"
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
+                    >
+                        <LogOut :size="24" class="text-[#215439]" />
                     </Link>
                 </div>
             </div>
@@ -323,12 +325,13 @@ onMounted(() => {
                 </div>
             </div>
 
-            <button
+            <Link
+                :href="route('network')"
                 class="flex h-12 w-full items-center justify-center space-x-2 rounded-xl border bg-gradient-to-tl from-slate-50 via-slate-100 to-slate-200"
             >
                 <h4>View Network</h4>
                 <Network :size="18" />
-            </button>
+            </Link>
 
             <div class="mt-5 flex flex-col bg-slate-50 p-4 shadow-sm">
                 <h6 class="text-sm text-gray-500">Order History</h6>

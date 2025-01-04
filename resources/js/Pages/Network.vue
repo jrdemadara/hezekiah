@@ -1,38 +1,110 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage, Link, useForm, router } from '@inertiajs/vue3';
-import { Check, Loader2, MoveLeft, Plus } from 'lucide-vue-next';
-import TextInput from '@/Components/TextInput.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { Head, usePage, Link } from '@inertiajs/vue3';
+import { MoveLeft } from 'lucide-vue-next';
+import * as d3 from 'd3';
 
 const { props } = usePage();
 
-const form = useForm({
-    lastname: null,
-    firstname: null,
-    middlename: null,
-    phone: null,
-    address: null,
-    code: null,
+const data = JSON.parse(props.data); // Parse the JSON string into an object
+console.log(data);
+
+// Create a reference for the chart container
+const chartRef = ref(null);
+
+const createChart = (data) => {
+    const width = 928;
+
+    // Compute the tree height; this approach will allow the height of the
+    // SVG to scale according to the breadth (width) of the tree layout.
+    const root = d3.hierarchy(data);
+    const dx = 10;
+    const dy = width / (root.height + 1);
+
+    // Create a tree layout.
+    const tree = d3.tree().nodeSize([dx, dy]);
+
+    // Sort the tree and apply the layout.
+    root.sort((a, b) => d3.ascending(a.data.name, b.data.name));
+    tree(root);
+
+    // Compute the extent of the tree. Note that x and y are swapped here
+    // because in the tree layout, x is the breadth, but when displayed, the
+    // tree extends right rather than down.
+    let x0 = Infinity;
+    let x1 = -x0;
+    root.each((d) => {
+        if (d.x > x1) x1 = d.x;
+        if (d.x < x0) x0 = d.x;
+    });
+
+    // Compute the adjusted height of the tree.
+    const height = x1 - x0 + dx * 2;
+
+    const svg = d3
+        .create('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', [-dy / 3, x0 - dx, width, height])
+        .attr('style', 'max-width: 100%; height: auto; font: 10px sans-serif;');
+
+    const link = svg
+        .append('g')
+        .attr('fill', 'none')
+        .attr('stroke', '#555')
+        .attr('stroke-opacity', 0.4)
+        .attr('stroke-width', 1.5)
+        .selectAll()
+        .data(root.links())
+        .join('path')
+        .attr(
+            'd',
+            d3
+                .linkHorizontal()
+                .x((d) => d.y)
+                .y((d) => d.x),
+        );
+
+    const node = svg
+        .append('g')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-width', 3)
+        .selectAll()
+        .data(root.descendants())
+        .join('g')
+        .attr('transform', (d) => `translate(${d.y},${d.x})`);
+
+    node.append('circle')
+        .attr('fill', (d) => (d.children ? '#555' : '#999'))
+        .attr('r', 2.5);
+
+    node.append('text')
+        .attr('dy', '0.31em')
+        .attr('x', (d) => (d.children ? -6 : 6))
+        .attr('text-anchor', (d) => (d.children ? 'end' : 'start'))
+        .text((d) => d.data.name)
+        .attr('stroke', 'white')
+        .attr('paint-order', 'stroke');
+
+    // Render the SVG to the container
+    const container = chartRef.value;
+    container.innerHTML = ''; // Clear any existing content
+    container.appendChild(svg.node());
+};
+
+// Lifecycle hook to create the chart when the component is mounted
+onMounted(() => {
+    createChart(data); // Call createChart with initial data
 });
 
-const save = async () => {
-    form.post(route('add-member.store'), {
-        onSuccess: (res) => {
-            console.log(res);
-            toast.success('Success!');
-            form.reset();
-        },
-        onError: (err) => {
-            console.log(err);
-            toast.error(err.message);
-        },
-    });
-};
+// Watch for changes in the data prop
+watch(
+    () => props.data,
+    (newData) => {
+        createChart(newData); // Recreate the chart when data changes
+    },
+);
 </script>
 
 <template>
@@ -48,108 +120,13 @@ const save = async () => {
                 <h2
                     class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
                 >
-                    Add Member
+                    Network
                 </h2>
             </div>
         </template>
 
-        <div class="flex h-[calc(100vh-64px)] flex-col pb-16">
-            <form @submit.prevent="save" class="h-52 w-full px-4">
-                <h2 class="font-semibold">Add New Member</h2>
-                <div class="my-4">
-                    <InputLabel value="Lastname" />
-                    <TextInput
-                        id="lastname"
-                        type="text"
-                        class="mt-1 block h-12 w-full capitalize"
-                        v-model="form.lastname"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.lastname" />
-                </div>
-                <div class="my-4">
-                    <InputLabel value="Firstname" />
-                    <TextInput
-                        id="firstname"
-                        type="text"
-                        class="mt-1 block h-12 w-full capitalize"
-                        v-model="form.firstname"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.firstname" />
-                </div>
-                <div class="my-4">
-                    <InputLabel value="Middlename" />
-                    <TextInput
-                        id="middlename"
-                        type="text"
-                        class="h-province mt-1 block w-full capitalize"
-                        v-model="form.middlename"
-                        required
-                    />
-                    <InputError
-                        class="mt-2"
-                        :message="form.errors.middlename"
-                    />
-                </div>
-                <div class="my-4">
-                    <InputLabel value="Phone Nummber" />
-                    <TextInput
-                        id="phone"
-                        type="number"
-                        class="mt-1 block h-12 w-full capitalize"
-                        v-model="form.phone"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.phone" />
-                </div>
-                <div class="mb-8 mt-4">
-                    <InputLabel value="Complete Address" />
-                    <TextInput
-                        id="address"
-                        type="text"
-                        class="mt-1 block h-12 w-full capitalize"
-                        v-model="form.address"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.address" />
-                </div>
-
-                <hr />
-                <div class="mb-4 mt-6">
-                    <InputLabel value="Code" />
-                    <TextInput
-                        id="code"
-                        type="text"
-                        class="mt-1 block h-12 w-full uppercase"
-                        v-model="form.code"
-                        required
-                    />
-                    <InputError class="mt-2" :message="form.errors.code" />
-                </div>
-
-                <div class="mt-8 flex items-center justify-between space-x-2">
-                    <Link
-                        :href="route('dashboard')"
-                        class="flex h-12 w-1/2 items-center justify-center space-x-1 rounded-lg bg-gray-200 hover:bg-gray-300"
-                    >
-                        Cancel
-                    </Link>
-                    <button
-                        class="flex h-12 w-1/2 items-center justify-center space-x-1 rounded-lg bg-[#458500] text-white hover:bg-[#427E00]"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
-                        <Loader2
-                            class="flex-shrink-0 animate-spin"
-                            v-if="form.processing"
-                        />
-                        <span
-                            v-text="form.processing ? 'Please wait...' : 'Save'"
-                        ></span>
-                    </button>
-                </div>
-            </form>
+        <div class="max-w-1200px max-h-800px w-full scroll-smooth">
+            <div ref="chartRef" class="h-full w-full"></div>
         </div>
     </AuthenticatedLayout>
 </template>

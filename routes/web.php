@@ -4,6 +4,7 @@ use App\Http\Controllers\AddMemberController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRCodeController;
@@ -37,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode');
+
+    Route::get('/network', [NetworkController::class, 'index'])->name('network');
 
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::patch('/order', [OrderController::class, 'store'])->name('order.store');
