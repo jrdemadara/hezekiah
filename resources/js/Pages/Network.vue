@@ -125,8 +125,10 @@ watch(
             </div>
         </template>
 
-        <div class="max-w-1200px max-h-800px w-full scroll-smooth">
-            <div ref="chartRef" class="h-full w-full"></div>
+        <div class="mx-auto w-full max-w-screen-lg px-4 sm:px-6 lg:px-8">
+            <div ref="chartRef" class="relative overflow-scroll">
+                <!-- Chart content will be appended here -->
+            </div>
         </div>
     </AuthenticatedLayout>
 </template>
