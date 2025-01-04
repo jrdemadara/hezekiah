@@ -170,7 +170,7 @@ onMounted(() => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between px-0 sm:px-14">
                 <div class="flex items-center space-x-2">
                     <img
                         :src="props.auth.user.avatar || avatar"
@@ -215,7 +215,7 @@ onMounted(() => {
             </div>
         </template>
 
-        <div class="flex flex-col bg-white px-4">
+        <div class="flex flex-col bg-white px-4 sm:px-32">
             <div class="flex flex-col">
                 <h6 class="text-sm text-gray-500">Total Balance</h6>
                 <h2 class="text-4xl font-semibold">
@@ -243,7 +243,7 @@ onMounted(() => {
                     >
                 </div>
             </div>
-            <div class="mb-4 mt-2 grid w-full grid-cols-2 gap-2 sm:grid-cols-2">
+            <div class="mb-4 mt-2 grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
                 <div
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#AFEC70] p-4"
                 >

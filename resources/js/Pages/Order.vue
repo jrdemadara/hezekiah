@@ -34,6 +34,7 @@ const saveOrder = () => {
     form.patch(route('order.store'), {
         onSuccess: () => {
             toast.success('Order successfully added.');
+            form.reset();
             // setTimeout(() => {
             //     window.location.href = route('dashboard');
             // }, 5000);

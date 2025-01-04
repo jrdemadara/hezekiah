@@ -163,7 +163,7 @@ class HandleInertiaRequests extends Middleware
                 'indirect' => $indirectDownlines,
                 'cashouts' => $user ? $user->cashouts()->count() : 0,
                 'package_bonus' => $packageCounts,
-                'referral_trend' => $data,
+                'referral_trend' => 'none',
             ],
         ];
 

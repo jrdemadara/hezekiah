@@ -25,6 +25,7 @@ const save = async () => {
         onSuccess: (res) => {
             console.log(res);
             toast.success('Success!');
+            form.reset();
         },
         onError: (err) => {
             console.log(err);
