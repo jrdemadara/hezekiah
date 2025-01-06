@@ -60,7 +60,6 @@ const saveOrder = () => {
             </p>
             <div class="mt-4 flex w-3/4 flex-col items-center justify-center">
                 <QrcodeStream @decode="onDecode" @init="onInit" />
-                <p v-if="form.code">Decoded Text: {{ form.code }}</p>
                 <div
                     class="mb-6 mt-6 flex w-full items-center justify-center space-x-2"
                 >
