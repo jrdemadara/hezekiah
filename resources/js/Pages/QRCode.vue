@@ -36,7 +36,7 @@ const shareInvite = () => {
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="QRCode" />
 
     <AuthenticatedLayout>
         <div class="flex h-screen flex-col items-center bg-white py-6">

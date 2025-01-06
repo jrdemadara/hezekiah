@@ -14,8 +14,6 @@ const defaultAddress = props.auth.address.find(
     (address) => address.is_default === 1,
 );
 
-
-
 const backLink = computed(() => {
     return props.auth.user ? route('bag') : route('home');
 });
@@ -34,7 +32,7 @@ const placeOrder = async () => {
 </script>
 
 <template>
-    <Head title="Checkout" />
+    <Head title="Order History" />
 
     <AuthenticatedLayout>
         <template #header>

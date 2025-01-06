@@ -38,7 +38,7 @@ const checkCode = () => {
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="Referral Code" />
 
     <AuthenticatedLayout>
         <div class="flex h-screen flex-col items-center bg-white py-6">

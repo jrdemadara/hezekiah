@@ -47,7 +47,7 @@ const saveOrder = () => {
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="Order" />
 
     <AuthenticatedLayout>
         <div class="flex h-screen flex-col items-center bg-white py-6">

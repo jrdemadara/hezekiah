@@ -108,7 +108,7 @@ watch(
 </script>
 
 <template>
-    <Head title="Checkout" />
+    <Head title="Network" />
 
     <AuthenticatedLayout>
         <template #header>

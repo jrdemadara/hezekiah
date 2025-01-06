@@ -35,7 +35,7 @@ const logoutLink = computed(() => {
 </script>
 
 <template>
-    <Head title="Bag" />
+    <Head title="User Profile" />
 
     <AuthenticatedLayout>
         <template #header>

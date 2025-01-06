@@ -37,7 +37,7 @@ const save = async () => {
 </script>
 
 <template>
-    <Head title="Checkout" />
+    <Head title="Add Member" />
 
     <AuthenticatedLayout>
         <template #header>
