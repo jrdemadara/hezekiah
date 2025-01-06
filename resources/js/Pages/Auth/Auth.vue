@@ -20,18 +20,16 @@ import {
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 
-const pageStatus = ref('check-phone');
+const pageStatus = ref('check-username');
 const loginFailed = ref(false);
 
-const bagStore = useBagStore(); // Access Pinia store
-
-const checkPhoneForm = useForm({
-    phone: null,
+const checkUsernameForm = useForm({
+    username: null,
 });
 
-// Method to check the phone
-const checkPhone = async () => {
-    checkPhoneForm.post(route('check-phone'), {
+// Method to check the username
+const checkusername = async () => {
+    checkUsernameForm.post(route('check-username'), {
         onSuccess: ({ props }) => {
             if (props.status) {
                 pageStatus.value = 'login';
@@ -46,7 +44,7 @@ const checkPhone = async () => {
 };
 
 const loginForm = useForm({
-    phone: computed(() => checkPhoneForm.phone),
+    username: computed(() => checkUsernameForm.username),
     password: '',
 });
 
@@ -56,7 +54,7 @@ const login = async () => {
             console.log(props);
         },
         onError: (errors) => {
-            if (errors.phone) {
+            if (errors.username) {
                 loginFailed.value = true;
             }
         },
@@ -65,7 +63,7 @@ const login = async () => {
 
 const formHeader = computed(() => {
     switch (pageStatus.value) {
-        case 'check-phone':
+        case 'check-username':
             return 'Sign in to your account';
         case 'login':
             return '';
@@ -98,7 +96,7 @@ defineProps(['status']);
             }"
         >
             <Link
-                v-show="pageStatus === 'check-phone'"
+                v-show="pageStatus === 'check-username'"
                 :href="route('home')"
                 class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
             >
@@ -106,8 +104,8 @@ defineProps(['status']);
             </Link>
 
             <h4
-                v-show="pageStatus !== 'check-phone'"
-                @click="pageStatus = 'check-phone'"
+                v-show="pageStatus !== 'check-username'"
+                @click="pageStatus = 'check-username'"
                 class="group w-fit cursor-pointer rounded-md px-3 font-semibold text-blue-500 ring-1 ring-transparent transition hover:text-blue-600 hover:underline focus:outline-none focus-visible:ring-[#FF2D20] sm:py-2"
                 :class="{
                     'py-2': pageStatus !== 'login',
@@ -139,10 +137,10 @@ defineProps(['status']);
                 {{ formHeader }}
             </h4>
             <p
-                v-show="pageStatus == 'check-phone'"
+                v-show="pageStatus == 'check-username'"
                 class="mt-2 text-center text-base text-stone-600"
             >
-                Enter your mobile number to get started. If you already have an
+                Enter your username to get started. If you already have an
                 account, we’ll find it for you.
             </p>
 
@@ -162,37 +160,39 @@ defineProps(['status']);
                     }"
                 >
                     <form
-                        v-show="pageStatus === 'check-phone'"
-                        @submit.prevent="checkPhone"
+                        v-show="pageStatus === 'check-username'"
+                        @submit.prevent="checkusername"
                         class="w-full"
                     >
                         <div>
                             <TextInput
-                                id="phone"
+                                id="username"
                                 type="text"
-                                class="mt-1 block h-12 w-full"
-                                v-model="checkPhoneForm.phone"
+                                class="mt-1 block h-12 w-full capitalize"
+                                v-model="checkUsernameForm.username"
                                 required
-                                placeholder="Phone Number"
-                                autocomplete="phone"
+                                placeholder="Username"
+                                autocomplete="username"
                             />
                             <InputError
                                 class="mt-2"
-                                :message="checkPhoneForm.errors.phone"
+                                :message="checkUsernameForm.errors.username"
                             />
                         </div>
                         <button
                             class="mt-6 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] font-bold text-white hover:bg-[#427E00]"
-                            :class="{ 'opacity-25': checkPhoneForm.processing }"
-                            :disabled="checkPhoneForm.processing"
+                            :class="{
+                                'opacity-25': checkUsernameForm.processing,
+                            }"
+                            :disabled="checkUsernameForm.processing"
                         >
                             <Loader2
                                 class="flex-shrink-0 animate-spin"
-                                v-if="checkPhoneForm.processing"
+                                v-if="checkUsernameForm.processing"
                             />
                             <span
                                 v-text="
-                                    checkPhoneForm.processing
+                                    checkUsernameForm.processing
                                         ? 'Please wait...'
                                         : 'Continue'
                                 "
@@ -202,23 +202,27 @@ defineProps(['status']);
 
                     <form v-show="pageStatus === 'unregistered'" class="w-full">
                         <div class="flex flex-col">
-                            <small>Phone Number:</small>
+                            <small>Username:</small>
                             <div
                                 class="flex items-center justify-between space-x-6"
                             >
-                                <span class="font-bold">{{
-                                    checkPhoneForm.phone
+                                <span class="font-bold lowercase">{{
+                                    checkUsernameForm.username
                                 }}</span>
                                 <span
-                                    @click="pageStatus = 'check-phone'"
-                                    class="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
+                                    @click="pageStatus = 'check-username'"
+                                    class="cursor-pointer text-sm font-bold text-blue-500 hover:text-blue-600 hover:underline"
                                     >change</span
                                 >
                             </div>
                         </div>
                         <p class="mt-2">
-                            We didn’t find an account with that phone number. If
-                            you’re interested in becoming a member, we invite
+                            <span class="text-red-500"
+                                >We didn’t find an account with that
+                                username.</span
+                            ><br />
+
+                            If you’re interested in becoming a member, we invite
                             you to join us.
                         </p>
                         <Link
@@ -235,21 +239,21 @@ defineProps(['status']);
                         class="w-full"
                     >
                         <div class="flex flex-col">
-                            <small>Phone Number:</small>
+                            <small>Username:</small>
                             <div
                                 class="flex items-center justify-between space-x-6"
                             >
-                                <span class="font-bold">{{
-                                    loginForm.phone
+                                <span class="font-bold lowercase">{{
+                                    loginForm.username
                                 }}</span>
                                 <span
-                                    @click="pageStatus = 'check-phone'"
+                                    @click="pageStatus = 'check-username'"
                                     class="cursor-pointer text-sm text-blue-500 hover:text-blue-600"
                                     >change</span
                                 >
                             </div>
                         </div>
-                        <h4 class="mt-6 text-center text-3xl font-semibold">
+                        <h4 class="mt-6 text-center text-2xl font-semibold">
                             Welcome back!
                         </h4>
                         <p class="mt-1 text-center leading-5 text-gray-600">
@@ -323,7 +327,7 @@ defineProps(['status']);
                     </form>
 
                     <p
-                        v-show="pageStatus === 'check-phone'"
+                        v-show="pageStatus === 'check-username'"
                         class="mt-4 text-xs sm:mt-0"
                     >
                         By continuing, you’ve read and agree to our

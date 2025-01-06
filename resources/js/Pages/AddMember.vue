@@ -17,6 +17,7 @@ const form = useForm({
     middlename: null,
     phone: null,
     address: null,
+    username: null,
     code: null,
 });
 
@@ -116,6 +117,20 @@ const save = async () => {
                 </div>
 
                 <hr />
+                <div class="my-4">
+                    <InputLabel value="Username" />
+                    <TextInput
+                        id="username"
+                        type="text"
+                        class="mt-1 block h-12 w-full lowercase"
+                        v-model="form.username"
+                        required
+                        placeholder="Member's Username"
+                    />
+                    <InputError class="mt-2" :message="form.errors.username" />
+                </div>
+
+                <hr />
                 <div class="mb-4 mt-6">
                     <InputLabel value="Code" />
                     <TextInput
@@ -126,6 +141,17 @@ const save = async () => {
                         required
                     />
                     <InputError class="mt-2" :message="form.errors.code" />
+                </div>
+
+                <div class="mb-4 mt-6">
+                    <p>
+                        <strong class="text-red-500">Reminder:</strong> The new
+                        member's default password is their
+                        <strong>username</strong> followed by the last 4 digits
+                        of their mobile number (e.g.,
+                        <strong>john1357</strong>). Please make sure to change
+                        it after logging in for the first time.
+                    </p>
                 </div>
 
                 <div class="mt-8 flex items-center justify-between space-x-2">

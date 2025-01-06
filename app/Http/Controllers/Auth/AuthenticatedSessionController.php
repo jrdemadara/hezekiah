@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,18 +29,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function checkPhone(Request $request): RedirectResponse
+    public function checkUsername(Request $request): RedirectResponse
     {
         // Validate the email input
         $request->validate([
-            'phone' => 'required|string',
+            'username' => 'required|string',
         ]);
 
         // Check if the email is already registered
-        $isPhoneExist = User::where('phone', $request->phone)->exists();
+        $isExist = User::where('username', Str::lower($request->username))->exists();
 
         return back()->with([
-            'status' => $isPhoneExist,
+            'status' => $isExist,
         ]);
 
     }
@@ -50,7 +51,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->validate([
-            'phone' => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 

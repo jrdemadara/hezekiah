@@ -12,7 +12,7 @@ use Inertia\Response;
 
 class AddMemberController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(): Response
     {
         return Inertia::render('AddMember');
     }
@@ -21,10 +21,11 @@ class AddMemberController extends Controller
     {
         // Validate the incoming request data
         $request->validate([
+            'username' => 'required|string|max:255|unique:users,username',
             'lastname' => 'required|string|max:255',
             'firstname' => 'required|string|max:255',
             'middlename' => 'required|string|max:255',
-            'phone' => 'required|integer|unique:users,phone',
+            'phone' => 'required|integer',
             'address' => 'required|string|max:255',
             'code' => 'required|string|max:255',
         ]);
@@ -39,14 +40,13 @@ class AddMemberController extends Controller
             ->first();
 
         if ($code) {
-            $tempPass = trim($request->lastname) . substr(trim($request->phone), -4);
+            $tempPass = trim($request->username) . substr(trim($request->phone), -4);
 
             // Try to create or update the member
-            $member = User::updateOrCreate(
+            $member = User::Create(
                 [
-                    'code' => Str::lower($this->generateRandomString()), // Random code
-                ],
-                [
+                    'code' => Str::lower($this->generateRandomString()),
+                    'username' => Str::lower($request->username),
                     'lastname' => Str::lower($request->lastname),
                     'firstname' => Str::lower($request->firstname),
                     'middlename' => Str::lower($request->middlename),
