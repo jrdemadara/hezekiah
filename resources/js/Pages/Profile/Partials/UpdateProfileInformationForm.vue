@@ -56,21 +56,6 @@ const form = useForm({
 
                 <InputError class="mt-2" :message="form.errors.lastname" />
             </div>
-            <div>
-                <InputLabel for="lastname" value="Lastname" />
-
-                <TextInput
-                    id="lastname"
-                    type="text"
-                    class="mt-1 block w-full capitalize"
-                    v-model="form.lastname"
-                    required
-                    autofocus
-                    autocomplete="lastname"
-                />
-
-                <InputError class="mt-2" :message="form.errors.lastname" />
-            </div>
 
             <div>
                 <InputLabel for="firstname" value="Firstname" />
