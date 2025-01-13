@@ -47,7 +47,7 @@ const formatDate = (dateString) => {
                 class="flex w-full flex-col rounded border-b px-4 py-2 text-gray-600"
             >
                 <div class="mb-1 flex justify-between text-sm">
-                    <small>Cashout</small>
+                    <small>Cashout Date</small>
                     <small>{{ formatDate(cashout.created_at) }}</small>
                 </div>
                 <div class="flex justify-between">

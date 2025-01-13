@@ -1,9 +1,8 @@
 <script setup>
-import { watch, ref } from 'vue';
+import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link, useForm } from '@inertiajs/vue3';
 import { BadgeCheck, Loader2, MoveLeft } from 'lucide-vue-next';
-import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -34,7 +33,7 @@ const handleInputChange = (event) => {
     } else {
         // Reset the timer if input changes
         clearTimeout(timeoutId);
-
+        cashoutPercentage.value = null;
         timeoutId = setTimeout(() => {
             if (inputAmount >= 500) {
                 if (totalPoints >= inputAmount) {

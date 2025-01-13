@@ -315,7 +315,8 @@ onMounted(() => {
                         </h2>
                     </div>
                 </div>
-                <div
+                <Link
+                    :href="route('cashout.history')"
                     class="flex h-32 flex-col justify-between rounded-3xl bg-[#C6EBCD] p-4"
                 >
                     <div class="flex items-center justify-between">
@@ -333,7 +334,7 @@ onMounted(() => {
                             }}<span class="text-xs font-normal">/History</span>
                         </h2>
                     </div>
-                </div>
+                </Link>
             </div>
 
             <Link
