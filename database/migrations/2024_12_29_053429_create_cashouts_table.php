@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('cashouts', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', total: 10, places: 2);
-            $table->enum('status', ['pending', 'done', 'canceled']);
+            $table->decimal('gross_amount', total: 10, places: 2);
+            $table->decimal('transaction_fee', total: 10, places: 2);
+            $table->decimal('net_amount', total: 10, places: 2);
+            $table->decimal('referral_deduction', total: 10, places: 2);
+            $table->decimal('order_deduction', total: 10, places: 2);
+            $table->enum('status', ['pending', 'approved', 'done', 'denied']);
+            $table->boolean('pooled')->default(false);
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 

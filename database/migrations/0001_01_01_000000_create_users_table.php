@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 8)->unique();
             $table->string('avatar')->nullable();
+            $table->string('username')->unique();
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();

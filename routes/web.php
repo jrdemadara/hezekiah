@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddMemberController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BagController;
+use App\Http\Controllers\CashoutController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\OrderController;
@@ -61,6 +62,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/add-member', [AddMemberController::class, 'index'])->name('add-member.index');
     Route::post('/add-member', [AddMemberController::class, 'store'])->name('add-member.store');
+
+    Route::get('/cashout', [CashoutController::class, 'index'])->name('cashout.index');
+    Route::post('/cashout', [CashoutController::class, 'save'])->name('cashout.save');
+    Route::get('/cashout-history', [CashoutController::class, 'history'])->name('cashout.history');
 
     // Only referred user can access this routes
     Route::middleware(['mustReferred'])->group(function () {

@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { useBagStore } from '@/Stores/bag';
 import {
     CalendarCheck,
     CircleAlert,
@@ -168,7 +167,7 @@ defineProps(['status']);
                             <TextInput
                                 id="username"
                                 type="text"
-                                class="mt-1 block h-12 w-full capitalize"
+                                class="mt-1 block h-12 w-full"
                                 v-model="checkUsernameForm.username"
                                 required
                                 placeholder="Username"

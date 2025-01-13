@@ -7,6 +7,7 @@ import {} from '@inertiajs/vue3';
 import avatar from '../../assets/images/avatar.jpg';
 
 import {
+    ArrowUpFromDot,
     Check,
     Coins,
     Copy,
@@ -219,23 +220,23 @@ onMounted(() => {
         </template>
 
         <div class="flex flex-col bg-white px-4 sm:px-32">
-            <div class="flex items-center justify-between">
-                <div class="flex flex-col">
-                    <h6 class="text-sm text-gray-500">Total Balance</h6>
+            <div class="flex flex-col">
+                <h6 class="text-sm text-gray-500">Total Balance</h6>
+                <div class="flex justify-between">
                     <h2 class="text-4xl font-semibold">
                         ₱{{
                             parseFloat(props.auth.user.referral_points || 0) +
                             parseFloat(props.auth.user.order_points || 0)
                         }}
                     </h2>
+                    <Link
+                        :href="route('cashout.index')"
+                        class="flex items-center space-x-0.5 rounded-xl bg-[#AFEC70]/10 p-2 text-[#215439] ring-1 ring-[#5DA414]/20"
+                    >
+                        <ArrowUpFromDot :size="24" class="rotate-45" />
+                        <small class="font-semibold">Cashout</small>
+                    </Link>
                 </div>
-                <Link
-                    :href="route('profile.edit')"
-                    class="flex flex-col items-center space-y-0.5 rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
-                >
-                    <HandCoins :size="24" class="text-[#215439]" />
-                    <small class="text-gray-800">Cashout</small>
-                </Link>
             </div>
 
             <div

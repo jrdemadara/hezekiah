@@ -164,6 +164,8 @@ class HandleInertiaRequests extends Middleware
                 'cashouts' => $user ? $user->cashouts()->count() : 0,
                 'package_bonus' => $packageCounts,
                 'referral_trend' => null,
+                'cashout_history' => $user
+                ? $user->cashouts()->orderBy('created_at', 'desc')->get() : 0,
             ],
         ];
 

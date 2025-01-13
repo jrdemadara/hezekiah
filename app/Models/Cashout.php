@@ -11,13 +11,17 @@ class Cashout extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'amound',
+        'gross_amount',
+        'transaction_fee',
+        'net_amount',
+        'referral_deduction',
+        'order_deduction',
         'status',
+        'pooled',
         'user_id',
     ];
 
     protected $hidden = [
-        'created_at',
         'updated_at',
         'deleted_at',
     ];
