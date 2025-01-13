@@ -22,9 +22,7 @@ const onDecode = (result) => {
 // Handle initialization
 const onInit = (promise) => {
     promise
-        .then(() => {
-            //toast.success('Camera permission granted!');
-        })
+        .then(() => {})
         .catch(() => {
             toast.error('Camera initialization failed.');
         });
@@ -35,9 +33,6 @@ const saveOrder = () => {
         onSuccess: () => {
             toast.success('Order successfully added.');
             form.reset();
-            // setTimeout(() => {
-            //     window.location.href = route('dashboard');
-            // }, 5000);
         },
         onError: (error) => {
             toast.error(error.message);

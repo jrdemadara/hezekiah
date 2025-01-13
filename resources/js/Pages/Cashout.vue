@@ -29,9 +29,8 @@ const handleInputChange = (event) => {
     if (isNaN(inputAmount) || inputAmount === '') {
         amount.value = null;
         form.gross_amount = null;
-        clearTimeout(timeoutId); // Clear any previous timer if input is invalid
+        clearTimeout(timeoutId);
     } else {
-        // Reset the timer if input changes
         clearTimeout(timeoutId);
         cashoutPercentage.value = null;
         timeoutId = setTimeout(() => {
@@ -43,12 +42,12 @@ const handleInputChange = (event) => {
                     transactionFee.value = fee.toLocaleString('en-US');
                     form.gross_amount = inputAmount;
                 } else {
-                    toast.error('Invalid input: amount exceeds total points.');
+                    toast.error('Amount should not exceeds total points.');
                 }
             } else {
                 toast.error('Minimum cashout amount is 500.');
             }
-        }, 2500); // 3 seconds delay
+        }, 2500);
     }
 };
 
@@ -96,7 +95,7 @@ const save = async () => {
                 </Link>
 
                 <h2
-                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800"
                 >
                     Cashout
                 </h2>

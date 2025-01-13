@@ -1,46 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import { usePage, Head, Link, useForm } from '@inertiajs/vue3';
+import { usePage, Head, Link } from '@inertiajs/vue3';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { ArrowDown, Plus } from 'lucide-vue-next';
-import { useBagStore } from '@/Stores/bag';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
 // import heroImage from '../../assets/images/welcome-background.png';
 
 const { props } = usePage();
 
 defineProps({
     products: {
-        type: Array, // Accept the products prop directly here
+        type: Array,
         required: true,
     },
 });
-
-const bagStore = useBagStore();
-
-const bagForm = useForm({
-    product_id: '',
-});
-
-const addToBag = (product) => {
-    bagForm.product_id = product.id;
-    if (props.auth.user) {
-        bagForm.post('bag-add', {
-            onSuccess: () => {
-                bagStore.addToBag(product);
-                toast.success('Item is added to bag!');
-            },
-            onError: (errors) => {
-                console.error('Error adding to bag:', errors);
-                toast.error('Something went wrong! Please try again later.');
-            },
-        });
-    } else {
-        bagStore.addToBag(product);
-        toast.success('Item is added to bag!');
-    }
-};
 </script>
 
 <template>

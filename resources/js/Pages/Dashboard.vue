@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
@@ -11,7 +11,6 @@ import {
     Check,
     Coins,
     Copy,
-    HandCoins,
     LogOut,
     Network,
     SquareStack,

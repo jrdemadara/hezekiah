@@ -4,7 +4,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { Loader2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';

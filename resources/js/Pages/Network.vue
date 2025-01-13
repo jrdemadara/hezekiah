@@ -8,7 +8,6 @@ import * as d3 from 'd3';
 const { props } = usePage();
 
 const data = JSON.parse(props.data); // Parse the JSON string into an object
-console.log(data);
 
 // Create a reference for the chart container
 const chartRef = ref(null);
@@ -118,7 +117,7 @@ watch(
                 </Link>
 
                 <h2
-                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 "
                 >
                     Network
                 </h2>

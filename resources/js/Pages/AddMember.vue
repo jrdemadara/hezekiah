@@ -9,8 +9,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-const { props } = usePage();
-
 const form = useForm({
     lastname: null,
     firstname: null,
@@ -23,13 +21,11 @@ const form = useForm({
 
 const save = async () => {
     form.post(route('add-member.store'), {
-        onSuccess: (res) => {
-            console.log(res);
+        onSuccess: () => {
             toast.success('Success!');
             form.reset();
         },
         onError: (err) => {
-            console.log(err);
             toast.error(err.message);
         },
     });
@@ -47,7 +43,7 @@ const save = async () => {
                 </Link>
 
                 <h2
-                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800"
                 >
                     Add Member
                 </h2>

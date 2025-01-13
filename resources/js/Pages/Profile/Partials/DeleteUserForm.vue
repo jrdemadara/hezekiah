@@ -17,7 +17,6 @@ const form = useForm({
 
 const confirmUserDeletion = () => {
     confirmingUserDeletion.value = true;
-
     nextTick(() => passwordInput.value.focus());
 };
 
@@ -32,7 +31,6 @@ const deleteUser = () => {
 
 const closeModal = () => {
     confirmingUserDeletion.value = false;
-
     form.clearErrors();
     form.reset();
 };
@@ -41,9 +39,7 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Delete Account
-            </h2>
+            <h2 class="text-lg font-medium text-gray-900">Delete Account</h2>
 
             <p class="mt-1 text-sm text-gray-600">
                 Once your account is deleted, all of its resources and data will
@@ -56,9 +52,7 @@ const closeModal = () => {
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
-                <h2
-                    class="text-lg font-medium text-gray-900"
-                >
+                <h2 class="text-lg font-medium text-gray-900">
                     Are you sure you want to delete your account?
                 </h2>
 
