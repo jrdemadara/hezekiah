@@ -138,7 +138,7 @@ const save = async () => {
                         class="mt-2"
                         :message="form.errors.gross_amount"
                     />
-                    <small></small>
+
                     <div class="flex justify-between">
                         <p class="mt-1 text-sm text-gray-600">
                             Current Balance:
@@ -163,56 +163,56 @@ const save = async () => {
                             10% transaction fee may apply
                         </p>
                     </div>
-                </div>
-
-                <hr />
-                <div class="mt-7 flex flex-col">
-                    <small class="mb-2 text-center text-gray-600">
-                        Cashout requests will be processed once reviewed by the
-                        admin.
-                    </small>
-                    <div class="flex justify-between space-x-3">
-                        <div
-                            @click="calculatePercentage(25)"
-                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                            :class="{
-                                'bg-[#AFEC70]/70': cashoutPercentage == 25,
-                            }"
-                        >
-                            25%
-                        </div>
-                        <div
-                            @click="calculatePercentage(50)"
-                            :class="{
-                                'bg-[#AFEC70]/70': cashoutPercentage == 50,
-                            }"
-                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                        >
-                            50%
-                        </div>
-                        <div
-                            @click="calculatePercentage(75)"
-                            :class="{
-                                'bg-[#AFEC70]/70': cashoutPercentage == 75,
-                            }"
-                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                        >
-                            75%
-                        </div>
-                        <div
-                            @click="calculatePercentage(100)"
-                            :class="{
-                                'bg-[#AFEC70]/70': cashoutPercentage == 100,
-                            }"
-                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                        >
-                            Max
+                    <div class="mt-5 flex flex-col">
+                        <div class="flex w-full justify-between space-x-3">
+                            <div
+                                @click="calculatePercentage(25)"
+                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                                :class="{
+                                    'bg-[#AFEC70]/70': cashoutPercentage == 25,
+                                }"
+                            >
+                                25%
+                            </div>
+                            <div
+                                @click="calculatePercentage(50)"
+                                :class="{
+                                    'bg-[#AFEC70]/70': cashoutPercentage == 50,
+                                }"
+                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                            >
+                                50%
+                            </div>
+                            <div
+                                @click="calculatePercentage(75)"
+                                :class="{
+                                    'bg-[#AFEC70]/70': cashoutPercentage == 75,
+                                }"
+                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                            >
+                                75%
+                            </div>
+                            <div
+                                @click="calculatePercentage(100)"
+                                :class="{
+                                    'bg-[#AFEC70]/70': cashoutPercentage == 100,
+                                }"
+                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                            >
+                                Max
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <hr />
+
+                <p class="mb-2 mt-7 text-center text-sm text-gray-600">
+                    Cashout requests will be processed once reviewed by the
+                    admin.
+                </p>
                 <button
-                    class="mt-5 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] text-white hover:bg-[#427E00]"
+                    class="mt-3 flex h-12 w-full items-center justify-center space-x-1 rounded-lg bg-[#458500] text-white hover:bg-[#427E00]"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
