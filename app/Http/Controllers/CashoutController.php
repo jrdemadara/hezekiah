@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Exception;
@@ -19,6 +18,7 @@ class CashoutController extends Controller
     {
         $request->validate([
             'gross_amount' => 'required|numeric|min:500',
+            'cashout_type' => 'required|string|max:255',
         ]);
 
         $user = $request->user();
@@ -44,18 +44,19 @@ class CashoutController extends Controller
                 $user->save();
 
                 // Calculate the fee and net amount
-                $fee = ($request->gross_amount * 10) / 100;
+                $fee       = ($request->gross_amount * 10) / 100;
                 $netAmount = $request->gross_amount - $fee;
 
                 // Create the cashout record
                 $user->cashouts()->create([
-                    'gross_amount' => $request->gross_amount,
-                    'transaction_fee' => $fee,
-                    'net_amount' => $netAmount,
+                    'gross_amount'       => $request->gross_amount,
+                    'transaction_fee'    => $fee,
+                    'net_amount'         => $netAmount,
                     'referral_deduction' => $referralDeduct,
-                    'order_deduction' => $orderDeduct,
-                    'status' => 'pending',
-                    'pooled' => false,
+                    'order_deduction'    => $orderDeduct,
+                    'status'             => 'pending',
+                    'pooled'             => false,
+                    'cashout_type'       => $request->cashout_type,
                 ]);
             });
 
@@ -66,7 +67,7 @@ class CashoutController extends Controller
         } catch (Exception $e) {
             // If any exception occurs, return with an error message
             return back()->with([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'An error occurred during the cashout process. Please try again.',
             ]);
         }

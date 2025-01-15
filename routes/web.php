@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\CashoutController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\EWalletController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -22,11 +23,11 @@ Route::get('/', function () {
         ->get();
 
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
+        'canLogin'       => Route::has('login'),
+        'canRegister'    => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'products' => $products,
+        'phpVersion'     => PHP_VERSION,
+        'products'       => $products,
     ]);
 })->name('home');
 
@@ -66,6 +67,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/cashout', [CashoutController::class, 'index'])->name('cashout.index');
     Route::post('/cashout', [CashoutController::class, 'save'])->name('cashout.save');
     Route::get('/cashout-history', [CashoutController::class, 'history'])->name('cashout.history');
+
+    Route::get('/e-wallet', [EWalletController::class, 'index'])->name('e-wallet.index');
+    Route::post('/e-wallet', [EWalletController::class, 'store'])->name('e-wallet.store');
 
     // Only referred user can access this routes
     Route::middleware(['mustReferred'])->group(function () {

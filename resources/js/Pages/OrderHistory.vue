@@ -46,6 +46,9 @@ const placeOrder = async () => {
                 >
                     Checkout
                 </h2>
+                <Link :href="route('dashboard')">
+                    <MoveLeft class="text-transparent" />
+                </Link>
             </div>
         </template>
 

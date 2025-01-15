@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 //
@@ -65,7 +64,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
@@ -92,5 +91,10 @@ class User extends Authenticatable
     public function cashouts()
     {
         return $this->hasMany(Cashout::class, 'user_id');
+    }
+
+    public function ewallet()
+    {
+        return $this->hasOne(EWallet::class, 'user_id');
     }
 }

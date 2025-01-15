@@ -2,14 +2,16 @@
 import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link, useForm } from '@inertiajs/vue3';
-import { BadgeCheck, Loader2, MoveLeft } from 'lucide-vue-next';
+import { BadgeCheck, Loader2, MoveLeft, Store, Wallet2 } from 'lucide-vue-next';
 import InputError from '@/Components/InputError.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const { props } = usePage();
+const user = usePage().props.auth;
 const pageState = ref('start');
 const cashoutPercentage = ref(null);
+const cashoutType = ref(null);
 const amount = ref(null);
 const transactionFee = ref(null);
 
@@ -19,6 +21,7 @@ const totalPoints =
 
 const form = useForm({
     gross_amount: null,
+    cashout_type: null,
 });
 
 let timeoutId;
@@ -70,16 +73,28 @@ const calculatePercentage = (percentage) => {
 };
 
 const save = async () => {
+    form.cashout_type = cashoutType.value;
     if (form.gross_amount >= 500) {
-        form.post(route('cashout.save'), {
-            onSuccess: () => {
-                form.reset();
-                pageState.value = 'done';
-            },
-            onError: (err) => {
-                toast.error(err.message);
-            },
-        });
+        if (cashoutType.value != null) {
+            form.post(route('cashout.save'), {
+                onSuccess: () => {
+                    form.reset();
+                    pageState.value = 'done';
+                },
+                onError: (err) => {
+                    toast.error(err.message);
+                },
+            });
+        } else {
+            toast.warning('Kindly choose from the available cashout options.');
+        }
+    }
+};
+
+const selectEwallet = () => {
+    cashoutType.value = 'ewallet';
+    if (user.ewallet == null) {
+        location.href = '/e-wallet';
     }
 };
 </script>
@@ -99,6 +114,9 @@ const save = async () => {
                 >
                     Cashout
                 </h2>
+                <Link :href="route('dashboard')">
+                    <MoveLeft class="text-transparent" />
+                </Link>
             </div>
         </template>
 
@@ -117,7 +135,7 @@ const save = async () => {
                             <input
                                 id="amount"
                                 type="text"
-                                class="w-full border-0 px-1 py-0 capitalize focus:outline-none focus:ring-0"
+                                class="h-9 w-full border-0 px-1 py-0 capitalize focus:outline-none focus:ring-0"
                                 :class="{ 'text-2xl font-bold': amount }"
                                 v-model="amount"
                                 placeholder="Amount"
@@ -163,46 +181,76 @@ const save = async () => {
                             10% transaction fee may apply
                         </p>
                     </div>
-                    <div class="mt-5 flex flex-col">
-                        <div class="flex w-full justify-between space-x-3">
-                            <div
-                                @click="calculatePercentage(25)"
-                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                                :class="{
-                                    'bg-[#AFEC70]/70': cashoutPercentage == 25,
-                                }"
-                            >
-                                25%
-                            </div>
-                            <div
-                                @click="calculatePercentage(50)"
-                                :class="{
-                                    'bg-[#AFEC70]/70': cashoutPercentage == 50,
-                                }"
-                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                            >
-                                50%
-                            </div>
-                            <div
-                                @click="calculatePercentage(75)"
-                                :class="{
-                                    'bg-[#AFEC70]/70': cashoutPercentage == 75,
-                                }"
-                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                            >
-                                75%
-                            </div>
-                            <div
-                                @click="calculatePercentage(100)"
-                                :class="{
-                                    'bg-[#AFEC70]/70': cashoutPercentage == 100,
-                                }"
-                                class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
-                            >
-                                Max
-                            </div>
+                    <div class="mt-5 flex w-full justify-between space-x-3">
+                        <div
+                            @click="calculatePercentage(25)"
+                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                            :class="{
+                                'bg-[#AFEC70]/70': cashoutPercentage == 25,
+                            }"
+                        >
+                            25%
+                        </div>
+                        <div
+                            @click="calculatePercentage(50)"
+                            :class="{
+                                'bg-[#AFEC70]/70': cashoutPercentage == 50,
+                            }"
+                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                        >
+                            50%
+                        </div>
+                        <div
+                            @click="calculatePercentage(75)"
+                            :class="{
+                                'bg-[#AFEC70]/70': cashoutPercentage == 75,
+                            }"
+                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                        >
+                            75%
+                        </div>
+                        <div
+                            @click="calculatePercentage(100)"
+                            :class="{
+                                'bg-[#AFEC70]/70': cashoutPercentage == 100,
+                            }"
+                            class="flex w-full cursor-pointer justify-center rounded-xl bg-[#AFEC70]/10 p-2 text-sm font-semibold text-[#458500] ring-1 ring-[#5DA414]/20"
+                        >
+                            Max
                         </div>
                     </div>
+                </div>
+                <div class="flex w-full items-center">
+                    <div class="my-2 h-px w-full bg-gray-200"></div>
+                    <div class="mx-4 whitespace-nowrap text-sm">
+                        Cashout Options
+                    </div>
+                    <div class="my-2 h-px w-full bg-gray-200"></div>
+                </div>
+                <div class="my-7 flex space-x-3">
+                    <div
+                        @click="cashoutType = 'otc'"
+                        class="flex h-12 w-full items-center justify-center space-x-2 rounded-lg bg-[#AFEC70]/10 text-[#458500] ring-1 ring-[#5DA414]/20"
+                        :class="{
+                            'bg-[#AFEC70]/70': cashoutType == 'otc',
+                        }"
+                    >
+                        <Store />
+                        <p class="text-sm font-medium">Over the counter</p>
+                    </div>
+                    <div
+                        @click="selectEwallet"
+                        class="flex h-12 w-full items-center justify-center space-x-2 rounded-lg bg-[#AFEC70]/10 text-[#458500] ring-1 ring-[#5DA414]/20"
+                        :class="{
+                            'bg-[#AFEC70]/70': cashoutType == 'ewallet',
+                        }"
+                    >
+                        <Wallet2 />
+                        <p class="text-sm font-medium">E-wallet</p>
+                    </div>
+                </div>
+                <div v-if="cashoutType == 'ewallet' && props.auth.user.ewallet">
+                    Ewallet details
                 </div>
 
                 <hr />

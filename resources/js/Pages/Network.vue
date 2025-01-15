@@ -117,10 +117,13 @@ watch(
                 </Link>
 
                 <h2
-                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800 "
+                    class="w-full text-center text-xl font-semibold leading-tight text-gray-800"
                 >
                     Network
                 </h2>
+                <Link :href="route('dashboard')">
+                    <MoveLeft class="text-transparent" />
+                </Link>
             </div>
         </template>
 

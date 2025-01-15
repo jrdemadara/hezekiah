@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('order_deduction', total: 10, places: 2);
             $table->enum('status', ['pending', 'approved', 'done', 'denied']);
             $table->boolean('pooled')->default(false);
+            $table->enum('cashout_type', ['otc', 'ewallet']);
             $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();

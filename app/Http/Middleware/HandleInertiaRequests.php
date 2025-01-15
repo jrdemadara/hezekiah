@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
@@ -34,8 +33,8 @@ class HandleInertiaRequests extends Middleware
 
         // Initialize downline count to 0 in case the user is not authenticated
         $indirectDownlines = 0;
-        $packageCounts = [];
-        $formattedData = [];
+        $packageCounts     = [];
+        $formattedData     = [];
 
         // If the user is authenticated, calculate the downline count
         if ($user) {
@@ -91,7 +90,7 @@ class HandleInertiaRequests extends Middleware
 
             // Ensure all levels from 1 to 10 are included (even if count is 0)
             for ($i = 1; $i <= 10; $i++) {
-                if (!isset($packageCounts['level_' . $i])) {
+                if (! isset($packageCounts['level_' . $i])) {
                     $packageCounts['level_' . $i] = 0;
                 }
             }
@@ -133,14 +132,14 @@ class HandleInertiaRequests extends Middleware
                     $row->month <= 12
                 ) {
                     try {
-                        // Use the current year and the month to create a valid date
-                        $month = (int) $row->month; // Ensure it's an integer
-                        $date = new \DateTime("{$currentYear}-{$month}-01"); // Start of the month
-                        $date->modify('last day of this month'); // Last day of the month
+                                                                              // Use the current year and the month to create a valid date
+                        $month = (int) $row->month;                           // Ensure it's an integer
+                        $date  = new \DateTime("{$currentYear}-{$month}-01"); // Start of the month
+                        $date->modify('last day of this month');              // Last day of the month
 
                         // Add the formatted data
                         $formattedData[] = [
-                            'date' => "{$currentYear}, {$month}", // Format as 'YYYY, M'
+                            'date'  => "{$currentYear}, {$month}",   // Format as 'YYYY, M'
                             'close' => (float) $row->referral_count, // Use referral count as "close"
                         ];
                     } catch (\Exception $e) {
@@ -158,14 +157,16 @@ class HandleInertiaRequests extends Middleware
         return [
              ...parent::share($request),
             'auth' => [
-                'user' => $user,
-                'referrals' => $user ? $user->referrals()->count() : 0,
-                'indirect' => $indirectDownlines,
-                'cashouts' => $user ? $user->cashouts()->count() : 0,
-                'package_bonus' => $packageCounts,
-                'referral_trend' => null,
+                'user'            => $user,
+                'referrals'       => $user ? $user->referrals()->count() : 0,
+                'indirect'        => $indirectDownlines,
+                'cashouts'        => $user ? $user->cashouts()->count() : 0,
+                'package_bonus'   => $packageCounts,
+                'referral_trend'  => null,
                 'cashout_history' => $user
-                ? $user->cashouts()->orderBy('created_at', 'desc')->get() : 0,
+                ? $user->cashouts()->orderBy('created_at', 'desc')->get() : null,
+
+                'ewallet'         => optional($user)->ewallet()->first(),
             ],
         ];
 

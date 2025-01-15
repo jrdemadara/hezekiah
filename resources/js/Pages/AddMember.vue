@@ -47,6 +47,9 @@ const save = async () => {
                 >
                     Add Member
                 </h2>
+                <Link :href="route('dashboard')">
+                    <MoveLeft class="text-transparent" />
+                </Link>
             </div>
         </template>
 

@@ -32,6 +32,9 @@ const formatDate = (dateString) => {
                 >
                     Cashout History
                 </h2>
+                <Link :href="route('dashboard')">
+                    <MoveLeft class="text-transparent" />
+                </Link>
             </div>
         </template>
 
