@@ -88,7 +88,7 @@ defineProps(['status']);
     >
         <ApplicationLogo class="mt-6 w-44 flex-none sm:mt-0 sm:w-48" />
         <div
-            class="flex flex-col rounded-lg p-4 ring-stone-300 sm:p-8 sm:ring-1"
+            class="flex w-full flex-col rounded-lg p-4 ring-stone-300 sm:p-8 sm:ring-1"
             :class="{
                 'sm:w-2/3': pageStatus !== 'login',
                 'sm:w-1/3': pageStatus === 'login',
