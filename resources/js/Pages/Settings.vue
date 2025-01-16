@@ -75,22 +75,28 @@ const logoutLink = computed(() => {
             <div class="w-full space-y-5 rounded-xl p-4 ring-1 ring-gray-200">
                 <small class="uppercase text-gray-500">Profile Menu</small>
                 <div class="flex flex-col space-y-3">
-                    <div class="flex w-full items-center justify-between">
+                    <Link
+                        :href="route('profile.index')"
+                        class="flex w-full items-center justify-between"
+                    >
                         <User2 :size="28" />
                         <strong
                             class="ml-3 w-full text-start text-lg font-normal capitalize"
                             >My Profile</strong
                         >
                         <ChevronRight class="text-gray-500" :size="32" />
-                    </div>
-                    <div class="flex w-full items-center justify-between">
+                    </Link>
+                    <Link
+                        :href="route('password.index')"
+                        class="flex w-full items-center justify-between"
+                    >
                         <Lock :size="28" />
                         <strong
                             class="ml-3 w-full text-start text-lg font-normal capitalize"
                             >Security</strong
                         >
                         <ChevronRight class="text-gray-500" :size="32" />
-                    </div>
+                    </Link>
                     <Link
                         :href="route('e-wallet.index')"
                         class="flex w-full items-center justify-between"

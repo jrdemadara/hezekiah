@@ -200,7 +200,7 @@ onMounted(() => {
                 </div>
                 <div class="flex space-x-3">
                     <Link
-                        :href="route('profile.index')"
+                        :href="route('settings.index')"
                         class="rounded-xl bg-[#AFEC70]/10 p-2 ring-1 ring-[#5DA414]/20"
                     >
                         <UserCog2 :size="24" class="text-[#215439]" />

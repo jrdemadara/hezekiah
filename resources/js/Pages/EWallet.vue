@@ -4,15 +4,18 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
-import { MoveLeft } from 'lucide-vue-next';
+import { Loader2, MoveLeft } from 'lucide-vue-next';
 
 const props = usePage().props;
 const user = usePage().props.auth.user;
-
 const form = useForm({
-    wallet: props.auth.ewallet[0].wallet,
-    account_number: props.auth.ewallet[0].account_number,
-    account_name: props.auth.ewallet[0].account_name,
+    wallet: props.auth.ewallet !== null ? props.auth.ewallet[0].wallet : null,
+    account_number:
+        props.auth.ewallet !== null
+            ? props.auth.ewallet[0].account_number
+            : null,
+    account_name:
+        props.auth.ewallet !== null ? props.auth.ewallet[0].account_name : null,
 });
 </script>
 
@@ -22,7 +25,7 @@ const form = useForm({
     <AuthenticatedLayout>
         <template #header>
             <div class="flex">
-                <Link :href="route('dashboard')">
+                <Link :href="route('settings.index')">
                     <MoveLeft />
                 </Link>
 
@@ -31,14 +34,22 @@ const form = useForm({
                 >
                     E-wallet
                 </h2>
-                <Link :href="route('dashboard')">
+                <Link :href="route('settings.index')">
                     <MoveLeft class="text-transparent" />
                 </Link>
             </div>
         </template>
 
         <div class="flex h-[calc(100vh-64px)] select-none flex-col px-6 pb-16">
-            <p>Provide your default e-wallet for cashouts.</p>
+            <header>
+                <h2 class="text-lg font-medium text-gray-900">
+                    Default E-wallet
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600">
+                    Provide your default e-wallet for cashouts.
+                </p>
+            </header>
             <form
                 @submit.prevent="form.post(route('e-wallet.store'))"
                 class="mt-6 space-y-6"

@@ -119,7 +119,9 @@ onMounted(() => {
                                 </template>
 
                                 <template #content>
-                                    <DropdownLink :href="route('profile.edit')">
+                                    <DropdownLink
+                                        :href="route('profile.index')"
+                                    >
                                         Profile
                                     </DropdownLink>
                                     <Link

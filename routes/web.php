@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddMemberController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\CashoutController;
 use App\Http\Controllers\CheckoutController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ReferralCodeController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,17 +37,19 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/password', [PasswordController::class, 'index'])->name('password.index');
+
+    //Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/qrcode', [QRCodeController::class, 'index'])->name('qrcode');
 
     Route::get('/network', [NetworkController::class, 'index'])->name('network');
 
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::patch('/order', [OrderController::class, 'store'])->name('order.store');
-
-    Route::get('/user-profile', [UserProfileController::class, 'index'])->name('profile.index');
 
     Route::get('/address', [AddressController::class, 'index'])->name('address.index');
     Route::post('/address', [AddressController::class, 'store'])->name('address.save');
