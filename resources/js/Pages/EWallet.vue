@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { Loader2, MoveLeft } from 'lucide-vue-next';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const props = usePage().props;
 const user = usePage().props.auth.user;
@@ -19,6 +21,17 @@ const form = useForm({
             ? props.auth.ewallet[0].account_name
             : null,
 });
+
+const save = async () => {
+    form.post(route('e-wallet.store'), {
+        onSuccess: () => {
+            toast.success('Success!');
+        },
+        onError: (err) => {
+            toast.error(err.message);
+        },
+    });
+};
 </script>
 
 <template>
@@ -52,10 +65,7 @@ const form = useForm({
                     Provide your default e-wallet for cashouts.
                 </p>
             </header>
-            <form
-                @submit.prevent="form.post(route('e-wallet.store'))"
-                class="mt-6 space-y-6"
-            >
+            <form @submit.prevent="save" class="mt-6 space-y-6">
                 <div>
                     <InputLabel for="wallet" value="E-Wallet" />
                     <select
