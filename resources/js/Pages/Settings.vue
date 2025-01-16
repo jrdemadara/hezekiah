@@ -39,7 +39,7 @@ const logoutLink = computed(() => {
                 <h2
                     class="w-full text-center text-xl font-semibold leading-tight text-gray-800"
                 >
-                    Profile
+                    Settings
                 </h2>
                 <Link :href="route('dashboard')">
                     <MoveLeft class="text-transparent" />
@@ -73,7 +73,7 @@ const logoutLink = computed(() => {
                 </div>
             </div>
             <div class="w-full space-y-5 rounded-xl p-4 ring-1 ring-gray-200">
-                <small class="uppercase text-gray-500">Profile Menu</small>
+                <small class="uppercase text-gray-500">Settings Menu</small>
                 <div class="flex flex-col space-y-3">
                     <Link
                         :href="route('profile.index')"
