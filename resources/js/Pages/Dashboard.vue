@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
@@ -21,11 +21,15 @@ import {
 import * as d3 from 'd3';
 const { props } = usePage();
 const code = props.auth.user.code;
+const user = props.auth.user;
 const source = ref('');
 source.value = code;
 
 const { copy, copied } = useClipboard({ source });
 
+const firstLetter = computed(() => {
+    return user.firstname ? user.firstname.charAt(0) : '';
+});
 const aapl = [
     // Example data structure (replace this with your actual data)
     { date: new Date(2024, 1), close: 0 },
@@ -172,11 +176,15 @@ onMounted(() => {
         <template #header>
             <div class="flex items-center justify-between px-0 sm:px-14">
                 <div class="flex items-center space-x-2">
-                    <img
-                        :src="props.auth.user.avatar || avatar"
-                        alt="avatar"
-                        class="w-14 rounded-full"
-                    />
+                    <div
+                        class="flex h-16 w-16 items-center justify-center rounded-full bg-[#50962a]"
+                    >
+                        <h2
+                            class="font-serif text-5xl font-semibold uppercase text-white"
+                        >
+                            {{ firstLetter }}
+                        </h2>
+                    </div>
                     <div class="flex flex-col">
                         <h4 class="font-semibold capitalize">
                             {{ props.auth.user.firstname }}
