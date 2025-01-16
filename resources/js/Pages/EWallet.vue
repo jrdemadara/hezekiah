@@ -9,13 +9,15 @@ import { Loader2, MoveLeft } from 'lucide-vue-next';
 const props = usePage().props;
 const user = usePage().props.auth.user;
 const form = useForm({
-    wallet: props.auth.ewallet !== null ? props.auth.ewallet[0].wallet : null,
+    wallet: props.auth.ewallet.length > 0 ? props.auth.ewallet[0].wallet : null,
     account_number:
-        props.auth.ewallet !== null
+        props.auth.ewallet.length > 0
             ? props.auth.ewallet[0].account_number
             : null,
     account_name:
-        props.auth.ewallet !== null ? props.auth.ewallet[0].account_name : null,
+        props.auth.ewallet.length > 0
+            ? props.auth.ewallet[0].account_name
+            : null,
 });
 </script>
 

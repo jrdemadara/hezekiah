@@ -93,7 +93,7 @@ const save = async () => {
 
 const selectEwallet = () => {
     cashoutType.value = 'ewallet';
-    if (user.ewallet == null) {
+    if (user.ewallet.length == 0) {
         location.href = '/e-wallet';
     }
 };
