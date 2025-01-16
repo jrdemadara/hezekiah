@@ -166,7 +166,8 @@ class HandleInertiaRequests extends Middleware
                 'cashout_history' => $user
                 ? $user->cashouts()->orderBy('created_at', 'desc')->get() : null,
 
-                'ewallet'         => optional($user)->ewallet()->first(),
+                'ewallet'         => $user
+                ? $user->ewallet()->get() : null,
             ],
         ];
 

@@ -10,9 +10,9 @@ const props = usePage().props;
 const user = usePage().props.auth.user;
 
 const form = useForm({
-    wallet: null,
-    account_number: null,
-    account_name: null,
+    wallet: props.auth.ewallet[0].wallet,
+    account_number: props.auth.ewallet[0].account_number,
+    account_name: props.auth.ewallet[0].account_name,
 });
 </script>
 

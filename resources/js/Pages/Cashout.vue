@@ -236,7 +236,9 @@ const selectEwallet = () => {
                         }"
                     >
                         <Store />
-                        <p class="text-sm font-medium">Over the counter</p>
+                        <p class="cursor-pointer text-sm font-medium">
+                            Over the counter
+                        </p>
                     </div>
                     <div
                         @click="selectEwallet"
@@ -246,7 +248,9 @@ const selectEwallet = () => {
                         }"
                     >
                         <Wallet2 />
-                        <p class="text-sm font-medium">E-wallet</p>
+                        <p class="cursor-pointer text-sm font-medium">
+                            E-wallet
+                        </p>
                     </div>
                 </div>
                 <div v-if="cashoutType == 'ewallet' && props.auth.user.ewallet">
