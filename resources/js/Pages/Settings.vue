@@ -58,7 +58,7 @@ const logoutLink = computed(() => {
                         {{ firstLetter }}
                     </h2>
                 </div>
-                <h4 class="mt-1 font-mono text-lg font-semibold uppercase">
+                <h4 class="mt-1 font-mono text-lg font-bold uppercase">
                     {{ props.auth.user.firstname }}
                     {{ props.auth.user.lastname }}
                 </h4>
